@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "673382117239",
+    "project_id": "faenonibeqwa",
+    "storage_bucket": "faenonibeqwa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673382117239:android:5469a97fd2b20194517b72",
+        "android_client_info": {
+          "package_name": "com.example.faenonibeqwa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXmmiPFBSs0NsTlLCA1WWqE27AfC-lITw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
