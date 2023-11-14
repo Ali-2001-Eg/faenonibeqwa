@@ -6,8 +6,9 @@ class HomeProvider extends ChangeNotifier {
   HomeProvider(this.ref);
 
   void changeIndex(int newIndex) {
+    // ignore: deprecated_member_use
     ref.read(homeIndexState.state).update((state) => newIndex);
-    
+
     notifyListeners();
   }
 }

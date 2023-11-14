@@ -2,7 +2,7 @@ import 'package:faenonibeqwa/utils/base/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-ThemeData darkMode(context) => ThemeData.dark().copyWith(
+ThemeData get darkMode => ThemeData.dark().copyWith(
       hoverColor: darkReplyColor,
       scaffoldBackgroundColor: backgroundColor,
       indicatorColor: tabColor,
@@ -14,6 +14,13 @@ ThemeData darkMode(context) => ThemeData.dark().copyWith(
         style: ButtonStyle(
           elevation: MaterialStatePropertyAll<double>(0),
           iconColor: MaterialStatePropertyAll<Color>(Colors.grey),
+        ),
+      ),
+      elevatedButtonTheme: const ElevatedButtonThemeData(
+        style: ButtonStyle(
+          elevation: MaterialStatePropertyAll<double>(0),
+          backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
+          padding: MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.all(10)),
         ),
       ),
       appBarTheme: AppBarTheme(

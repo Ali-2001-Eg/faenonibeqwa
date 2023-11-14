@@ -1,11 +1,15 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math';
 
+import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/controllers/meeting_controller.dart';
 import 'package:faenonibeqwa/repositories/meeting_repo.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_app_bar.dart';
 import 'package:faenonibeqwa/screens/meeting/participant_tile.dart';
 import 'package:faenonibeqwa/screens/meeting/share_screen_view.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,12 +46,12 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     // create room
     _room = VideoSDK.createRoom(
       roomId: widget.conferenceID,
       token: widget.token,
-      displayName: "Ali Mazen",
+      displayName: await ref.read(authControllerProvider).getName,
       micEnabled: ref.read(micEnabled),
       camEnabled: ref.read(camEnabled),
       defaultCameraIndex:
@@ -121,8 +125,10 @@ class _MeetingScreenState extends ConsumerState<MeetingScreen> {
                       mainAxisExtent: 300,
                     ),
                     itemBuilder: (context, index) {
-                      print(
-                          'participants number is ${participants.entries.map((e) => e.value)}');
+                      if (kDebugMode) {
+                        print(
+                            'participants number is ${participants.entries.map((e) => e.value)}');
+                      }
                       return ParticipantTile(
                           key: Key(participants.values.elementAt(index).id),
                           participant: participants.values.elementAt(index));

@@ -1,15 +1,13 @@
-import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
+import 'package:faenonibeqwa/controllers/meeting_controller.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
-import 'package:faenonibeqwa/utils/shared/data/api_client.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/base/constants.dart';
-
 class HomeScreen extends ConsumerWidget {
+  static const String routeName = '/home';
   HomeScreen({super.key});
 
   final TextEditingController _meetingIdController = TextEditingController();
@@ -20,7 +18,8 @@ class HomeScreen extends ConsumerWidget {
         title: const Text('فَأَعِينُونِي بِقُوَّةٍ'),
         actions: [
           IconButton(
-              onPressed: () => _onCreateButtonPressed(context),
+              onPressed: () =>
+                  ref.read(meetingControllerProvider).createMeeting(context),
               tooltip: 'قم بإنشاء محادثه بينك و بين أصدقائك',
               icon: const Icon(
                 Icons.call,
@@ -35,14 +34,14 @@ class HomeScreen extends ConsumerWidget {
           children: [
             const BigText(text: ' للإنضمام لمكالمه جاريه :'),
             10.verticalspace,
-            _joinMeetingTextField(context),
+            _joinMeetingTextField(context, ref),
           ],
         ),
       ),
     );
   }
 
-  TextField _joinMeetingTextField(BuildContext context) {
+  TextField _joinMeetingTextField(BuildContext context, WidgetRef ref) {
     return TextField(
       controller: _meetingIdController,
       textAlign: TextAlign.center,
@@ -65,51 +64,23 @@ class HomeScreen extends ConsumerWidget {
               Icons.login_rounded,
               color: Colors.teal,
             ),
-            onPressed: () => _meetingIdController.text.isEmpty
-                ? customSnackbar(
-                    context: context,
-                    text: 'اكتب الرمز من فضلك',
-                  )
-                : _onJoinButtonPressed(context),
+            onPressed: () => _joinMeeting(ref, context),
           )),
     );
   }
 
-  void _onCreateButtonPressed(BuildContext context) async {
-    // call api to create meeting and then navigate to MeetingScreen with meetingId,token
-    await ApiClient.createMeeting().then((meetingId) {
-      if (!context.mounted) return;
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => MeetingScreen(
-            conferenceID: meetingId,
-            token: AppConstants.videosdkToken,
-          ),
-        ),
-      );
-    });
-  }
-
-  void _onJoinButtonPressed(BuildContext context) {
-    String meetingId = _meetingIdController.text;
-    var re = RegExp("\\w{4}\\-\\w{4}\\-\\w{4}");
-    // check meeting id is not null or invaild
-    // if meeting id is vaild then navigate to MeetingScreen with meetingId,token
-    if (meetingId.isNotEmpty && re.hasMatch(meetingId)) {
-      _meetingIdController.clear();
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => MeetingScreen(
-            conferenceID: meetingId,
-            token: AppConstants.videosdkToken,
-          ),
-        ),
-      );
-    } else {
+  void _joinMeeting(WidgetRef ref, BuildContext context) {
+    if (_meetingIdController.text.isEmpty) {
       customSnackbar(
         context: context,
-        text: "لا توجد اي غرف بالرمز ${_meetingIdController.text}",
+        text: 'اكتب الرمز من فضلك',
       );
+      return;
+    } else {
+      ref.read(meetingControllerProvider).joinMeeting(
+            context,
+            _meetingIdController.text.trim(),
+          );
     }
   }
 }

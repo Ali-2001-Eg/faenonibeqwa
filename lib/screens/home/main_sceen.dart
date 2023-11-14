@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:faenonibeqwa/screens/home/settings_screen.dart';
 import 'package:faenonibeqwa/screens/home/trips_screen.dart';
 
@@ -32,6 +34,7 @@ class MainScreen extends ConsumerWidget {
         elevation: 0,
         type: BottomNavigationBarType.fixed,
         currentIndex: selectedTabIndex,
+        landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
         onTap: (value) {
           ref.read(homeProvider).changeIndex(value);
         },

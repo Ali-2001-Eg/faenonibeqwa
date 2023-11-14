@@ -1,16 +1,20 @@
+import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:videosdk/videosdk.dart';
 
-class ParticipantTile extends StatefulWidget {
+import '../../controllers/auth_controller.dart';
+
+class ParticipantTile extends ConsumerStatefulWidget {
   final Participant participant;
 
   const ParticipantTile({super.key, required this.participant});
 
   @override
-  State<ParticipantTile> createState() => _ParticipantTileState();
+  ConsumerState<ParticipantTile> createState() => _ParticipantTileState();
 }
 
-class _ParticipantTileState extends State<ParticipantTile> {
+class _ParticipantTileState extends ConsumerState<ParticipantTile> {
   Stream? videoStream;
   Stream? audioStream;
 
@@ -68,14 +72,21 @@ class _ParticipantTileState extends State<ParticipantTile> {
           : Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                color: Colors.grey.shade800,
+                color: context.theme.cardColor,
               ),
-              child: const Center(
-                child: Icon(
-                  Icons.person,
-                  size: 100,
-                ),
-              ),
+              child: FutureBuilder<String>(
+                  future: ref.read(authControllerProvider).getPhotoUrl,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Container();
+                    }
+                    if (snapshot.data == '') {
+                      return Container();
+                    }
+                    return CircleAvatar(
+                      backgroundImage: NetworkImage(snapshot.data!),
+                    );
+                  }),
             ),
     );
   }

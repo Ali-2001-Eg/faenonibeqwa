@@ -3,18 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'colors.dart';
 
-ThemeData lightMode(context) => ThemeData.light().copyWith(
+ThemeData get lightMode => ThemeData.light().copyWith(
       scaffoldBackgroundColor: lightScaffold,
       iconTheme: const IconThemeData(
         color: lightButton,
       ),
       textTheme: TextTheme(
-        displayMedium: TextStyle(
-          color: Colors.black,
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w500
-        )
-      ),
+          displayMedium: TextStyle(
+              color: Colors.black,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w500)),
       hoverColor: lightReplyColor,
       bottomNavigationBarTheme:
           BottomNavigationBarThemeData(backgroundColor: Colors.blue[100]),
@@ -22,6 +20,14 @@ ThemeData lightMode(context) => ThemeData.light().copyWith(
         style: ButtonStyle(
           elevation: MaterialStatePropertyAll<double>(0),
           iconColor: MaterialStatePropertyAll<Color>(lightButton),
+        ),
+      ),
+      elevatedButtonTheme: const ElevatedButtonThemeData(
+        style: ButtonStyle(
+          elevation: MaterialStatePropertyAll<double>(0),
+          backgroundColor: MaterialStatePropertyAll<Color>(lightButton),
+          padding: MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.all(10)),
+          
         ),
       ),
       cardColor: lightMessage,

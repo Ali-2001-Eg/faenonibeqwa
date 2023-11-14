@@ -1,19 +1,19 @@
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 
-class BigText extends StatelessWidget {
+class SmallText extends StatelessWidget {
   final String text;
   final double fontSize;
   final Color? color;
-  final TextAlign? textAlign;
   final FontWeight fontWeight;
-  const BigText({
+  final TextAlign? textAlign;
+  const SmallText({
     super.key,
     required this.text,
-    this.fontSize = 20,
-    this.color,
-    this.textAlign,
-    this.fontWeight = FontWeight.w800,
+     this.fontSize = 14,
+     this.color,
+     this.fontWeight = FontWeight.w500,
+     this.textAlign,
   });
 
   @override

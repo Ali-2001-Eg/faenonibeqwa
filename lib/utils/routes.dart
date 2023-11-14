@@ -1,3 +1,4 @@
+import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/base/constants.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'base/error_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
+    case LoginScreen.routeName:
+      return _buildNewRoute(const LoginScreen());
     case MainScreen.routeName:
       return _buildNewRoute(const MainScreen());
     case MeetingScreen.routeName:
