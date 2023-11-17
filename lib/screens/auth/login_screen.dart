@@ -31,13 +31,11 @@ class LoginScreen extends ConsumerWidget {
           ),
           CustomButton(
             onTap: () => _googleSignIn(ref, context),
-            svgPath: 'assets/svg/google.svg',
             text: 'Sign in with Google',
           ),
-          if (Platform.isIOS)
+         
             CustomButton(
               onTap: () {},
-              svgPath: 'assets/svg/apple.svg',
               text: 'Sign in with Apple',
             ),
         ],

@@ -1,6 +1,8 @@
 class AppConstants {
-  //AppConstants._intrenal();
-  static const String videosdkToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiI1ZWZkZTcxMS02ZjkxLTQ3MzEtYTYwZS1kNDg5Y2QwMDcyMzgiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTY5OTk3MjM4NCwiZXhwIjoxNzAyNTY0Mzg0fQ.kMOA1GjqTOZR7IPynN0PnbfhpV3JEPXH04ujRmlxuSI';
-  static const String videosdkBaseUrl = 'https://api.videosdk.live/v2/rooms';
+  
+  static String appId = '65eea9cb5796412fa31855c300eab573';
+  static String appCertificate = '833538363a9e431bbcd254da38bb0f30';
+  static const String baseUrl =
+      'https://chat-live-app-9fa050a2955b.herokuapp.com';
+      
 }

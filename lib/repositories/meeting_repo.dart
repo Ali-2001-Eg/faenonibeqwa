@@ -3,12 +3,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faenonibeqwa/models/meeting_model.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
+import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import 'package:videosdk/videosdk.dart';
 
 import '../controllers/auth_controller.dart';
 import '../utils/base/constants.dart';
@@ -32,66 +32,106 @@ class MeetingRepo extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> createMeeting(BuildContext context) async {
-    // call api to create meeting and then navigate to MeetingScreen with meetingId,token
-    await ApiClient.createMeeting().then((meetId) async {
-      if (kDebugMode) {
-        print('meeting id is  $meetId');
+  Future<String> startMeeting(
+      BuildContext context, String title, Uint8List? image) async {
+    final user = await ref.read(authControllerProvider).user;
+    print('user email is ${user?.email}');
+    String channelId = '';
+    try {
+      if (title.isNotEmpty && image != null && user != null) {
+        if (!((await firestore
+                .collection('meeting')
+                .doc('${user.uid}${user.displayName}')
+                .get())
+            .exists)) {
+          String thumbnailUrl = await ref
+              .read(firebaseStorageRepoProvider)
+              .storeFileToFirebaseStorage(
+                'Meeting-thumbnails',
+                image,
+                user.uid,
+              );
+          channelId = '${user.uid}${user.displayName}';
+
+          MeetingModel meeting = MeetingModel(
+            title: title,
+            image: thumbnailUrl,
+            uid: user.uid,
+            username: user.displayName ?? '',
+            viewers: 0,
+            channelId: channelId,
+            startedAt: DateTime.now(),
+          );
+
+          firestore.collection('meeting').doc(channelId).set(meeting.toMap());
+        } else {
+          if (context.mounted) {
+            customSnackbar(
+                context: context,
+                text: 'Two Meeting cannot start at the same time.');
+          }
+        }
       }
-      MeetingModel meeting = MeetingModel(
-        id: meetId,
-        admin: await ref.read(authControllerProvider).getName,
-        adminPhotoUrl: await ref.read(authControllerProvider).getPhotoUrl,
-        timeEnded: false,
-        audience: [auth.currentUser!.uid],
-      );
-      firestore.collection('meetings').doc(meetId).set(meeting.toMap());
-      if (context.mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => MeetingScreen(
-              conferenceID: meetId,
-              token: AppConstants.videosdkToken,
-            ),
-          ),
-        );
-      }
-    });
+    } on FirebaseException catch (e) {
+      if (context.mounted) customSnackbar(context: context, text: e.message!);
+    }
+    return channelId;
   }
 
-  Future<void> joinMeeting(BuildContext context, String meetingId) async {
-    var re = RegExp("\\w{4}\\-\\w{4}\\-\\w{4}");
-    // check meeting id is not null or invaild
-    // if meeting id is vaild then navigate to MeetingScreen with meetingId,token
-    if (meetingId.isNotEmpty && re.hasMatch(meetingId)) {
-      await firestore.collection('meetings').doc(meetingId).update({
-        'audience': FieldValue.arrayUnion([auth.currentUser!.uid]),
+  Future<void> chat(String text, String id, BuildContext context) async {
+    final user = await ref.read(authControllerProvider).user;
+
+    try {
+      String commentId = const Uuid().v1();
+      await firestore
+          .collection('meeting')
+          .doc(id)
+          .collection('comments')
+          .doc(commentId)
+          .set({
+        'username': user!.displayName,
+        'message': text,
+        'uid': user.uid,
+        'createdAt': DateTime.now(),
+        'commentId': commentId,
       });
-      if (context.mounted) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => MeetingScreen(
-              conferenceID: meetingId,
-              token: AppConstants.videosdkToken,
-            ),
-          ),
-        );
-      }
-    } else {
-      customSnackbar(
-        context: context,
-        text: "لا توجد اي غرف بالرمز $meetingId",
-      );
+    } on FirebaseException catch (e) {
+      if (context.mounted) customSnackbar(context: context, text: e.message!);
     }
   }
 
-  Future<void> endMeeeting(Room room, BuildContext context) async {
-    await firestore
-        .collection('meetings')
-        .doc(room.id)
-        .update({'timeEnded': true});
-    room.end();
-    if (context.mounted) Navigator.popUntil(context, (route) => false);
+  Future<void> updateViewCount(String id, bool isIncrease) async {
+    try {
+      await firestore.collection('meeting').doc(id).update({
+        'viewers': FieldValue.increment(isIncrease ? 1 : -1),
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> endMeeting(String channelId) async {
+    try {
+      QuerySnapshot snap = await firestore
+          .collection('meeting')
+          .doc(channelId)
+          .collection('comments')
+          .get();
+
+      for (int i = 0; i < snap.docs.length; i++) {
+        await firestore
+            .collection('meeting')
+            .doc(channelId)
+            .collection('comments')
+            .doc(
+              ((snap.docs[i].data()! as dynamic)['commentId']),
+            )
+            .delete();
+      }
+      await firestore.collection('meeting').doc(channelId).delete();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }
 

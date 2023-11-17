@@ -1,9 +1,9 @@
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
-import 'package:faenonibeqwa/utils/base/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/home/main_sceen.dart';
+import '../screens/meeting/create_meeting_screen.dart';
 import 'base/error_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -12,12 +12,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _buildNewRoute(const LoginScreen());
     case MainScreen.routeName:
       return _buildNewRoute(const MainScreen());
+    case CreateMeetingScreen.routeName:
+      return _buildNewRoute(const CreateMeetingScreen());
     case MeetingScreen.routeName:
       final args = settings.arguments as Map<String, String>;
-      final conferenceID = args['conferenceID'] as String;
+      final channelId = args['channelId'] as String;
+      final isBroadcaster = args['isBroadcaster'] as bool;
       return _buildNewRoute(MeetingScreen(
-        conferenceID: conferenceID,
-        token: AppConstants.videosdkToken,
+        channelId: channelId,
+        isBroadcaster: isBroadcaster,
       ));
     default:
       return _buildNewRoute(const ErrorScreen());

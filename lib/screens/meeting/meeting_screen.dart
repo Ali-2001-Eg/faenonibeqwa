@@ -1,268 +1,316 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: library_prefixes
 
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/controllers/meeting_controller.dart';
-import 'package:faenonibeqwa/repositories/meeting_repo.dart';
-import 'package:faenonibeqwa/screens/meeting/meeting_app_bar.dart';
-import 'package:faenonibeqwa/screens/meeting/participant_tile.dart';
-import 'package:faenonibeqwa/screens/meeting/share_screen_view.dart';
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:faenonibeqwa/screens/home/main_sceen.dart';
+import 'package:faenonibeqwa/utils/base/constants.dart';
+import 'package:faenonibeqwa/utils/responsive/responsive_layout.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:videosdk/videosdk.dart';
-import '../../utils/base/constants.dart';
-import 'meetings_controls.dart';
-
-final String userId = Random().nextInt(10000).toString();
+import 'package:http/http.dart' as http;
+import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
+import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
+import '../../utils/shared/widgets/custom_button.dart';
+import 'chat_widget.dart';
 
 class MeetingScreen extends ConsumerStatefulWidget {
-  //secret key to enter the conference
-  final String conferenceID;
-  final String token;
-  static const String routeName = '/meeting-screen';
+  static const String routeName = '/meeting';
+  final bool isBroadcaster;
+  final String channelId;
   const MeetingScreen({
     Key? key,
-    required this.conferenceID,
-    required this.token,
+    required this.isBroadcaster,
+    required this.channelId,
   }) : super(key: key);
 
   @override
-  ConsumerState<MeetingScreen> createState() => _MeetingScreenState();
+  ConsumerState<MeetingScreen> createState() => _BroadcastScreenState();
 }
 
-class _MeetingScreenState extends ConsumerState<MeetingScreen> {
-  late Room _room;
+class _BroadcastScreenState extends ConsumerState<MeetingScreen> {
+  late final RtcEngine _engine;
+  List<int> remoteUid = [];
+  bool switchCamera = true;
+  bool isMuted = false;
+  bool isScreenSharing = false;
 
-  Map<String, Participant> participants = {};
   @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
+  void initState() {
+    super.initState();
+    _initEngine();
+  }
+
+  void _initEngine() async {
+    _engine =
+        await RtcEngine.createWithContext(RtcEngineContext(AppConstants.appId));
+    _addListeners();
+
+    await _engine.enableVideo();
+    await _engine.startPreview();
+    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    if (widget.isBroadcaster) {
+      _engine.setClientRole(ClientRole.Broadcaster);
+    } else {
+      _engine.setClientRole(ClientRole.Audience);
+    }
+    _joinChannel();
+  }
+
+  String baseUrl = AppConstants.baseUrl;
+
+  String? token;
+
+  Future<void> getToken() async {
+    final res = await http.get(
+      Uri.parse(
+          '$baseUrl/rtc/${widget.channelId}/publisher/userAccount/${FirebaseAuth.instance.currentUser!.uid}/'),
+    );
+
+    if (res.statusCode == 200) {
+      setState(() {
+        token = res.body;
+        token = jsonDecode(token!)['rtcToken'];
+      });
+    } else {
+      debugPrint('Failed to fetch the token');
     }
   }
 
-  @override
-  void didChangeDependencies() async {
-    // create room
-    _room = VideoSDK.createRoom(
-      roomId: widget.conferenceID,
-      token: widget.token,
-      displayName: await ref.read(authControllerProvider).getName,
-      micEnabled: ref.read(micEnabled),
-      camEnabled: ref.read(camEnabled),
-      defaultCameraIndex:
-          1, // Index of MediaDevices will be used to set default camera
+  void _addListeners() {
+    _engine.setEventHandler(
+        RtcEngineEventHandler(joinChannelSuccess: (channel, uid, elapsed) {
+      debugPrint('joinChannelSuccess $channel $uid $elapsed');
+    }, userJoined: (uid, elapsed) {
+      debugPrint('userJoined $uid $elapsed');
+      setState(() {
+        remoteUid.add(uid);
+      });
+    }, userOffline: (uid, reason) {
+      debugPrint('userOffline $uid $reason');
+      setState(() {
+        remoteUid.removeWhere((element) => element == uid);
+      });
+    }, leaveChannel: (stats) {
+      debugPrint('leaveChannel $stats');
+      setState(() {
+        remoteUid.clear();
+      });
+    }, tokenPrivilegeWillExpire: (token) async {
+      await getToken();
+      await _engine.renewToken(token);
+    }));
+  }
+
+  void _joinChannel() async {
+    await getToken();
+    if (token != null) {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        await [Permission.microphone, Permission.camera].request();
+      }
+      await _engine.joinChannelWithUserAccount(
+        token,
+        widget.channelId,
+        FirebaseAuth.instance.currentUser!.uid,
+      );
+    }
+  }
+
+  void _switchCamera() {
+    _engine.switchCamera().then((value) {
+      setState(() {
+        switchCamera = !switchCamera;
+      });
+    }).catchError((err) {
+      debugPrint('switchCamera $err');
+    });
+  }
+
+  void onToggleMute() async {
+    setState(() {
+      isMuted = !isMuted;
+    });
+    await _engine.muteLocalAudioStream(isMuted);
+  }
+
+  _startScreenShare() async {
+    final helper = await _engine.getScreenShareHelper(
+        appGroup: kIsWeb || Platform.isWindows ? null : 'io.agora');
+    await helper.disableAudio();
+    await helper.enableVideo();
+    await helper.setChannelProfile(ChannelProfile.LiveBroadcasting);
+    await helper.setClientRole(ClientRole.Broadcaster);
+    var windowId = 0;
+    var random = Random();
+    if (!kIsWeb &&
+        (Platform.isWindows || Platform.isMacOS || Platform.isAndroid)) {
+      final windows = _engine.enumerateWindows();
+      if (windows.isNotEmpty) {
+        final index = random.nextInt(windows.length - 1);
+        debugPrint('Screensharing window with index $index');
+        windowId = windows[index].id;
+      }
+    }
+    await helper.startScreenCaptureByWindowId(windowId);
+    setState(() {
+      isScreenSharing = true;
+    });
+    await helper.joinChannelWithUserAccount(
+      token,
+      widget.channelId,
+      ref.read(authControllerProvider).userInfo.uid,
     );
-    _setMeetingEventListener();
+  }
 
-    // Join room
-    _room.join();
+  _stopScreenShare() async {
+    final helper = await _engine.getScreenShareHelper();
+    await helper.destroy().then((value) {
+      setState(() {
+        isScreenSharing = false;
+      });
+    }).catchError((err) {
+      debugPrint('StopScreenShare $err');
+    });
+  }
 
-    super.didChangeDependencies();
+  _leaveChannel() async {
+    await _engine.leaveChannel();
+    if ('${ref.read(authControllerProvider).userInfo.uid}${ref.read(authControllerProvider).userInfo.displayName}' ==
+        widget.channelId) {
+      await ref.read(meetingControllerProvider).endMeeting(widget.channelId);
+    } else {
+      await ref
+          .read(meetingControllerProvider)
+          .updateViewCount(widget.channelId, false);
+    }
+    if (mounted) Navigator.pushReplacementNamed(context, MainScreen.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isMicEnabled = ref.watch(micEnabled.state).state;
-    bool isCamEnabled = ref.watch(camEnabled.state).state;
-    bool isShareScreenEnabled = ref.watch(shareScreenEnabled.state).state;
-    //_room.end();
+    final User user = ref.read(authControllerProvider).userInfo;
 
-    return SafeArea(
-        child: WillPopScope(
-      onWillPop: _onWillPop,
+    return WillPopScope(
+      onWillPop: () async {
+        await _leaveChannel();
+        return Future.value(true);
+      },
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(context.screenWidth, 60.h),
-          child: MeetingAppBar(
-            meeting: _room,
-            token: AppConstants.videosdkToken,
-            isFullScreen: false,
-          ),
-        ),
+        bottomNavigationBar: widget.isBroadcaster
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: CustomButton(
+                  text: 'End Stream',
+                  onTap: _leaveChannel,
+                ),
+              )
+            : null,
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: GestureDetector(
-                    child: OrientationBuilder(builder: (context, orientation) {
-                  return Flex(
-                    direction: orientation == Orientation.portrait
-                        ? Axis.vertical
-                        : Axis.horizontal,
+          padding: const EdgeInsets.all(8),
+          child: ResponsiveLayout(
+            desktopBody: Row(
+              children: [
+                Expanded(
+                  child: Column(
                     children: [
-                      ScreenShareView(
-                        meeting: _room,
-                        onStopShareScreen: () async {
-                          isShareScreenEnabled = false;
-
-                          await _room.disableScreenShare();
-                        },
-                      ),
+                      _renderVideo(user, isScreenSharing),
+                      if ("${user.uid}${user.displayName}" == widget.channelId)
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: _switchCamera,
+                              child: const Text('Switch Camera'),
+                            ),
+                            InkWell(
+                              onTap: onToggleMute,
+                              child: Text(isMuted ? 'Unmute' : 'Mute'),
+                            ),
+                            InkWell(
+                              onTap: isScreenSharing
+                                  ? _stopScreenShare
+                                  : _startScreenShare,
+                              child: Text(
+                                isScreenSharing
+                                    ? 'Stop ScreenSharing'
+                                    : 'Start Screensharing',
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
-                  );
-                })),
-              ),
-              //render all participant
-
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GridView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      mainAxisExtent: 300,
-                    ),
-                    itemBuilder: (context, index) {
-                      if (kDebugMode) {
-                        print(
-                            'participants number is ${participants.entries.map((e) => e.value)}');
-                      }
-                      return ParticipantTile(
-                          key: Key(participants.values.elementAt(index).id),
-                          participant: participants.values.elementAt(index));
-                    },
-                    itemCount: participants.length,
                   ),
                 ),
-              ),
-              MeetingControls(
-                onToggleMicButtonPressed: () {
-                  isMicEnabled ? _room.muteMic() : _room.unmuteMic();
-                  ref.read(meetingControllerProvider).toggleMicEnabled;
-                },
-                onToggleCameraButtonPressed: () {
-                  isCamEnabled ? _room.disableCam() : _room.enableCam();
-                  ref.read(meetingControllerProvider).toggleCamEnabled;
-                },
-                onLeaveButtonPressed: () => showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('مغادره المكالمه'),
-                        content: const Text('تأكيد الخروج من المكالمه'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              // Close the dialog and navigate away
-                              Navigator.of(context).pop();
-                              _room.disableScreenShare();
-                              isShareScreenEnabled = false;
-                              //to ensure thet share screen is not enabled
-                              Future.delayed(const Duration(seconds: 1),
-                                  () => _room.leave());
-                            },
-                            child: const Text(
-                              'تأكيد',
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              // Close the dialog
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('البقاء'),
-                          ),
-                        ],
-                      );
-                    }),
-                onToggelShareScreenPressed: () {
-                  if (ref.read(shareScreenEnabled)) {
-                    _room.disableScreenShare();
-                    isShareScreenEnabled = false;
-                  } else {
-                    _room.enableScreenShare();
-                    isShareScreenEnabled = true;
-                  }
-                },
-                isMicEnabled: isMicEnabled,
-                isCamEnabled: isCamEnabled,
-                isScreenShareEnabled: isShareScreenEnabled,
-              ),
-            ],
+                ChatWidget(channelId: widget.channelId),
+              ],
+            ),
+            mobileBody: Column(
+              children: [
+                _renderVideo(user, isScreenSharing),
+                if ("${user.uid}${user.displayName}" == widget.channelId)
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: _switchCamera,
+                        child: const Text('Switch Camera'),
+                      ),
+                      InkWell(
+                        onTap: onToggleMute,
+                        child: Text(isMuted ? 'Unmute' : 'Mute'),
+                      ),
+                    ],
+                  ),
+                Expanded(
+                  child: ChatWidget(
+                    channelId: widget.channelId,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ));
-  }
-
-// listening to meeting events
-  void _setMeetingEventListener() {
-    _room.on(Events.roomJoined, () {
-      setState(() {
-        participants.putIfAbsent(
-            _room.localParticipant.id, () => _room.localParticipant);
-      });
-    });
-
-    _room.on(
-      Events.participantJoined,
-      (Participant participant) {
-        setState(
-          () => participants.putIfAbsent(participant.id, () => participant),
-        );
-      },
     );
-
-    _room.on(Events.participantLeft, (String participantId) {
-      if (participants.containsKey(participantId)) {
-        setState(
-          () => participants.remove(participantId),
-        );
-      }
-    });
-
-    _room.on(Events.roomLeft, () {
-      participants.clear();
-      Navigator.popUntil(context, ModalRoute.withName('/'));
-    });
   }
 
-  Future<bool> _onWillPop() async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('مغادره المكالمه'),
-            content: const Text('تأكيد الخروج من المكالمه'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  // Close the dialog and navigate away
-                  Navigator.of(context).pop();
-                  _room.disableScreenShare();
-                  ref.read(shareScreenEnabled.state).state = false;
-                  //to ensure thet share screen is not enabled
-                  Future.delayed(
-                      const Duration(seconds: 1), () => _room.leave());
-                },
-                child: const Text(
-                  'تأكيد',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  // Close the dialog
-                  Navigator.of(context).pop();
-                },
-                child: const Text('البقاء'),
-              ),
-            ],
-          );
-        });
-    return true;
+  _renderVideo(User user, bool isScreenSharing) {
+    
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: "${user.uid}${user.displayName}" == widget.channelId
+          ? isScreenSharing
+              ? kIsWeb
+                  ? const RtcLocalView.SurfaceView.screenShare()
+                  : const RtcLocalView.TextureView.screenShare()
+              : const RtcLocalView.SurfaceView(
+                  zOrderMediaOverlay: true,
+                  zOrderOnTop: true,
+                )
+          : isScreenSharing
+              ? kIsWeb
+                  ? const RtcLocalView.SurfaceView.screenShare()
+                  : const RtcLocalView.TextureView.screenShare()
+              : remoteUid.isNotEmpty
+                  ? kIsWeb
+                      ? RtcRemoteView.SurfaceView(
+                          uid: remoteUid[0],
+                          channelId: widget.channelId,
+                        )
+                      : RtcRemoteView.TextureView(
+                          uid: remoteUid[0],
+                          channelId: widget.channelId,
+                        )
+                  : Container(),
+    );
   }
 }

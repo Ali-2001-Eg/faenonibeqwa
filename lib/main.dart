@@ -17,7 +17,20 @@ void main() async {
   /*  Future.wait([
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
   ]); */
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: const  FirebaseOptions(
+      apiKey: 'AIzaSyAze24W-AA8y5DvywYhTC4-EjZTkWBcKL8',
+      appId: '1:673382117239:web:56d2ad88b239747e517b72',
+      messagingSenderId: '673382117239',
+      projectId: 'faenonibeqwa',
+    ));
+  } else {
+    //await Firebase.initializeApp();
+  }
+
+await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const ProviderScope(child: MyApp()));
 }
 

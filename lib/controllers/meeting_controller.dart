@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/repositories/meeting_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,10 +18,21 @@ class MeetingController {
   void get toggleMicEnabled => meetingRepo.toggleMic;
   void get toggleCamEnabled => meetingRepo.toggleCam;
   void get toggleScreenShareEnabled => meetingRepo.toggleScreenShare;
-  //create meeting
-  Future<void> createMeeting(BuildContext context) =>
-      meetingRepo.createMeeting(context);
-  //join meeting
-  void joinMeeting(BuildContext context, String meetingIdController) =>
-      meetingRepo.joinMeeting(context, meetingIdController);
+  //meeting start
+  Future<String> startMeeting(
+          BuildContext context, String title, Uint8List image) =>
+      meetingRepo.startMeeting(context, title, image);
+  //chat
+  Future<void> chat(String text, String id, BuildContext context) async => ref
+      .read(userDataProvider)
+      .whenData((value) => meetingRepo.chat(text, id, context));
+  //update viewer count
+  Future<void> updateViewCount(String id, bool isIncrease) async => ref
+      .read(userDataProvider)
+      .whenData((value) => meetingRepo.updateViewCount(id, isIncrease));
+  //end meeting
+  Future<void> endMeeting(String channelId) async => ref
+      .read(userDataProvider)
+      .whenData((value) => meetingRepo.endMeeting(channelId));
+  
 }
