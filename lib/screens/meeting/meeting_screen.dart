@@ -39,6 +39,7 @@ class _BroadcastScreenState extends ConsumerState<MeetingScreen> {
   late final RtcEngine _engine;
   List<int> remoteUid = [];
   bool switchCamera = true;
+  bool cameraDisabled = true;
   bool isMuted = false;
   bool isScreenSharing = false;
 
@@ -133,11 +134,19 @@ class _BroadcastScreenState extends ConsumerState<MeetingScreen> {
     });
   }
 
-  void onToggleMute() async {
+  void _toggleCamera() {
+    setState(() {
+      cameraDisabled = !cameraDisabled;
+    });
+
+    _engine.enableLocalVideo(cameraDisabled);
+  }
+
+  void _onToggleMute() async {
     setState(() {
       isMuted = !isMuted;
     });
-    await _engine.muteLocalAudioStream(isMuted);
+    await _engine.enableLocalAudio(isMuted);
   }
 
   _startScreenShare() async {
@@ -184,89 +193,140 @@ class _BroadcastScreenState extends ConsumerState<MeetingScreen> {
     await _engine.leaveChannel();
     if ('${ref.read(authControllerProvider).userInfo.uid}${ref.read(authControllerProvider).userInfo.displayName}' ==
         widget.channelId) {
-      await ref.read(meetingControllerProvider).endMeeting(widget.channelId);
+      await ref
+          .read(meetingControllerProvider)
+          .endMeeting(widget.channelId)
+          .then((value) => (mounted)
+              ? Navigator.pushReplacementNamed(context, MainScreen.routeName)
+              : null);
     } else {
       await ref
           .read(meetingControllerProvider)
-          .updateViewCount(widget.channelId, false);
+          .updateViewCount(widget.channelId, false)
+          .then((value) => (mounted)
+              ? Navigator.pushReplacementNamed(context, MainScreen.routeName)
+              : null);
     }
-    if (mounted) Navigator.pushReplacementNamed(context, MainScreen.routeName);
+  }
+
+  void _toggleScreenSharing() {
+    if (isScreenSharing) {
+      _engine.stopScreenCapture();
+    } else {
+      // Example values, replace with your actual values
+      int windowId = 0; // Replace with the ID of the window you want to capture
+      Rect rect = Rect(
+          left: 0,
+          top: 0,
+          right: 720,
+          bottom: 1280); // Replace with the region to be captured
+      int captureFreq = 15; // Replace with the desired frame rate
+      int bitrate = 1200; // Replace with the desired bitrate
+
+      _engine.startScreenCapture(windowId, captureFreq, rect, bitrate);
+    }
+    setState(() {
+      isScreenSharing = !isScreenSharing;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final User user = ref.read(authControllerProvider).userInfo;
-
+    print(user.email);
     return WillPopScope(
       onWillPop: () async {
         await _leaveChannel();
         return Future.value(true);
       },
       child: Scaffold(
-        bottomNavigationBar: widget.isBroadcaster
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: CustomButton(
-                  text: 'End Stream',
-                  onTap: _leaveChannel,
-                ),
-              )
-            : null,
         body: Padding(
           padding: const EdgeInsets.all(8),
           child: ResponsiveLayout(
             desktopBody: Row(
               children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      _renderVideo(user, isScreenSharing),
-                      if ("${user.uid}${user.displayName}" == widget.channelId)
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: _switchCamera,
-                              child: const Text('Switch Camera'),
+                Column(
+                  children: [
+                    _renderVideo(user),
+                    if ("${user.uid}${user.displayName}" == widget.channelId)
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          InkWell(
+                            onTap: _switchCamera,
+                            child: const Text('Switch Camera'),
+                          ),
+                          InkWell(
+                            onTap: _onToggleMute,
+                            child: Text(isMuted ? 'Unmute' : 'Mute'),
+                          ),
+                          InkWell(
+                            onTap: isScreenSharing
+                                ? _stopScreenShare
+                                : _startScreenShare,
+                            child: Text(
+                              isScreenSharing
+                                  ? 'Stop ScreenSharing'
+                                  : 'Start Screensharing',
                             ),
-                            InkWell(
-                              onTap: onToggleMute,
-                              child: Text(isMuted ? 'Unmute' : 'Mute'),
-                            ),
-                            InkWell(
-                              onTap: isScreenSharing
-                                  ? _stopScreenShare
-                                  : _startScreenShare,
-                              child: Text(
-                                isScreenSharing
-                                    ? 'Stop ScreenSharing'
-                                    : 'Start Screensharing',
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
+                          ),
+                        ],
+                      ),
+                  ],
                 ),
                 ChatWidget(channelId: widget.channelId),
               ],
             ),
             mobileBody: Column(
               children: [
-                _renderVideo(user, isScreenSharing),
+                /* SizedBox(
+                  height: 500,
+                  child: RtcLocalView.SurfaceView(
+                    channelId: widget.channelId, // Replace with your channel ID
+                  ),
+                ), */
+                _renderVideo(user),
+                //_displayShareScreen(),
                 if ("${user.uid}${user.displayName}" == widget.channelId)
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       InkWell(
-                        onTap: _switchCamera,
-                        child: const Text('Switch Camera'),
+                        onTap: _onToggleMute,
+                        child: Icon(isMuted ? Icons.mic_off : Icons.mic),
                       ),
                       InkWell(
-                        onTap: onToggleMute,
-                        child: Text(isMuted ? 'Unmute' : 'Mute'),
+                        onTap: _toggleCamera,
+                        child: Icon(!cameraDisabled
+                            ? Icons.videocam_off
+                            : Icons.videocam),
+                      ),
+                      InkWell(
+                        onTap: _switchCamera,
+                        child: const Icon(Icons.switch_camera),
+                      ),
+                      InkWell(
+                        onTap: _toggleScreenSharing,
+                        child: Icon(
+                          Icons.screen_share,
+                          color: isScreenSharing ? Colors.blue : Colors.grey,
+                        ),
+                      ),
+                      if (widget.isBroadcaster)
+                        InkWell(
+                          onTap: () {},
+                          child: const Icon(
+                            Icons.message,
+                          ),
+                        ),
+                      InkWell(
+                        onTap: _leaveChannel,
+                        child: const Icon(
+                          Icons.call_end,
+                          color: Colors.red,
+                        ),
                       ),
                     ],
                   ),
@@ -283,34 +343,36 @@ class _BroadcastScreenState extends ConsumerState<MeetingScreen> {
     );
   }
 
-  _renderVideo(User user, bool isScreenSharing) {
-    
+  AspectRatio _renderVideo(User user) {
     return AspectRatio(
-      aspectRatio: 16 / 9,
-      child: "${user.uid}${user.displayName}" == widget.channelId
-          ? isScreenSharing
-              ? kIsWeb
-                  ? const RtcLocalView.SurfaceView.screenShare()
-                  : const RtcLocalView.TextureView.screenShare()
-              : const RtcLocalView.SurfaceView(
-                  zOrderMediaOverlay: true,
-                  zOrderOnTop: true,
-                )
-          : isScreenSharing
-              ? kIsWeb
-                  ? const RtcLocalView.SurfaceView.screenShare()
-                  : const RtcLocalView.TextureView.screenShare()
-              : remoteUid.isNotEmpty
-                  ? kIsWeb
-                      ? RtcRemoteView.SurfaceView(
-                          uid: remoteUid[0],
-                          channelId: widget.channelId,
-                        )
-                      : RtcRemoteView.TextureView(
-                          uid: remoteUid[0],
-                          channelId: widget.channelId,
-                        )
-                  : Container(),
+        aspectRatio: 16 / 16,
+        child: "${user.uid}${user.displayName}" == widget.channelId
+            ? isScreenSharing
+                ? const RtcLocalView.TextureView.screenShare()
+                : const RtcLocalView.SurfaceView(
+                    zOrderMediaOverlay: true,
+                    zOrderOnTop: true,
+                  )
+            : remoteUid.isNotEmpty
+                ? RtcRemoteView.SurfaceView(
+                    uid: remoteUid[0],
+                    channelId: widget.channelId,
+                  )
+                : RtcRemoteView.TextureView(
+                    uid: remoteUid[0],
+                    channelId: widget.channelId,
+                  ));
+  }
+
+  _displayShareScreen() {
+    return AspectRatio(
+      aspectRatio: 16 / 16,
+      child: widget.isBroadcaster && isScreenSharing
+          ? RtcLocalView.TextureView.screenShare()
+          : remoteUid.isNotEmpty
+              ? RtcRemoteView.SurfaceView(
+                  uid: remoteUid[0], channelId: widget.channelId)
+              : Container(),
     );
   }
 }

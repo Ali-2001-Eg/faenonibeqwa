@@ -1,13 +1,16 @@
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MeetingTitleTextField extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final Function(String)? onTap;
-  const MeetingTitleTextField({
+  final String hint;
+  const CustomTextField({
     Key? key,
     required this.controller,
     this.onTap,
+    required this.hint,
   }) : super(key: key);
 
   @override
@@ -15,7 +18,11 @@ class MeetingTitleTextField extends StatelessWidget {
     return TextField(
       onSubmitted: onTap,
       controller: controller,
+      style: context.theme.textTheme.displayMedium!.copyWith(
+        fontSize: 16.sp,
+      ),
       decoration: InputDecoration(
+          hintText: hint,
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: context.theme.cardColor,

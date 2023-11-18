@@ -23,11 +23,11 @@ class MainScreen extends ConsumerWidget {
     return Scaffold(
       body: IndexedStack(
         index: selectedTabIndex,
-        children: [
+        children: const [
           HomeScreen(),
-          const TripsScreen(),
-          const EventsScreen(),
-          const SettingsScreen(),
+          TripsScreen(),
+          EventsScreen(),
+          SettingsScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

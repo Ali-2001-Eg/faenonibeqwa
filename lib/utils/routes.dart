@@ -9,7 +9,7 @@ import 'base/error_screen.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case LoginScreen.routeName:
-      return _buildNewRoute(const LoginScreen());
+      return _buildNewRoute( LoginScreen());
     case MainScreen.routeName:
       return _buildNewRoute(const MainScreen());
     case CreateMeetingScreen.routeName:

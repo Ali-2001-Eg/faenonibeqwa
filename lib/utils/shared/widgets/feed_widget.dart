@@ -49,6 +49,7 @@ class _FeedWidgetState extends ConsumerState<FeedWidget> {
                           .read(meetingControllerProvider)
                           .updateViewCount(post.channelId, true);
                       if (mounted) {
+                        print('channel id is  ${post.channelId}');
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => MeetingScreen(

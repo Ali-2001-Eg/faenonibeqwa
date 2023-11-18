@@ -32,22 +32,32 @@ class _GoLiveScreenState extends ConsumerState<CreateMeetingScreen> {
   }
 
   Future<void> goLiveStream() async {
-    String channelId = await ref
+    await ref
         .read(meetingControllerProvider)
-        .startMeeting(context, _titleController.text, image!);
-    print('channel id is  $channelId');
-    if (channelId.isNotEmpty && mounted) {
-      customSnackbar(
-          context: context, text: 'Livestream has started successfully!');
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => MeetingScreen(
-            isBroadcaster: true,
-            channelId: channelId,
+        .startMeeting(context, _titleController.text, image)
+        .then((value) {
+      print('channel id is  $value');
+      if (value.isNotEmpty && mounted) {
+        customSnackbar(
+          context: context,
+          text: 'Livestream has started successfully!',
+          color: Colors.green,
+        );
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MeetingScreen(
+              isBroadcaster: true,
+              channelId: value,
+            ),
           ),
-        ),
-      );
-    }
+        );
+      }
+      return value;
+    }).catchError((err) {
+      customSnackbar(context: context, text: 'Error: ${err.message}');
+      return err;
+    });
   }
 
   @override
@@ -132,8 +142,9 @@ class _GoLiveScreenState extends ConsumerState<CreateMeetingScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: MeetingTitleTextField(
+                            child: CustomTextField(
                               controller: _titleController,
+                              hint: 'Title',
                             ),
                           ),
                         ],

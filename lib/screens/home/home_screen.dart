@@ -8,9 +8,8 @@ import '../meeting/create_meeting_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   static const String routeName = '/home';
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
-  final TextEditingController _meetingIdController = TextEditingController();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
@@ -23,7 +22,6 @@ class HomeScreen extends ConsumerWidget {
               tooltip: 'قم بإنشاء محادثه بينك و بين أصدقائك',
               icon: const Icon(
                 Icons.call,
-                color: Colors.teal,
               ))
         ],
       ),
@@ -40,5 +38,4 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
-
 }

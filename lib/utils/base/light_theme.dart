@@ -6,14 +6,14 @@ import 'colors.dart';
 ThemeData get lightMode => ThemeData.light().copyWith(
       scaffoldBackgroundColor: lightScaffold,
       iconTheme: const IconThemeData(
-        color: lightButton,
+        color: lightIconColor,
       ),
       textTheme: TextTheme(
           displayMedium: TextStyle(
               color: Colors.black,
               fontSize: 18.sp,
               fontWeight: FontWeight.w500)),
-      hoverColor: lightReplyColor,
+      hoverColor: lightScaffold,
       bottomNavigationBarTheme:
           BottomNavigationBarThemeData(backgroundColor: Colors.blue[100]),
       iconButtonTheme: const IconButtonThemeData(
@@ -24,14 +24,15 @@ ThemeData get lightMode => ThemeData.light().copyWith(
       ),
       elevatedButtonTheme: const ElevatedButtonThemeData(
         style: ButtonStyle(
-          elevation: MaterialStatePropertyAll<double>(0),
-          backgroundColor: MaterialStatePropertyAll<Color>(lightButton),
-          padding: MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.all(10)),
-          
-        ),
+            elevation: MaterialStatePropertyAll<double>(0),
+            backgroundColor: MaterialStatePropertyAll<Color>(lightButton),
+            padding: MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.all(10)),
+            shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))))),
       ),
-      cardColor: lightMessage,
-      indicatorColor: lightBar,
+      cardColor: lightAppBar,
+      canvasColor: lightIconColor,
+      indicatorColor: indicatorColor,
       appBarTheme: AppBarTheme(
         color: lightAppBar,
         toolbarHeight: 50.h,
@@ -43,6 +44,7 @@ ThemeData get lightMode => ThemeData.light().copyWith(
         backgroundColor: lightAppBar,
       ),
       inputDecorationTheme: const InputDecorationTheme(
+        
         fillColor: lightChatBox,
         iconColor: lightText,
         isCollapsed: true,

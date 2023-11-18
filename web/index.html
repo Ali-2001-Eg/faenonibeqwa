@@ -40,6 +40,28 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script> 
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script> 
+
+<script> 
+	// paste the code copied 
+	// from Firebase SDK below. 
+	const firebaseConfig = {
+  apiKey: "AIzaSyAze24W-AA8y5DvywYhTC4-EjZTkWBcKL8",
+  authDomain: "faenonibeqwa.firebaseapp.com",
+  projectId: "faenonibeqwa",
+  storageBucket: "faenonibeqwa.appspot.com",
+  messagingSenderId: "673382117239",
+  appId: "1:673382117239:web:56d2ad88b239747e517b72",
+  measurementId: "G-87W0GLQFE0"
+};
+
+	// Initialize Firebase 
+	const app = initializeApp(firebaseConfig); 
+	const analytics = getAnalytics(app); 
+	
+</script>
+
   <script
       src="AgoraRtcWrapper.bundle.js"
       type="application/javascript"

@@ -38,19 +38,24 @@ class MeetingRepo extends ChangeNotifier {
     print('user email is ${user?.email}');
     String channelId = '';
     try {
-      if (title.isNotEmpty && image != null && user != null) {
+      if (title.isNotEmpty && user != null) {
         if (!((await firestore
                 .collection('meeting')
                 .doc('${user.uid}${user.displayName}')
                 .get())
             .exists)) {
-          String thumbnailUrl = await ref
-              .read(firebaseStorageRepoProvider)
-              .storeFileToFirebaseStorage(
-                'Meeting-thumbnails',
-                image,
-                user.uid,
-              );
+          String thumbnailUrl = '';
+          if (image != null) {
+            thumbnailUrl = await ref
+                .read(firebaseStorageRepoProvider)
+                .storeFileToFirebaseStorage(
+                  'Meeting-thumbnails',
+                  image,
+                  user.uid,
+                );
+          } else {
+            thumbnailUrl = '';
+          }
           channelId = '${user.uid}${user.displayName}';
 
           MeetingModel meeting = MeetingModel(

@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faenonibeqwa/controllers/meeting_controller.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/meeting_title_text_field.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../utils/shared/widgets/custom_indicator.dart';
-
 
 class ChatWidget extends ConsumerStatefulWidget {
   final String channelId;
@@ -31,7 +31,7 @@ class _ChatState extends ConsumerState<ChatWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final User userProvider =ref.read(authControllerProvider).userInfo;
+    final User userProvider = ref.read(authControllerProvider).userInfo;
     final size = MediaQuery.of(context).size;
 
     return SizedBox(
@@ -58,28 +58,29 @@ class _ChatState extends ConsumerState<ChatWidget> {
                     title: Text(
                       snapshot.data.docs[index]['username'],
                       style: TextStyle(
-                        color: snapshot.data.docs[index]['uid'] ==
-                                userProvider.uid
-                            ? Colors.blue
-                            : Colors.black,
+                        color:
+                            snapshot.data.docs[index]['uid'] == userProvider.uid
+                                ? Colors.blue
+                                : Colors.black,
                       ),
                     ),
-                    subtitle: Text(
-                      snapshot.data.docs[index]['message'],
+                    subtitle: SmallText(
+                      text: snapshot.data.docs[index]['message'],
                     ),
                   ),
                 );
               },
             ),
           ),
-          MeetingTitleTextField(
+          CustomTextField(
             controller: _chatController,
+            hint: 'Type your message',
             onTap: (val) {
               ref.read(meetingControllerProvider).chat(
-                _chatController.text,
-                widget.channelId,
-                context,
-              );
+                    _chatController.text,
+                    widget.channelId,
+                    context,
+                  );
               setState(() {
                 _chatController.text = "";
               });

@@ -4,6 +4,7 @@ import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/dark_theme.dart';
 import 'package:faenonibeqwa/utils/base/light_theme.dart';
 import 'package:faenonibeqwa/utils/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,18 +19,21 @@ void main() async {
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
   ]); */
   if (kIsWeb) {
-    await Firebase.initializeApp(
-        options: const  FirebaseOptions(
-      apiKey: 'AIzaSyAze24W-AA8y5DvywYhTC4-EjZTkWBcKL8',
-      appId: '1:673382117239:web:56d2ad88b239747e517b72',
-      messagingSenderId: '673382117239',
-      projectId: 'faenonibeqwa',
-    ));
-  } else {
-    //await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyAze24W-AA8y5DvywYhTC4-EjZTkWBcKL8",
+          authDomain: "faenonibeqwa.firebaseapp.com",
+          projectId: "faenonibeqwa",
+          storageBucket: "faenonibeqwa.appspot.com",
+          messagingSenderId: "673382117239",
+          appId: "1:673382117239:web:56d2ad88b239747e517b72",
+          measurementId: "G-87W0GLQFE0"));
+  }
+  else { 
+  //await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   }
 
-await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -57,8 +61,9 @@ class MyApp extends ConsumerWidget {
               child: Scaffold(
                 body: ref.watch(userDataProvider).when(
                   data: (user) {
+                    print('email is ${user?.email}');
                     if (user == null) {
-                      return const LoginScreen();
+                      return  LoginScreen();
                     }
                     return const MainScreen();
                   },

@@ -17,35 +17,27 @@ class AuthRepo extends ChangeNotifier {
 //google sign in
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   Future<void> signInWithGoogleAccount() async {
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
-      ref
-          .read(displayName.state)
-          .update((state) => googleSignInAccount!.displayName!);
-      ref
-          .read(displayEmail.state)
-          .update((state) => googleSignInAccount!.email);
-      ref
-          .read(displayPhotoUrl.state)
-          .update((state) => googleSignInAccount!.photoUrl!);
-      notifyListeners();
-      GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount!.authentication;
-      final AuthCredential credentials = GoogleAuthProvider.credential(
-        idToken: googleSignInAuthentication.idToken,
-        accessToken: googleSignInAuthentication.accessToken,
-      );
-      await auth.signInWithCredential(
-        credentials,
-      );
-      //firestore
-      _saveCredentials();
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
-    }
+    final GoogleSignInAccount? googleSignInAccount =
+        await _googleSignIn.signIn();
+    ref
+        .read(displayName.state)
+        .update((state) => googleSignInAccount!.displayName!);
+    ref.read(displayEmail.state).update((state) => googleSignInAccount!.email);
+    ref.read(displayPhotoUrl.state).update((state) =>
+        googleSignInAccount!.photoUrl ??
+        'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg');
+    notifyListeners();
+    GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount!.authentication;
+    final AuthCredential credentials = GoogleAuthProvider.credential(
+      idToken: googleSignInAuthentication.idToken,
+      accessToken: googleSignInAuthentication.accessToken,
+    );
+    await auth.signInWithCredential(
+      credentials,
+    );
+    //firestore
+    _saveCredentials();
   }
 
   //firestore
@@ -61,7 +53,7 @@ class AuthRepo extends ChangeNotifier {
           .collection('users')
           .doc(auth.currentUser!.uid)
           .set(user.toMap());
-      //  print('email is ${user.email}');
+      print('email is ${user.email}');
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -85,9 +77,9 @@ class AuthRepo extends ChangeNotifier {
   }
 
   //get photo url
-  Future<String> get getPhotoUrl  async{
+  Future<String> get getPhotoUrl async {
     String photoUrl = '';
-     await getUserData.then((value) => photoUrl = value!.photoUrl);
+    await getUserData.then((value) => photoUrl = value!.photoUrl);
     return photoUrl;
   }
 
@@ -96,6 +88,48 @@ class AuthRepo extends ChangeNotifier {
     String name = '';
     getUserData.then((value) => name = value!.name);
     return name;
+  }
+
+  Future<void> signout() async {
+    try {
+      auth.signOut();
+    } catch (e) {
+      print('sign out $e');
+    }
+  }
+
+  Future signUp(
+      String email, String password, String username, String image) async {
+    try {
+      await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      ref.read(displayName.state).update((state) => username);
+      ref.read(displayEmail.state).update((state) => email);
+      ref.read(displayPhotoUrl.state).update((state) => image);
+      notifyListeners();
+      UserModel user = UserModel(
+          name: ref.read(displayName),
+          uid: auth.currentUser!.uid,
+          photoUrl: ref.read(displayPhotoUrl),
+          email: ref.read(displayEmail));
+      await firestore
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .set(user.toMap());
+    } catch (e) {}
+  }
+
+  Future login(String email, String password) async {
+    try {
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+      } else if (e.code == 'wrong-password') {
+        print('e.code is ${e.code}');
+      }
+    }
   }
 }
 

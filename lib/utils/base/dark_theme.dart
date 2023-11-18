@@ -21,6 +21,8 @@ ThemeData get darkMode => ThemeData.dark().copyWith(
           elevation: MaterialStatePropertyAll<double>(0),
           backgroundColor: MaterialStatePropertyAll<Color>(Colors.grey),
           padding: MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.all(10)),
+          shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)))),
         ),
       ),
       appBarTheme: AppBarTheme(

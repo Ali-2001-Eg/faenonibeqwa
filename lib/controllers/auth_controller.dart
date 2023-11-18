@@ -17,6 +17,11 @@ class AuthController {
   Future<String> get getPhotoUrl => authRepo.getPhotoUrl;
   String get getName => authRepo.getName;
   User get userInfo => authRepo.auth.currentUser!;
+  Future<void> get signout => authRepo.signout();
+  Future<void> signup(
+          String email, String password, String username, String image) =>
+      authRepo.signUp(email, password, username, image);
+  Future<void> login(String email , String password) => authRepo.login(email, password);
 }
 
 final authControllerProvider = Provider((ref) {

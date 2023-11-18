@@ -20,7 +20,7 @@ class MeetingController {
   void get toggleScreenShareEnabled => meetingRepo.toggleScreenShare;
   //meeting start
   Future<String> startMeeting(
-          BuildContext context, String title, Uint8List image) =>
+          BuildContext context, String title, Uint8List? image) =>
       meetingRepo.startMeeting(context, title, image);
   //chat
   Future<void> chat(String text, String id, BuildContext context) async => ref
