@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
+import 'package:faenonibeqwa/models/meeting_model.dart';
 import 'package:faenonibeqwa/repositories/meeting_repo.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final meetingControllerProvider = Provider((ref) {
@@ -14,10 +14,7 @@ class MeetingController {
   final MeetingRepo meetingRepo;
   final ProviderRef ref;
   MeetingController(this.ref, this.meetingRepo);
-  //toggle meeting features
-  void get toggleMicEnabled => meetingRepo.toggleMic;
-  void get toggleCamEnabled => meetingRepo.toggleCam;
-  void get toggleScreenShareEnabled => meetingRepo.toggleScreenShare;
+  
   //meeting start
   Future<void> startMeeting({
     required String title,
@@ -25,4 +22,15 @@ class MeetingController {
     required String channelId,
   }) =>
       meetingRepo.startMeeing(title, isBrodcater, channelId);
+  //get live feeds
+  Stream<List<MeetingModel>> get feeds => meetingRepo.feeds;
+  //join meeting
+  Future<void> joinMeeting(String channelId) =>
+      meetingRepo.joinMeeting(channelId);
+  //leave meeting
+  Future<void> leaveMeeting (String channelId) =>
+      meetingRepo.leaveMeeting(channelId);
+  //end meeting
+  Future<void> endMeeting(String channelId) =>
+      meetingRepo.endMeeting(channelId);
 }

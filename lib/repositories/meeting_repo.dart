@@ -24,15 +24,7 @@ class MeetingRepo extends ChangeNotifier {
 
   MeetingRepo(this.ref, this.auth, this.firestore);
 
-  void get toggleMic => _toggleMeetingFeatures(micEnabled.state);
-  void get toggleCam => _toggleMeetingFeatures(camEnabled.state);
-  void get toggleScreenShare =>
-      _toggleMeetingFeatures(shareScreenEnabled.state);
-
-  void _toggleMeetingFeatures(ProviderListenable stateProvider) {
-    ref.read(stateProvider).update((state) => !state);
-    notifyListeners();
-  }
+ 
 
   Future<void> startMeeing(
       String title, bool isBrodcater, String channelId) async {
@@ -44,12 +36,12 @@ class MeetingRepo extends ChangeNotifier {
           uid: auth.currentUser!.uid,
           username: auth.currentUser!.displayName!,
           startedAt: DateTime.now(),
-          viewers: 1,
+          viewers: <String>[auth.currentUser!.uid],
           channelId: channelId,
         );
         await firestore
             .collection('meeting')
-            .doc(auth.currentUser!.uid)
+            .doc(channelId)
             .set(meeting.toMap());
       } else {
         print('fill all fields');
@@ -58,10 +50,37 @@ class MeetingRepo extends ChangeNotifier {
       print('error $e');
     }
   }
+
+  Stream<List<MeetingModel>> get feeds =>
+      firestore.collection('meeting').snapshots().map((query) {
+        List<MeetingModel> meetings = [];
+        for (var meeting in query.docs) {
+          meetings.add(MeetingModel.fromMap(meeting.data()));
+        }
+        return meetings;
+      });
+
+  Future<void> joinMeeting(String channelId) async {
+    var meetingData =
+        await firestore.collection('meeting').doc(channelId).get();
+    if (meetingData.data() != null) {
+      await firestore.collection('meeting').doc(channelId).update({
+        'viewers': FieldValue.arrayUnion([auth.currentUser!.uid]),
+      });
+    }
+  }
+
+  Future<void> leaveMeeting(String channelId) async {
+    await firestore.collection('meeting').doc(channelId).update({
+      'viewers': FieldValue.arrayRemove([auth.currentUser!.uid]),
+    });
+  }
+
+  Future<void> endMeeting(String channelId) async {
+    await firestore.collection('meeting').doc(channelId).delete();
+  }
 }
 
 final meetingRepoProvider = Provider((ref) =>
     MeetingRepo(ref, FirebaseAuth.instance, FirebaseFirestore.instance));
-final micEnabled = StateProvider<bool>((ref) => false);
-final camEnabled = StateProvider<bool>((ref) => false);
-final shareScreenEnabled = StateProvider<bool>((ref) => false);
+

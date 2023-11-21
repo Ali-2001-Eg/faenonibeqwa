@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class MeetingModel extends Equatable {
@@ -7,7 +9,7 @@ class MeetingModel extends Equatable {
   final String uid;
   final String username;
   final DateTime startedAt;
-  final int viewers;
+  final List<String> viewers;
   final String channelId;
   const MeetingModel({
     required this.title,
@@ -22,8 +24,8 @@ class MeetingModel extends Equatable {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
-      'uid': uid,
       'isBrodcater': isBrodcater,
+      'uid': uid,
       'username': username,
       'startedAt': startedAt.millisecondsSinceEpoch,
       'viewers': viewers,
@@ -34,23 +36,25 @@ class MeetingModel extends Equatable {
   factory MeetingModel.fromMap(Map<String, dynamic> map) {
     return MeetingModel(
       title: map['title'] as String,
+      isBrodcater: map['isBrodcater'] as bool,
       uid: map['uid'] as String,
       username: map['username'] as String,
       startedAt: DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int),
-      viewers: map['viewers'] as int,
-      isBrodcater: map['isBrodcater'] as bool,
+      viewers: List<String>.from((map['viewers'])),
       channelId: map['channelId'] as String,
     );
   }
 
   @override
-  List<Object> get props => [
-        title,
-        uid,
-        username,
-        startedAt,
-        viewers,
-        channelId,
-        isBrodcater,
-      ];
+  List<Object> get props {
+    return [
+      title,
+      isBrodcater,
+      uid,
+      username,
+      startedAt,
+      viewers,
+      channelId,
+    ];
+  }
 }

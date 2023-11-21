@@ -1,8 +1,8 @@
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 
-class LoadingIndicator extends StatelessWidget {
-  const LoadingIndicator({Key? key}) : super(key: key);
+class CustomIndicator extends StatelessWidget {
+  const CustomIndicator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
