@@ -108,6 +108,8 @@ class AuthRepo extends ChangeNotifier {
       ref.read(displayName.state).update((state) => username);
       ref.read(displayEmail.state).update((state) => email);
       ref.read(displayPhotoUrl.state).update((state) => image);
+      auth.currentUser!.updateProfile(displayName: ref.read(displayName));
+      await auth.currentUser!.reload();
       notifyListeners();
       UserModel user = UserModel(
           name: ref.read(displayName),

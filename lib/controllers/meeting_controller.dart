@@ -19,20 +19,10 @@ class MeetingController {
   void get toggleCamEnabled => meetingRepo.toggleCam;
   void get toggleScreenShareEnabled => meetingRepo.toggleScreenShare;
   //meeting start
-  Future<String> startMeeting(
-          BuildContext context, String title, Uint8List? image) =>
-      meetingRepo.startMeeting(context, title, image);
-  //chat
-  Future<void> chat(String text, String id, BuildContext context) async => ref
-      .read(userDataProvider)
-      .whenData((value) => meetingRepo.chat(text, id, context));
-  //update viewer count
-  Future<void> updateViewCount(String id, bool isIncrease) async => ref
-      .read(userDataProvider)
-      .whenData((value) => meetingRepo.updateViewCount(id, isIncrease));
-  //end meeting
-  Future<void> endMeeting(String channelId) async => ref
-      .read(userDataProvider)
-      .whenData((value) => meetingRepo.endMeeting(channelId));
-  
+  Future<void> startMeeting({
+    required String title,
+    required bool isBrodcater,
+    required String channelId,
+  }) =>
+      meetingRepo.startMeeing(title, isBrodcater, channelId);
 }

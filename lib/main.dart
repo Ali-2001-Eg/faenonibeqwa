@@ -1,6 +1,7 @@
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
+import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/base/dark_theme.dart';
 import 'package:faenonibeqwa/utils/base/light_theme.dart';
 import 'package:faenonibeqwa/utils/routes.dart';
@@ -59,9 +60,12 @@ class MyApp extends ConsumerWidget {
             home: Directionality(
               textDirection: TextDirection.rtl,
               child: Scaffold(
-                body: ref.watch(userDataProvider).when(
+                body:
+              
+                 ref.watch(userDataProvider).when(
                   data: (user) {
                     print('email is ${user?.email}');
+                    print('displayname is ${user?.displayName}');
                     if (user == null) {
                       return  LoginScreen();
                     }
