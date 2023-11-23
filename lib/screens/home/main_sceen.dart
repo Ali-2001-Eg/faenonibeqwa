@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:faenonibeqwa/screens/home/settings_screen.dart';
-import 'package:faenonibeqwa/screens/home/trips_screen.dart';
+import 'package:faenonibeqwa/screens/trip/trips_screen.dart';
 
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';

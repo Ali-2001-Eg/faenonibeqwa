@@ -1,7 +1,16 @@
-import 'dart:convert';
-import 'package:faenonibeqwa/utils/base/constants.dart';
-import 'package:http/http.dart' as http;
+
+import 'package:dio/dio.dart';
 
 class ApiClient {
- 
+ static Future<Response> postData({
+    required String url,
+    required Map data,
+    Map<String, dynamic>? queryParameters,
+  }) {
+    final dio = Dio().post(url,
+        data: data,
+        queryParameters:
+            queryParameters ?? {"Content-Type": "application/json"});
+    return dio;
+  }
 }

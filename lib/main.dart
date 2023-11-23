@@ -54,37 +54,40 @@ class MyApp extends ConsumerWidget {
             title: 'Faenonibeqwa',
             theme: lightMode,
             darkTheme: darkMode,
+            builder: (context, child) {
+              return Directionality(
+                textDirection: TextDirection.rtl,
+                child: child!,
+              );
+            },
             themeMode: ThemeMode.system,
             debugShowCheckedModeBanner: false,
             onGenerateRoute: (settings) => generateRoute(settings),
-            home: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Scaffold(
-                body:
-              
-                 ref.watch(userDataProvider).when(
-                  data: (user) {
-                    print('email is ${user?.email}');
-                    print('displayname is ${user?.displayName}');
-                    if (user == null) {
-                      return  LoginScreen();
-                    }
-                    return const MainScreen();
-                  },
-                  error: (error, stackTrace) {
-                    if (kDebugMode) {
-                      print('error is ${error.toString()}');
-                    }
-                    return Scaffold(
-                      body: Center(
-                          child: Text(
-                              'This page doesn\'t exist because ${error.toString()}')),
-                    );
-                  },
-                  loading: () {
-                    return Scaffold(body: Container());
-                  },
-                ),
+            home: Scaffold(
+              body:
+            
+               ref.watch(userDataProvider).when(
+                data: (user) {
+                  print('email is ${user?.email}');
+                  print('displayname is ${user?.displayName}');
+                  if (user == null) {
+                    return  LoginScreen();
+                  }
+                  return const MainScreen();
+                },
+                error: (error, stackTrace) {
+                  if (kDebugMode) {
+                    print('error is ${error.toString()}');
+                  }
+                  return Scaffold(
+                    body: Center(
+                        child: Text(
+                            'This page doesn\'t exist because ${error.toString()}')),
+                  );
+                },
+                loading: () {
+                  return Scaffold(body: Container());
+                },
               ),
             ),
           );

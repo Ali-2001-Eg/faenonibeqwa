@@ -42,7 +42,7 @@ dependencies:
   flutter_screenutil: null
   flutter_svg: ^2.0.0
   google_sign_in: ^6.1.6
-  http: ^0.13.6
+  dio: ^5.3.4
   permission_handler: 
   uuid: null
   timeago: ^3.6.0
@@ -52,7 +52,9 @@ dependencies:
   zego_uikit_signaling_plugin: 
   zego_uikit_prebuilt_video_conference: any
   cached_network_image: ^3.0.0
+  webview_flutter: ^4.4.2
 
+  
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -69,8 +71,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
-    - assets/svg/
+    - assets/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

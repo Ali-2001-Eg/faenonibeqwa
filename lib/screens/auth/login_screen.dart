@@ -6,7 +6,7 @@ import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/meeting_title_text_field.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,10 +38,10 @@ class LoginScreen extends ConsumerWidget {
             ),
             CustomTextField(
               controller: _emailController,
-              hint: 'Email Address',
+              hintText: 'Email Address',
             ),
             15.verticalSpace,
-            CustomTextField(controller: _passwordController, hint: 'Password'),
+            CustomTextField(controller: _passwordController, hintText: 'Password'),
             30.verticalSpace,
             CustomButton(onTap: () => _login(ref, context), text: 'Login'),
             InkWell(
