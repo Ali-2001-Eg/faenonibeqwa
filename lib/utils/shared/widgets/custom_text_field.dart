@@ -12,7 +12,7 @@ class CustomTextField extends StatelessWidget {
   final Color? colorIcon;
   final Widget? prefixIcon;
   final IconData? suffixIcon;
-  final TextInputType? keyBoardTyp;
+  final TextInputType? keyBoardType;
   final double? width;
   final double? hight;
   final int? maxLines;
@@ -35,7 +35,7 @@ class CustomTextField extends StatelessWidget {
     this.colorIcon,
     this.prefixIcon,
     this.suffixIcon,
-    this.keyBoardTyp,
+    this.keyBoardType,
     this.width,
     this.hight,
     this.maxLines,
@@ -54,7 +54,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       onTap: onTap,
       minLines: minLines,
-      keyboardType: keyBoardTyp,
+      keyboardType: keyBoardType,
       onFieldSubmitted: onSubmitted,
       controller: controller,
       validator: validator,

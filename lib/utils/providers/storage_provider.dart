@@ -10,13 +10,10 @@ class FirebaseStorageRepo {
   FirebaseStorageRepo(this.storage);
 
   Future<String> storeFileToFirebaseStorage(
-      String childName, Uint8List file, String uid) async {
+      String childName, File file, String uid) async {
     Reference ref = storage.ref().child(childName).child(uid);
-    UploadTask uploadTask = ref.putData(
+    UploadTask uploadTask = ref.putFile(
       file,
-      SettableMetadata(
-        contentType: 'image/jpg',
-      ),
     );
     TaskSnapshot snapshot = await uploadTask;
     String downloadUrl = await snapshot.ref.getDownloadURL();

@@ -1,6 +1,7 @@
 import 'package:faenonibeqwa/screens/trip/trip_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../models/trip_model.dart';
 import '../../../utils/shared/widgets/custom_button.dart';
@@ -42,8 +43,8 @@ class ItemTrip extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                tripModel.imageTrip,
+              child: CachedNetworkImage(
+                imageUrl: tripModel.imageTrip,
                 height: 120.h,
                 fit: BoxFit.cover,
                 width: double.infinity,
@@ -83,7 +84,6 @@ class ItemTrip extends StatelessWidget {
             const SizedBox(height: 10),
             Center(
               child: CustomButton(
-               
                 onTap: () {
                   Navigator.push(
                     context,
@@ -97,7 +97,6 @@ class ItemTrip extends StatelessWidget {
                   );
                 },
                 text: 'احجز الأن',
-               
                 textColor: Colors.white,
               ),
             )

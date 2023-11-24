@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,8 +24,8 @@ class TripDetailsScreen extends StatelessWidget {
       body: Stack(
         clipBehavior: Clip.none,
         children: [
-          Image.asset(
-            tripModel.imageTrip,
+          CachedNetworkImage(
+            imageUrl: tripModel.imageTrip,
             fit: BoxFit.cover,
             width: double.infinity,
           ),
@@ -49,13 +51,13 @@ class TripDetailsScreen extends StatelessWidget {
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
-                      20.verticalSpace,
+                      20.xSpace,
                       BigText(
                         text: 'سعر الفرد / ${tripModel.price} جنية',
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
-                      20.verticalSpace,
+                      20.xSpace,
                       BigText(
                         textAlign: TextAlign.center,
                         text: tripModel.description,
@@ -105,7 +107,6 @@ class TripAppBar extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(CupertinoIcons.back),
-            color: Colors.black,
             onPressed: () {
               Navigator.pop(context);
             },

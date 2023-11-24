@@ -1,9 +1,8 @@
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
+import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../controllers/auth_controller.dart';
 import '../../utils/shared/widgets/custom_button.dart';
 
@@ -20,12 +19,15 @@ class SignUpScreen extends ConsumerWidget {
       body: Form(
         key: _formkey,
         child: Column(children: [
-          CustomTextField(controller: _emailController, hintText: 'Email Address'),
-          20.verticalSpace,
-          CustomTextField(controller: _passwordController, hintText: 'Password'),
-          20.verticalSpace,
-          CustomTextField(controller: _usernameController, hintText: 'Username'),
-          20.verticalSpace,
+          CustomTextField(
+              controller: _emailController, hintText: 'Email Address'),
+          20.xSpace,
+          CustomTextField(
+              controller: _passwordController, hintText: 'Password'),
+          20.xSpace,
+          CustomTextField(
+              controller: _usernameController, hintText: 'Username'),
+          20.xSpace,
           CustomButton(onTap: () => _signup(ref, context), text: 'Register'),
         ]),
       ),

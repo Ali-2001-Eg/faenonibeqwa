@@ -1,13 +1,16 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:developer';
 
+import 'package:faenonibeqwa/controllers/auth_controller.dart';
+import 'package:faenonibeqwa/screens/payment/visa_card_view.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:flutter/material.dart';
-
-import '../utils/base/constants.dart';
+import '../utils/base/app_constants.dart';
 import '../utils/shared/data/api_client.dart';
 
-class PaymentRepo extends ChangeNotifier {
+class PaymentRepo {
   final ProviderRef ref;
 
   PaymentRepo(this.ref);
@@ -20,7 +23,7 @@ class PaymentRepo extends ChangeNotifier {
       },
     ).then((value) {
       ref.read(firstToken.state).update((state) => value.data['token']);
-      notifyListeners();
+
       log('First Token ${ref.read(firstToken.state).state}');
     }).catchError((error) {
       log(error);
@@ -29,6 +32,8 @@ class PaymentRepo extends ChangeNotifier {
 
   Future<void> getOrderId({
     required num price,
+    required String phoneNumber,
+    required BuildContext context,
   }) async {
     await ApiClient.postData(
       url: AppConstants.baseUrl + AppConstants.orderID,
@@ -41,37 +46,40 @@ class PaymentRepo extends ChangeNotifier {
       },
     ).then((value) async {
       ref.read(orderID.state).update((state) => value.data['id']);
-      ref.read(loadingFinalToken.state).update((state) => true);
-      notifyListeners();
-      _getPaymentRequest(
+
+      await _getPaymentRequest(
         price: price,
-      ).then((value) =>
-          ref.read(loadingFinalToken.state).update((state) => false));
-      notifyListeners();
-      log('Order ${ref.read(orderID.state).state}');
-    }).catchError((error) {
-      log(error.toString());
+        context: context,
+        phoneNumber: phoneNumber,
+      );
+      // log('final token is ${ref.read(finalToken.state).state}');
+      // log('loading is ${ref.read(loadingFinalToken.state).state}');
     });
   }
 
   Future<void> _getPaymentRequest({
     required num price,
+    required BuildContext context,
+    required String phoneNumber,
   }) async {
+    // ref.watch(loadingFinalToken.state).update((state) => true);
+    // log('loading before ${ref.read(loadingFinalToken.state).state}');
+
     await ApiClient.postData(
       url: AppConstants.baseUrl + AppConstants.paymentKeyRequest,
       data: {
-        "auth_token": ref.watch(firstToken.state).state,
+        "auth_token": ref.read(firstToken.state).state,
         "amount_cents": price,
         "expiration": 3600,
-        "order_id": ref.watch(orderID.state).state,
+        "order_id": ref.read(orderID.state).state,
         "billing_data": {
           "apartment": "NA",
-          "email": "NA",
+          "email": ref.read(authControllerProvider).userInfo.uid,
           "floor": "NA",
-          "first_name": "NA",
+          "first_name": ref.read(authControllerProvider).userInfo.displayName,
           "street": "phone",
           "building": "NA",
-          "phone_number": "NA",
+          "phone_number": phoneNumber,
           "shipping_method": "NA",
           "postal_code": "NA",
           "city": "NA",
@@ -82,10 +90,22 @@ class PaymentRepo extends ChangeNotifier {
         "currency": "EGP",
         "integration_id": AppConstants.integrationId
       },
-    ).then((value) {
-      ref.watch(finalToken.state).update((state) => value.data['token']);
-      notifyListeners();
+    ).then((value) async {
+      ref.read(finalToken.state).update((state) => value.data['token']);
       log('finalToken ${ref.read(finalToken.state).state}');
+      log('order ${ref.read(orderID.state).state}');
+
+      if (context.mounted) {
+        await Navigator.push(context, MaterialPageRoute(
+          builder: (_) {
+            return VisaCardView(
+              finalToken: ref.read(finalToken.state).state,
+            );
+          },
+        )).catchError((error) {
+          log(error.toString());
+        });
+      }
     }).catchError((error) {
       log(error.toString());
     });
@@ -94,6 +114,6 @@ class PaymentRepo extends ChangeNotifier {
 
 final paymentRepoProvider = Provider((ref) => PaymentRepo(ref));
 final firstToken = StateProvider<String>((ref) => "");
-final finalToken = StateProvider<String?>((ref) => null);
+final finalToken = StateProvider<String>((ref) => "");
 final orderID = StateProvider<int>((ref) => 0);
-final loadingFinalToken = StateProvider<bool?>((ref) => null);
+final loadingFinalToken = StateProvider<bool>((ref) => false);

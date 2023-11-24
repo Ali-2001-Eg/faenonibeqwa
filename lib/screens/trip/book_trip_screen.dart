@@ -1,16 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:faenonibeqwa/repositories/payment_repo.dart';
+import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:faenonibeqwa/controllers/payment_controller.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 
 import '../../utils/shared/widgets/custom_text_field.dart';
-import '../payment/visa_card_view.dart';
 
 class BookTripNow extends ConsumerStatefulWidget {
   final num price;
@@ -57,11 +55,11 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                   return null;
                 },
               ),
-              14.verticalSpace,
+              14.xSpace,
               CustomTextField(
                 controller: phoneController,
                 hintText: 'رقم التليفون',
-                keyBoardTyp: TextInputType.phone,
+                keyBoardType: TextInputType.phone,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[0-9]'))
                 ],
@@ -72,12 +70,12 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                   return null;
                 },
               ),
-              14.verticalSpace,
+              14.xSpace,
               CustomTextField(
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[0-9]'))
                 ],
-                keyBoardTyp: TextInputType.phone,
+                keyBoardType: TextInputType.phone,
                 controller: numberOfPeopleController,
                 hintText: 'عدد الأفراد',
                 validator: (e) {
@@ -87,27 +85,17 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                   return null;
                 },
               ),
-              14.verticalSpace,
+              14.xSpace,
               CustomButton(
                 onTap: () {
                   if (formKey.currentState!.validate()) {
-                    ref
-                        .read(paymentControllerProvider)
-                        .getOrderId(
+                    ref.read(paymentControllerProvider).getOrderId(
+                          context: context,
                           price: widget.price *
                               num.parse(numberOfPeopleController.text.trim())
                                   .toDouble(),
-                        )
-                        .then((value) async {
-                      await Future.delayed(
-                          const Duration(seconds: 2),
-                          () => Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return VisaCardView(
-                                    finalToken:
-                                        ref.read(finalToken.state).state!);
-                              })));
-                    });
+                          phoneNumber: phoneController.text.trim(),
+                        );
                   }
                 },
                 text: 'تابع لأتمام عملية الحجز',

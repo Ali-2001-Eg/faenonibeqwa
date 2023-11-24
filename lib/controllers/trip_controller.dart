@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:faenonibeqwa/repositories/trip_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,8 +13,13 @@ class TripController {
   Future<void> deleteTrip(String uid) => tripRepository.deleteTrip(uid);
   Future<void> updateTrip(TripModel tripModel) =>
       tripRepository.updateTrip(tripModel);
-  Future<void> addTrip(TripModel tripModel) =>
-      tripRepository.addTrip(tripModel);
+  Future<void> addTrip({
+    required String tripName,
+    required File image,
+    required num price,
+    required String description,
+  }) =>
+      tripRepository.addTrip(tripName, image, price, description);
 }
 
 final tripControllerProvider = Provider((ref) {

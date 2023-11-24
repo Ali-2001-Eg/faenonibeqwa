@@ -30,7 +30,7 @@ class HomeScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            10.verticalspace,
+            10.xSpace,
             FeedWidget(),
           ],
         ),

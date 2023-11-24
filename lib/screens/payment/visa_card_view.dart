@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -17,19 +18,19 @@ class _VisaCardViewState extends State<VisaCardView> {
   final controller = WebViewController();
   Future<void> getUrl(String token) async {
     print('final token is ${widget.finalToken}');
-    String url2 =
+    String portraitUrl =
         'https://accept.paymob.com/api/acceptance/iframes/787144?payment_token=$token';
-    String url =
+    String landscapeUrl =
         'https://accept.paymob.com/api/acceptance/iframes/787143?payment_token=$token';
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(url2));
+      ..loadRequest(Uri.parse(portraitUrl));
   }
 
   @override
-  void initState() {
+  void didChangeDependencies() {
     getUrl(widget.finalToken);
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override

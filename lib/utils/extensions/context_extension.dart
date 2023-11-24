@@ -5,4 +5,5 @@ extension BuildContextExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
   double get screenWidth => _mediaQueryData.size.width;
   double get screenHeight => _mediaQueryData.size.height;
+  Orientation get orientation => _mediaQueryData.orientation;
 }

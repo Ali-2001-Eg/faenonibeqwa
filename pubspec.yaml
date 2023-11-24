@@ -53,6 +53,7 @@ dependencies:
   zego_uikit_prebuilt_video_conference: any
   cached_network_image: ^3.0.0
   webview_flutter: ^4.4.2
+  image_picker: ^1.0.1
 
   
 dev_dependencies:

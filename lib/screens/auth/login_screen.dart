@@ -4,6 +4,7 @@ import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/signup_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
@@ -40,9 +41,10 @@ class LoginScreen extends ConsumerWidget {
               controller: _emailController,
               hintText: 'Email Address',
             ),
-            15.verticalSpace,
-            CustomTextField(controller: _passwordController, hintText: 'Password'),
-            30.verticalSpace,
+            15.xSpace,
+            CustomTextField(
+                controller: _passwordController, hintText: 'Password'),
+            30.xSpace,
             CustomButton(onTap: () => _login(ref, context), text: 'Login'),
             InkWell(
                 onTap: () => Navigator.push(context,
