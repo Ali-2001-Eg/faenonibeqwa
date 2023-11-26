@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faenonibeqwa/controllers/auth_controller.dart';
+import 'package:faenonibeqwa/models/book_trip_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,6 +70,25 @@ class TripRepository extends ChangeNotifier {
     } catch (e) {
       log(e.toString());
     }
+  }
+
+  Future<void> savePaymentData({
+    required num tripPrice,
+    required bool success,
+    required int numberOfPeople,
+    required String phoneNumber,
+  }) async {
+    final bookTripModel = BookTripModel(
+      tripPrice: tripPrice,
+      success: success,
+      totalPrice: tripPrice * numberOfPeople,
+      numberOfPeople: numberOfPeople,
+      email: ref.read(authControllerProvider).userInfo.email!,
+      phoneNumber: phoneNumber,
+      userName: ref.read(authControllerProvider).userInfo.displayName!,
+      createdAt: DateTime.now(),
+    );
+    await firestore.collection('BookTrips').doc().set(bookTripModel.toMap());
   }
 }
 

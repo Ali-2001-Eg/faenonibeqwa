@@ -28,34 +28,31 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.3.0
   cloud_firestore: ^4.13.0
   cupertino_icons: ^1.0.2
+  dio: ^5.3.4
   equatable: ^2.0.5
-  
   firebase_auth: ^4.13.0
-  #videosdk: ^1.1.3
   firebase_core: ^2.22.0
+  firebase_storage: ^11.5.1
   flutter:
     sdk: flutter
-
+  flutter_logs: ^2.1.11
   flutter_riverpod: ^2.3.6
   flutter_screenutil: null
   flutter_svg: ^2.0.0
   google_sign_in: ^6.1.6
-  dio: ^5.3.4
-  permission_handler: 
-  uuid: null
-  timeago: ^3.6.0
-  firebase_storage: ^11.5.1
-  flutter_logs: ^2.1.11
-  zego_uikit_prebuilt_call: ^3.6.1
-  zego_uikit_signaling_plugin: 
-  zego_uikit_prebuilt_video_conference: any
-  cached_network_image: ^3.0.0
-  webview_flutter: ^4.4.2
   image_picker: ^1.0.1
+  paymob_payment: ^0.0.1+1
+  permission_handler: null
+  timeago: ^3.6.0
+  uuid: null
+  webview_flutter: ^4.4.2
+  zego_uikit_prebuilt_call: ^3.6.1
+  zego_uikit_prebuilt_video_conference: any
+  zego_uikit_signaling_plugin: null
 
-  
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

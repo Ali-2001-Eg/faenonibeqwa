@@ -26,7 +26,7 @@ class PaymentRepo {
 
       log('First Token ${ref.read(firstToken.state).state}');
     }).catchError((error) {
-      log(error);
+      log(error.toString());
     });
   }
 
@@ -47,12 +47,12 @@ class PaymentRepo {
     ).then((value) async {
       ref.read(orderID.state).update((state) => value.data['id']);
 
+      log('OrderID ${ref.read(orderID.state).state}');
       await _getPaymentRequest(
         price: price,
         context: context,
         phoneNumber: phoneNumber,
       );
-      // log('final token is ${ref.read(finalToken.state).state}');
       // log('loading is ${ref.read(loadingFinalToken.state).state}');
     });
   }
@@ -68,15 +68,15 @@ class PaymentRepo {
     await ApiClient.postData(
       url: AppConstants.baseUrl + AppConstants.paymentKeyRequest,
       data: {
-        "auth_token": ref.read(firstToken.state).state,
+        "auth_token": ref.watch(firstToken.state).state,
         "amount_cents": price,
         "expiration": 3600,
-        "order_id": ref.read(orderID.state).state,
+        "order_id": ref.watch(orderID.state).state,
         "billing_data": {
           "apartment": "NA",
-          "email": ref.read(authControllerProvider).userInfo.uid,
+          "email": ref.watch(authControllerProvider).userInfo.uid,
           "floor": "NA",
-          "first_name": ref.read(authControllerProvider).userInfo.displayName,
+          "first_name": "NA",
           "street": "phone",
           "building": "NA",
           "phone_number": phoneNumber,
@@ -93,7 +93,6 @@ class PaymentRepo {
     ).then((value) async {
       ref.read(finalToken.state).update((state) => value.data['token']);
       log('finalToken ${ref.read(finalToken.state).state}');
-      log('order ${ref.read(orderID.state).state}');
 
       if (context.mounted) {
         await Navigator.push(context, MaterialPageRoute(
@@ -102,9 +101,7 @@ class PaymentRepo {
               finalToken: ref.read(finalToken.state).state,
             );
           },
-        )).catchError((error) {
-          log(error.toString());
-        });
+        ));
       }
     }).catchError((error) {
       log(error.toString());
