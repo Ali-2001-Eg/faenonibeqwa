@@ -20,6 +20,19 @@ class TripController {
     required String description,
   }) =>
       tripRepository.addTrip(tripName, image, price, description);
+
+  Future<void> saveTripPayment({
+    required num tripPrice,
+    required bool success,
+    required int numberOfPeople,
+    required String phoneNumber,
+  }) =>
+      tripRepository.savePaymentData(
+        tripPrice: tripPrice,
+        success: success,
+        numberOfPeople: numberOfPeople,
+        phoneNumber: phoneNumber,
+      );
 }
 
 final tripControllerProvider = Provider((ref) {

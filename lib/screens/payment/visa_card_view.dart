@@ -24,9 +24,13 @@ class _VisaCardViewState extends State<VisaCardView> {
         'https://accept.paymob.com/api/acceptance/iframes/787143?payment_token=$token';
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(portraitUrl));
+      ..loadRequest(Uri.parse(landscapeUrl));
   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
   @override
   void didChangeDependencies() {
     getUrl(widget.finalToken);
