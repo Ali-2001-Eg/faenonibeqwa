@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
@@ -23,7 +22,7 @@ class UserModel extends Equatable {
       'name': name,
       'uid': uid,
       'photoUrl': photoUrl,
-      'email':email
+      'email': email
     };
   }
 
@@ -35,5 +34,4 @@ class UserModel extends Equatable {
       email: map['email'] as String,
     );
   }
-
 }

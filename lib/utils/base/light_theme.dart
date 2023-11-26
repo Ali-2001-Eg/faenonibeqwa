@@ -9,18 +9,32 @@ ThemeData get lightMode => ThemeData.light().copyWith(
         color: lightIconColor,
       ),
       textTheme: TextTheme(
-          displayMedium: TextStyle(
-              color: Colors.black,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w500)),
-      hoverColor: lightScaffold,
-      bottomNavigationBarTheme:
-          BottomNavigationBarThemeData(backgroundColor: Colors.blue[100]),
-      iconButtonTheme: const IconButtonThemeData(
-        style: ButtonStyle(
-          elevation: MaterialStatePropertyAll<double>(0),
-          iconColor: MaterialStatePropertyAll<Color>(lightButton),
+        displayMedium: TextStyle(
+          color: Colors.black,
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w500,
+          fontFamily: "Cairo",
         ),
+      ),
+      hoverColor: lightScaffold,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+          selectedItemColor: lightButton,
+          unselectedItemColor: Colors.grey[400],
+          selectedIconTheme: const IconThemeData(
+            color: lightButton,
+          )),
+      iconButtonTheme: IconButtonThemeData(
+        style: ButtonStyle(
+            backgroundColor:
+                MaterialStatePropertyAll<Color>(Colors.transparent),
+            elevation: MaterialStatePropertyAll<double>(0),
+            iconColor: MaterialStatePropertyAll<Color>(Colors.white),
+            textStyle: MaterialStateProperty.all<TextStyle>(
+              TextStyle(
+                color: Colors.white,
+              ),
+            )),
       ),
       elevatedButtonTheme: const ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -34,9 +48,18 @@ ThemeData get lightMode => ThemeData.light().copyWith(
       canvasColor: lightIconColor,
       indicatorColor: indicatorColor,
       appBarTheme: AppBarTheme(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          ),
+        ),
         color: lightAppBar,
         toolbarHeight: 50.h,
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20.h),
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 10.h),
+        actionsIconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         elevation: 0,
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -44,7 +67,6 @@ ThemeData get lightMode => ThemeData.light().copyWith(
         backgroundColor: lightAppBar,
       ),
       inputDecorationTheme: const InputDecorationTheme(
-        
         fillColor: lightChatBox,
         iconColor: lightText,
         isCollapsed: true,

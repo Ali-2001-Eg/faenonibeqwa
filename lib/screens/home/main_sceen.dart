@@ -40,33 +40,45 @@ class MainScreen extends ConsumerWidget {
         },
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: context.theme.cardColor),
-              label: 'الرئيسيه',
-              activeIcon: Icon(
-                Icons.home_filled,
-                color: context.theme.hoverColor,
-              )),
+            icon: Icon(
+              Icons.home,
+            ),
+            label: 'الرئيسيه',
+            // activeIcon: Icon(
+            //   Icons.home_filled,
+            //   color: context.theme.hoverColor,
+            // ),
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.rocket, color: context.theme.cardColor),
-              label: 'الرحلات',
-              activeIcon: Icon(
-                Icons.rocket_launch,
-                color: context.theme.hoverColor,
-              )),
+            icon: Icon(
+              Icons.rocket,
+            ),
+            label: 'الرحلات',
+            // activeIcon: Icon(
+            //   Icons.rocket_launch,
+            //   color: context.theme.hoverColor,
+            // ),
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.moving_sharp, color: context.theme.cardColor),
-              label: 'نشاطك',
-              activeIcon: Icon(
-                Icons.moving_outlined,
-                color: context.theme.hoverColor,
-              )),
+            icon: Icon(
+              Icons.moving_sharp,
+            ),
+            label: 'نشاطك',
+            // activeIcon: Icon(
+            //   Icons.moving_outlined,
+            //   color: context.theme.hoverColor,
+            // ),
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings, color: context.theme.cardColor),
-              label: 'الاعدادات',
-              activeIcon: Icon(
-                Icons.settings_outlined,
-                color: context.theme.hoverColor,
-              )),
+            icon: Icon(
+              Icons.settings,
+            ),
+            label: 'الاعدادات',
+            // activeIcon: Icon(
+            //   Icons.settings_outlined,
+            //   color: context.theme.hoverColor,
+            // ),
+          ),
         ],
       ),
     );

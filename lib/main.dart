@@ -1,12 +1,10 @@
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
-import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_constants.dart';
 import 'package:faenonibeqwa/utils/base/dark_theme.dart';
 import 'package:faenonibeqwa/utils/base/light_theme.dart';
 import 'package:faenonibeqwa/utils/routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,8 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:paymob_payment/paymob_payment.dart';
-
-import 'screens/payment/visa_card_view_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

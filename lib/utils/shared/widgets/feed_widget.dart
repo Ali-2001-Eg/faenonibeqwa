@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,8 +54,14 @@ class FeedWidget extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        title: BigText(text: feed.title),
-                        subtitle: SmallText(text: feed.username),
+                        title: BigText(
+                          text: feed.title,
+                          color: Colors.black,
+                        ),
+                        subtitle: SmallText(
+                          text: feed.username,
+                          color: Colors.black,
+                        ),
                         style: ListTileStyle.drawer,
                         trailing:
                             SmallText(text: timeago.format(feed.startedAt)),
@@ -70,7 +75,14 @@ class FeedWidget extends ConsumerWidget {
                 }),
           );
         } else {
-          return Container();
+          return const Expanded(
+            child: Center(
+              child: BigText(
+                text: 'لايوجد مكالمات',
+                fontSize: 28,
+              ),
+            ),
+          );
         }
       },
     );
@@ -90,10 +102,10 @@ class FeedWidget extends ConsumerWidget {
                 'isBroadcaster': false,
                 'title': feed.title,
               },
-            ))
-        .catchError((err) {
-      customSnackbar(context: context, text: err);
-      return err;
-    });
+            ));
+    //     .catchError((err) {
+    //   customSnackbar(context: context, text: err.toString());
+    //   return err;
+    // });
   }
 }

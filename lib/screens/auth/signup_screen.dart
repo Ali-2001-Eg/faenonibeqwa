@@ -1,5 +1,6 @@
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,21 +16,40 @@ class SignUpScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const BigText(
+          text: 'إنشاء حساب',
+          color: Colors.white,
+        ),
+        centerTitle: true,
+      ),
       body: Form(
         key: _formkey,
-        child: Column(children: [
-          CustomTextField(
-              controller: _emailController, hintText: 'Email Address'),
-          20.xSpace,
-          CustomTextField(
-              controller: _passwordController, hintText: 'Password'),
-          20.xSpace,
-          CustomTextField(
-              controller: _usernameController, hintText: 'Username'),
-          20.xSpace,
-          CustomButton(onTap: () => _signup(ref, context), text: 'Register'),
-        ]),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+          child: Column(children: [
+            CustomTextField(
+              controller: _usernameController,
+              hintText: 'اسم المستخدم',
+            ),
+            20.hSpace,
+            CustomTextField(
+              controller: _emailController,
+              hintText: 'البريد الألكتروني',
+            ),
+            20.hSpace,
+            CustomTextField(
+              controller: _passwordController,
+              hintText: 'الرقم السرى',
+            ),
+            20.hSpace,
+            CustomButton(
+              onTap: () => _signup(ref, context),
+              text: 'إنشاء حساب',
+              fontSize: 18,
+            ),
+          ]),
+        ),
       ),
     );
   }
