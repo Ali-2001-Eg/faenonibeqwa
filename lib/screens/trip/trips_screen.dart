@@ -31,7 +31,7 @@ class TripsScreen extends ConsumerWidget {
         centerTitle: true,
         title: const BigText(
           text: 'الرحلات',
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
       body: StreamBuilder<List<TripModel>>(
@@ -40,13 +40,13 @@ class TripsScreen extends ConsumerWidget {
             if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CustomIndicator();
+            }
             if (snapshot.data!.isEmpty) {
               return const Center(
                 child: BigText(text: 'لا يوجد رحلات بعد'),
               );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CustomIndicator();
             }
 
             return ListView.builder(

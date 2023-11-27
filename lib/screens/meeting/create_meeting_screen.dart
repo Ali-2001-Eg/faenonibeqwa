@@ -27,7 +27,6 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -37,6 +36,7 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
             SizedBox(
               width: MediaQuery.of(context).size.width / 1.2,
               child: TextField(
+                style: TextStyle(color: Colors.black),
                 controller: _titleController,
                 decoration: InputDecoration(
                   contentPadding:
@@ -71,7 +71,7 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
                             'userID':
                                 ref.read(authControllerProvider).userInfo.uid,
                             'isBroadcaster': true,
-                            'title':_titleController.text.trim(),
+                            'title': _titleController.text.trim(),
                           },
                         ))
                     .catchError((err) {

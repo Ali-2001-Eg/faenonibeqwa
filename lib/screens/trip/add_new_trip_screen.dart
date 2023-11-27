@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:faenonibeqwa/models/trip_model.dart';
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
@@ -13,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controllers/trip_controller.dart';
 import '../../utils/base/app_helper.dart';
-import '../../utils/base/app_images.dart';
 
 class AddNewTrip extends ConsumerStatefulWidget {
   const AddNewTrip({super.key});
@@ -33,6 +30,14 @@ class _AddNewTripState extends ConsumerState<AddNewTrip> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: Colors.white,
+        ),
         title: const BigText(
           text: 'اضافة رحلة جديده',
         ),
@@ -42,7 +47,6 @@ class _AddNewTripState extends ConsumerState<AddNewTrip> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Stack(
                 children: [
@@ -68,7 +72,7 @@ class _AddNewTripState extends ConsumerState<AddNewTrip> {
                   ),
                 ],
               ),
-              30.xSpace,
+              30.hSpace,
               CustomTextField(
                 controller: nameController,
                 hintText: 'اسم الرحله',
@@ -79,11 +83,10 @@ class _AddNewTripState extends ConsumerState<AddNewTrip> {
                   return null;
                 },
               ),
-              14.xSpace,
+              14.hSpace,
               CustomTextField(
                 controller: descController,
                 hintText: 'وصف الرحلة',
-                maxLines: null,
                 minLines: 1,
                 keyBoardType: TextInputType.text,
                 validator: (e) {
@@ -93,7 +96,7 @@ class _AddNewTripState extends ConsumerState<AddNewTrip> {
                   return null;
                 },
               ),
-              14.xSpace,
+              14.hSpace,
               CustomTextField(
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[0-9]'))
@@ -108,7 +111,7 @@ class _AddNewTripState extends ConsumerState<AddNewTrip> {
                   return null;
                 },
               ),
-              14.xSpace,
+              14.hSpace,
               CustomButton(
                 onTap: () {
                   if (formKey.currentState!.validate() && image != null) {

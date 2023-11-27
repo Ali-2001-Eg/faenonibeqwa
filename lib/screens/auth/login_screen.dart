@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/signup_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
@@ -24,33 +22,61 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       body: Form(
         key: _formkey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Icon(
-              Icons.book,
-              size: 250.h,
-              color: context.theme.cardColor,
-            ),
-            const BigText(
-              text:
-                  'قم بتسجيل الدخول لتمنح لأبنائك فرصه للتنشئه الدينيه الصحيحه',
-              textAlign: TextAlign.center,
-            ),
-            CustomTextField(
-              controller: _emailController,
-              hintText: 'Email Address',
-            ),
-            15.xSpace,
-            CustomTextField(
-                controller: _passwordController, hintText: 'Password'),
-            30.xSpace,
-            CustomButton(onTap: () => _login(ref, context), text: 'Login'),
-            InkWell(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => SignUpScreen()))),
-                child: const Text('Don\'t have an account'))
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+          child: Column(
+            children: [
+              Icon(
+                Icons.book,
+                size: 250.h,
+                color: context.theme.cardColor,
+              ),
+              16.hSpace,
+              const BigText(
+                text:
+                    'قم بتسجيل الدخول لتمنح لأبنائك فرصه للتنشئه الدينيه الصحيحه',
+                textAlign: TextAlign.center,
+              ),
+              16.hSpace,
+              CustomTextField(
+                controller: _emailController,
+                hintText: 'البريد الألكتروني',
+              ),
+              15.hSpace,
+              CustomTextField(
+                controller: _passwordController,
+                hintText: 'الرقم السرى',
+              ),
+              15.hSpace,
+              CustomButton(
+                  onTap: () => _login(ref, context), text: 'تسجيل الدخول'),
+              30.hSpace,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    child: const BigText(text: 'ليس لديك حساب ؟'),
+                  ),
+                  6.wSpace,
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => SignUpScreen()),
+                        ),
+                      );
+                    },
+                    child: const BigText(
+                      text: 'إنشاء حساب',
+                      color: Colors.blue,
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -63,7 +89,6 @@ class LoginScreen extends ConsumerWidget {
           .login(_emailController.text.trim(), _passwordController.text.trim())
           .then((value) => Navigator.pushNamedAndRemoveUntil(
               context, MainScreen.routeName, (route) => false));
-      ;
     }
   }
 

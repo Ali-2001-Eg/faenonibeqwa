@@ -25,7 +25,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
   final phoneController = TextEditingController();
   final numberOfPeopleController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  // PaymobResponse? response;
+  PaymobResponse? response;
   @override
   void initState() {
     ref.read(paymentControllerProvider).getPaymentAuth();
@@ -57,7 +57,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                   return null;
                 },
               ),
-              14.xSpace,
+              14.hSpace,
               CustomTextField(
                 controller: phoneController,
                 hintText: 'رقم التليفون',
@@ -72,7 +72,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                   return null;
                 },
               ),
-              14.xSpace,
+              14.hSpace,
               CustomTextField(
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[0-9]'))
@@ -87,7 +87,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                   return null;
                 },
               ),
-              14.xSpace,
+              14.hSpace,
               CustomButton(
                 onTap: () {
                   if (formKey.currentState!.validate()) {
@@ -105,7 +105,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                           "${widget.price * num.parse(numberOfPeopleController.text.trim()).toDouble()}",
                       billingData: PaymobBillingData(),
                       onPayment: (responsedata) {
-                        if (responsedata.success = true) {
+                        if (responsedata.success == true) {
                           ref.read(tripControllerProvider).saveTripPayment(
                                 tripPrice: widget.price,
                                 success: responsedata.success,
@@ -120,7 +120,20 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                 },
                 text: 'تابع لأتمام عملية الحجز',
                 textColor: Colors.white,
-              )
+              ),
+              // if (response != null)
+              //   Text(
+              //     " transactionID ${response?.transactionID}",
+              //     style: TextStyle(
+              //       color: Colors.red,
+              //     ),
+              //   ),
+              // Text(
+              //   " success ${response?.success}",
+              //   style: TextStyle(
+              //     color: Colors.red,
+              //   ),
+              // ),
             ],
           ),
         ),
