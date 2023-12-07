@@ -27,11 +27,11 @@ ThemeData get lightMode => ThemeData.light().copyWith(
       iconButtonTheme: IconButtonThemeData(
         style: ButtonStyle(
             backgroundColor:
-                MaterialStatePropertyAll<Color>(Colors.transparent),
-            elevation: MaterialStatePropertyAll<double>(0),
-            iconColor: MaterialStatePropertyAll<Color>(Colors.white),
+                const MaterialStatePropertyAll<Color>(Colors.transparent),
+            elevation: const MaterialStatePropertyAll<double>(0),
+            iconColor: const MaterialStatePropertyAll<Color>(Colors.white),
             textStyle: MaterialStateProperty.all<TextStyle>(
-              TextStyle(
+              const TextStyle(
                 color: Colors.white,
               ),
             )),

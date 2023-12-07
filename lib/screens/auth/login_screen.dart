@@ -25,6 +25,7 @@ class LoginScreen extends ConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.book,
@@ -83,12 +84,18 @@ class LoginScreen extends ConsumerWidget {
   }
 
   void _login(WidgetRef ref, BuildContext context) {
-    if (_formkey.currentState!.validate()) {
+    if (_formkey.currentState!.validate() &&
+        _emailController.text.isNotEmpty &&
+        _emailController.text.isNotEmpty) {
       ref
           .read(authControllerProvider)
           .login(_emailController.text.trim(), _passwordController.text.trim())
           .then((value) => Navigator.pushNamedAndRemoveUntil(
               context, MainScreen.routeName, (route) => false));
+    } else {
+      customSnackbar(
+          context: context,
+          text: 'قم بإكمال كافه البيانات الخاصه بتسجيل الدخول');
     }
   }
 

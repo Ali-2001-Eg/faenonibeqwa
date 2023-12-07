@@ -138,7 +138,7 @@ class _AddNewTripState extends ConsumerState<AddNewTrip> {
 
   void _selectImage() async {
     // print('Ali');
-    image = await pickImageFromGallery(context);
+    image = await AppHelper.pickImageFromGallery(context);
     setState(() {});
   }
 }

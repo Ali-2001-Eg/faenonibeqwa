@@ -38,7 +38,7 @@ class MainScreen extends ConsumerWidget {
         onTap: (value) {
           ref.read(homeProvider).changeIndex(value);
         },
-        items: <BottomNavigationBarItem>[
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,

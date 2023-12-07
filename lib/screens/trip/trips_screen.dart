@@ -1,3 +1,4 @@
+import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
 import 'package:flutter/material.dart';
@@ -14,19 +15,21 @@ class TripsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const AddNewTrip();
+      floatingActionButton: (ref.read(authControllerProvider).isAdmin)
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const AddNewTrip();
+                    },
+                  ),
+                );
               },
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+              child: const Icon(Icons.add),
+            )
+          : null,
       appBar: AppBar(
         centerTitle: true,
         title: const BigText(

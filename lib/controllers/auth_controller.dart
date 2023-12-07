@@ -16,12 +16,14 @@ class AuthController {
   Future<User?> get user => authRepo.user();
   Future<String> get getPhotoUrl => authRepo.getPhotoUrl;
   String get getName => authRepo.getName;
+  bool get isAdmin => authRepo.isAdmin;
   User get userInfo => authRepo.auth.currentUser!;
   Future<void> get signout => authRepo.signout();
   Future<void> signup(
           String email, String password, String username, String image) =>
       authRepo.signUp(email, password, username, image);
-  Future<void> login(String email , String password) => authRepo.login(email, password);
+  Future<void> login(String email, String password) =>
+      authRepo.login(email, password);
 }
 
 final authControllerProvider = Provider((ref) {
@@ -30,7 +32,7 @@ final authControllerProvider = Provider((ref) {
 });
 
 //future provider
-final userDataProvider = FutureProvider<User?>((ref) async {
+final userDataProvider = FutureProvider<UserModel?>((ref) async {
   final authController = ref.read(authControllerProvider);
-  return authController.user;
+  return authController.getUserData;
 });

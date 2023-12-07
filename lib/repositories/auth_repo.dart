@@ -1,8 +1,10 @@
-// ignore_for_file: deprecated_member_use, unused_import
+// ignore_for_file: deprecated_member_use, unused_import, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -48,7 +50,9 @@ class AuthRepo extends ChangeNotifier {
           name: ref.read(displayName),
           uid: auth.currentUser!.uid,
           photoUrl: ref.read(displayPhotoUrl),
-          email: ref.read(displayEmail));
+          email: ref.read(displayEmail),
+          isAdmin: false,
+          notificationToken: (await FirebaseMessaging.instance.getToken())!);
       await firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
@@ -90,6 +94,11 @@ class AuthRepo extends ChangeNotifier {
     return name;
   }
 
+  //check role
+  bool get isAdmin {
+    return ref.watch(userDataProvider).value!.isAdmin;
+  }
+
   Future<void> signout() async {
     try {
       auth.signOut();
@@ -111,16 +120,10 @@ class AuthRepo extends ChangeNotifier {
       auth.currentUser!.updateProfile(displayName: ref.read(displayName));
       await auth.currentUser!.reload();
       notifyListeners();
-      UserModel user = UserModel(
-          name: ref.read(displayName),
-          uid: auth.currentUser!.uid,
-          photoUrl: ref.read(displayPhotoUrl),
-          email: ref.read(displayEmail));
-      await firestore
-          .collection('users')
-          .doc(auth.currentUser!.uid)
-          .set(user.toMap());
-    } catch (e) {}
+      _saveCredentials();
+    } catch (e) {
+      print('error');
+    }
   }
 
   Future login(String email, String password) async {
@@ -131,6 +134,8 @@ class AuthRepo extends ChangeNotifier {
       } else if (e.code == 'wrong-password') {
         print('e.code is ${e.code}');
       }
+    } catch (e) {
+      print(e.toString());
     }
   }
 }
@@ -142,3 +147,5 @@ final authRepoProvider = Provider<AuthRepo>(
 final displayName = StateProvider<String>((ref) => '');
 final displayEmail = StateProvider<String>((ref) => '');
 final displayPhotoUrl = StateProvider<String>((ref) => '');
+//create admin الخطوه الجايه لما اعمل
+final isAdmin = StateProvider<bool>((ref) => false);
