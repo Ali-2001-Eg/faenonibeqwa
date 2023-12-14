@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_catch_error
+
 import 'dart:math';
 
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
@@ -36,7 +38,7 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
             SizedBox(
               width: MediaQuery.of(context).size.width / 1.2,
               child: TextField(
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 controller: _titleController,
                 decoration: InputDecoration(
                   contentPadding:

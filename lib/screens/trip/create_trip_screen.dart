@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +12,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../controllers/trip_controller.dart';
 import '../../utils/base/app_helper.dart';
 
-class AddNewTrip extends ConsumerStatefulWidget {
-  const AddNewTrip({super.key});
+class CreateTripScreen extends ConsumerStatefulWidget {
+  static const String routeName = '/add-new-trip';
+  const CreateTripScreen({super.key});
 
   @override
-  ConsumerState<AddNewTrip> createState() => _AddNewTripState();
+  ConsumerState<CreateTripScreen> createState() => _AddNewTripState();
 }
 
-class _AddNewTripState extends ConsumerState<AddNewTrip> {
+class _AddNewTripState extends ConsumerState<CreateTripScreen> {
   final nameController = TextEditingController();
   final descController = TextEditingController();
   final priceController = TextEditingController();
@@ -28,19 +29,14 @@ class _AddNewTripState extends ConsumerState<AddNewTrip> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: false,
+      appBar: CustomAppBar(
+        title: 'اضافة رحلة جديده',
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           color: Colors.white,
         ),
-        title: const BigText(
-          text: 'اضافة رحلة جديده',
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: Form(
         key: formKey,

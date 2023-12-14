@@ -50,8 +50,8 @@ ThemeData get lightMode => ThemeData.light().copyWith(
       appBarTheme: AppBarTheme(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
+            bottomLeft: Radius.circular(40),
+            bottomRight: Radius.circular(40),
           ),
         ),
         color: lightAppBar,

@@ -76,28 +76,16 @@ class AuthRepo extends ChangeNotifier {
     return user;
   }
 
-  Future<User?> user() async {
-    return auth.currentUser;
-  }
+  Future<User?> user() async => auth.currentUser;
 
   //get photo url
-  Future<String> get getPhotoUrl async {
-    String photoUrl = '';
-    await getUserData.then((value) => photoUrl = value!.photoUrl);
-    return photoUrl;
-  }
+  String get getPhotoUrl => ref.watch(userDataProvider).value!.photoUrl;
 
   //name
-  String get getName {
-    String name = '';
-    getUserData.then((value) => name = value!.name);
-    return name;
-  }
+  String get getName => ref.watch(userDataProvider).value!.name;
 
   //check role
-  bool get isAdmin {
-    return ref.watch(userDataProvider).value!.isAdmin;
-  }
+  bool get isAdmin => ref.watch(userDataProvider).value!.isAdmin;
 
   Future<void> signout() async {
     try {

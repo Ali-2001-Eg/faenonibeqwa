@@ -1,6 +1,8 @@
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
+import 'package:faenonibeqwa/screens/exam/create-exam/create_exam_screen.dart';
 import 'package:faenonibeqwa/screens/meeting/create_meeting_screen.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
+import 'package:faenonibeqwa/screens/trip/create_trip_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/home/main_sceen.dart';
@@ -14,6 +16,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _buildNewRoute(const MainScreen());
     case CreateMeetingScreen.routeName:
       return _buildNewRoute(const CreateMeetingScreen());
+    case CreateTripScreen.routeName:
+      return _buildNewRoute(const CreateTripScreen());
+    case CreateExamScreen.routeName:
+      return _buildNewRoute(const CreateExamScreen());
     case MeetingScreen.routeName:
       final args = settings.arguments as Map<String, dynamic>;
       final channelId = args['channelId'] as String;

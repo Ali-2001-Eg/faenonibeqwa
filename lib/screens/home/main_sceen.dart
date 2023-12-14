@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, unused_import
 
 import 'package:faenonibeqwa/screens/home/settings_screen.dart';
 import 'package:faenonibeqwa/screens/trip/trips_screen.dart';
@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/providers/home_provider.dart';
-import 'events.screen.dart';
+import '../exam/exams_list_screen.dart';
 import 'home_screen.dart';
 
 class MainScreen extends ConsumerWidget {
@@ -26,7 +26,7 @@ class MainScreen extends ConsumerWidget {
         children: const [
           HomeScreen(),
           TripsScreen(),
-          EventsScreen(),
+          ExamsListScreen(),
           SettingsScreen(),
         ],
       ),
@@ -61,9 +61,9 @@ class MainScreen extends ConsumerWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.moving_sharp,
+              Icons.text_snippet_outlined,
             ),
-            label: 'نشاطك',
+            label: 'الاختبارات',
             // activeIcon: Icon(
             //   Icons.moving_outlined,
             //   color: context.theme.hoverColor,
@@ -71,9 +71,9 @@ class MainScreen extends ConsumerWidget {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.settings,
+              Icons.person,
             ),
-            label: 'الاعدادات',
+            label: 'حسابي',
             // activeIcon: Icon(
             //   Icons.settings_outlined,
             //   color: context.theme.hoverColor,

@@ -1,6 +1,7 @@
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,13 +16,12 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('admin => ${ref.read(authControllerProvider).isAdmin}');
+    if (kDebugMode) {
+      print('admin => ${ref.read(authControllerProvider).isAdmin}');
+    }
     return Scaffold(
-      appBar: AppBar(
-        title: const BigText(
-          text: 'فَأَعِينُونِي بِقُوَّةٍ',
-          color: Colors.white,
-        ),
+      appBar: CustomAppBar(
+        title: 'فَأَعِينُونِي بِقُوَّةٍ',
         actions: [
           if (ref.read(authControllerProvider).isAdmin)
             Padding(

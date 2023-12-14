@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/shared/widgets/small_text.dart';
@@ -63,7 +62,7 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
                   textAlign: TextAlign.start,
 
                   text: hiddenText
-                      ? (firstHalf + '...')
+                      ? ('$firstHalf...')
                       : (firstHalf + secondHalf),
                 ),
                 InkWell(

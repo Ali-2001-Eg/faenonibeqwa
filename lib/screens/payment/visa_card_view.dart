@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_local_variable
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -16,7 +17,9 @@ class VisaCardView extends StatefulWidget {
 class _VisaCardViewState extends State<VisaCardView> {
   final controller = WebViewController();
   Future<void> getUrl(String token) async {
-    print('final token is ${widget.finalToken}');
+    if (kDebugMode) {
+      print('final token is ${widget.finalToken}');
+    }
     String portraitUrl =
         'https://accept.paymob.com/api/acceptance/iframes/787144?payment_token=$token';
     String landscapeUrl =

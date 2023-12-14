@@ -8,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:faenonibeqwa/models/trip_model.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'book_trip_screen.dart';
 import 'expand_text.dart';

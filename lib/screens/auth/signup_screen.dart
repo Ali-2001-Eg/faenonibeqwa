@@ -1,11 +1,12 @@
-import 'package:faenonibeqwa/screens/auth/login_screen.dart';
-import 'package:faenonibeqwa/screens/home/main_sceen.dart';
-import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:faenonibeqwa/screens/home/main_sceen.dart';
+import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/snackbar.dart';
+
 import '../../controllers/auth_controller.dart';
 import '../../utils/shared/widgets/custom_button.dart';
 
@@ -20,13 +21,7 @@ class SignUpScreen extends ConsumerWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       extendBody: true,
-      appBar: AppBar(
-        title: const BigText(
-          text: 'إنشاء حساب',
-          color: Colors.white,
-        ),
-        centerTitle: true,
-      ),
+      appBar: const CustomAppBar(title: 'إنشاء حساب'),
       body: SingleChildScrollView(
         child: Form(
           key: _formkey,

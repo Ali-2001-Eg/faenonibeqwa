@@ -8,7 +8,6 @@ import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -42,10 +41,14 @@ class MeetingRepo extends ChangeNotifier {
             .doc(channelId)
             .set(meeting.toMap());
       } else {
-        print('fill all fields');
+        if (kDebugMode) {
+          print('fill all fields');
+        }
       }
     } catch (e) {
-      print('error $e');
+      if (kDebugMode) {
+        print('error $e');
+      }
     }
   }
 

@@ -1,12 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:faenonibeqwa/controllers/trip_controller.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:faenonibeqwa/controllers/payment_controller.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:paymob_payment/paymob_payment.dart';
 
@@ -35,12 +35,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const BigText(
-          text: 'حجز رحلة',
-        ),
-      ),
+      appBar: const CustomAppBar(title: 'حجز رحلة'),
       body: Form(
         key: formKey,
         child: Padding(

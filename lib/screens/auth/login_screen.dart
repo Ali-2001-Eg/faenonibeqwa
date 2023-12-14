@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_catch_error, unused_element
+
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/signup_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';

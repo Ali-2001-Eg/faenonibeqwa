@@ -80,11 +80,9 @@ class MeetingScreen extends ConsumerWidget {
       ..bottomMenuBarConfig = zegoBottomMenuBarConfig
       ..turnOnCameraWhenJoining = false
       ..topMenuBarConfig = zegoTopMenuBarConfig;
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (t) {
         _handelExitFromMeeting(ref);
-
-        return true;
       },
       child: SafeArea(
         child: ZegoUIKitPrebuiltVideoConference(

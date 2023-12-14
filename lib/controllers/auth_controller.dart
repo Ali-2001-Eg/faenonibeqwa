@@ -14,7 +14,7 @@ class AuthController {
       await authRepo.signInWithGoogleAccount();
   Future<UserModel?> get getUserData => authRepo.getUserData;
   Future<User?> get user => authRepo.user();
-  Future<String> get getPhotoUrl => authRepo.getPhotoUrl;
+  String get getPhotoUrl => authRepo.getPhotoUrl;
   String get getName => authRepo.getName;
   bool get isAdmin => authRepo.isAdmin;
   User get userInfo => authRepo.auth.currentUser!;
