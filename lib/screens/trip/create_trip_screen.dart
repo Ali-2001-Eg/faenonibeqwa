@@ -8,6 +8,7 @@ import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 import '../../../controllers/trip_controller.dart';
 import '../../utils/base/app_helper.dart';
@@ -25,7 +26,7 @@ class _AddNewTripState extends ConsumerState<CreateTripScreen> {
   final descController = TextEditingController();
   final priceController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  File? image;
+  CroppedFile? image;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +56,7 @@ class _AddNewTripState extends ConsumerState<CreateTripScreen> {
                         )
                       : CircleAvatar(
                           backgroundImage: FileImage(
-                            image!,
+                            File(image!.path),
                           ),
                           radius: 64,
                         ),
@@ -115,7 +116,7 @@ class _AddNewTripState extends ConsumerState<CreateTripScreen> {
                         .read(tripControllerProvider)
                         .addTrip(
                           tripName: nameController.text.trim(),
-                          image: image!,
+                          image: File(image!.path),
                           price: num.parse(priceController.text.trim()),
                           description: descController.text.trim(),
                         )
@@ -134,7 +135,7 @@ class _AddNewTripState extends ConsumerState<CreateTripScreen> {
 
   void _selectImage() async {
     // print('Ali');
-    image = await AppHelper.pickImageFromGallery(context);
+    image = await AppHelper.pickImage(context);
     setState(() {});
   }
 }

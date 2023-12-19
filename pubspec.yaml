@@ -53,9 +53,8 @@ dependencies:
   webview_flutter: ^4.4.2
   # zego_uikit_prebuilt_call: ^3.6.1
   zego_uikit_prebuilt_video_conference: ^2.6.3
-  zego_uikit_signaling_plugin: null
-  flutter_document_scanner: ^1.1.0
-  # easy_stepper: ^0.8.3
+  image_cropper: ^5.0.1
+
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
