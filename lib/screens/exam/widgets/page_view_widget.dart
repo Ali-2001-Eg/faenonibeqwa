@@ -3,8 +3,6 @@ import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
-import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PageWidget extends StatelessWidget {

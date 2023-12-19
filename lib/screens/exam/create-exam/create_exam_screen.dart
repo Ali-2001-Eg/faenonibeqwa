@@ -1,6 +1,4 @@
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'exam_info_screen.dart';
@@ -22,6 +20,7 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'إضافه اختبار'),
+      resizeToAvoidBottomInset: false,
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         pageSnapping: false,

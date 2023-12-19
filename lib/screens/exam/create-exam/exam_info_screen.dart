@@ -21,11 +21,19 @@ class ExamInfoScreen extends StatefulWidget {
   State<ExamInfoScreen> createState() => _ExamInfoScreenState();
 }
 
-class _ExamInfoScreenState extends State<ExamInfoScreen> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+class _ExamInfoScreenState extends State<ExamInfoScreen> with AutomaticKeepAliveClientMixin {
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+  @override
+  void initState() {
+    _titleController = TextEditingController();
+    _descriptionController = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return PageWidget(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -51,6 +59,7 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
                 hintText: 'الوصف',
               ),
             ),
+            
           ],
         ),
       ),
@@ -58,4 +67,7 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
       onPreviousPressed: widget.onPreviousPressed,
     );
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

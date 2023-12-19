@@ -9,24 +9,28 @@ import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 
 class QuestionTypeRadioWidget extends StatefulWidget {
   const QuestionTypeRadioWidget({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _QuestionTypeRadioWidgetState createState() =>
       _QuestionTypeRadioWidgetState();
 }
 
-class _QuestionTypeRadioWidgetState extends State<QuestionTypeRadioWidget> {
+class _QuestionTypeRadioWidgetState extends State<QuestionTypeRadioWidget>
+    with AutomaticKeepAliveClientMixin {
+      //auto keep alive to save the state
   int _selectedOption = 0;
   CroppedFile? _questionImage;
   final TextEditingController _questionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -78,7 +82,12 @@ class _QuestionTypeRadioWidgetState extends State<QuestionTypeRadioWidget> {
                       )
                     : Column(
                         children: [
-                          Image.file(File(_questionImage!.path)),
+                          ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minHeight: 30.h,
+                                maxHeight: 100.h,
+                              ),
+                              child: Image.file(File(_questionImage!.path))),
                           10.hSpace,
                           CustomTextField(
                             controller: _questionController,
@@ -134,4 +143,8 @@ class _QuestionTypeRadioWidgetState extends State<QuestionTypeRadioWidget> {
       },
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
