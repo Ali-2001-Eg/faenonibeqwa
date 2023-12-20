@@ -5,7 +5,7 @@ import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/snackbar.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../utils/shared/widgets/custom_button.dart';

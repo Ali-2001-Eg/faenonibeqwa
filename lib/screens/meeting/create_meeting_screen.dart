@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/controllers/meeting_controller.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/snackbar.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

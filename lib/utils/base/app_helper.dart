@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:faenonibeqwa/utils/shared/widgets/snackbar.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
