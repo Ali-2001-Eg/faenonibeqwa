@@ -2,7 +2,8 @@ import 'package:equatable/equatable.dart';
 
 class ExamModel extends Equatable {
   final String id;
-  final String examTitle;
+  final String? examTitle;
+  final String? examDescription;
   final double totalGrade;
   final DateTime deadlineTime;
   final int timeMinutes;
@@ -10,7 +11,8 @@ class ExamModel extends Equatable {
   final List<Question> questions;
   const ExamModel({
     required this.id,
-    required this.examTitle,
+    this.examTitle,
+    this.examDescription,
     required this.totalGrade,
     required this.deadlineTime,
     required this.timeMinutes,
@@ -22,6 +24,7 @@ class ExamModel extends Equatable {
     return <String, dynamic>{
       'id': id,
       'examTitle': examTitle,
+      'examDescription': examDescription,
       'totalGrade': totalGrade,
       'deadlineTime': deadlineTime.millisecondsSinceEpoch,
       'timeMinutes': timeMinutes,
@@ -34,6 +37,7 @@ class ExamModel extends Equatable {
     return ExamModel(
       id: map['id'] as String,
       examTitle: map['examTitle'] as String,
+      examDescription: map['examDescription'] as String,
       totalGrade: map['totalGrade'] as double,
       deadlineTime:
           DateTime.fromMillisecondsSinceEpoch(map['deadlineTime'] as int),
@@ -48,43 +52,51 @@ class ExamModel extends Equatable {
   }
 
   @override
-  List<Object> get props => [
-        id,
-        examTitle,
-        totalGrade,
-        deadlineTime,
-        timeMinutes,
-        examImageUrl,
-        questions,
-      ];
+  List<Object> get props {
+    return [
+      id,
+      examTitle!,
+      examDescription!,
+      totalGrade,
+      deadlineTime,
+      timeMinutes,
+      examImageUrl,
+      questions,
+    ];
+  }
 }
 
 class Question extends Equatable {
-  final String title;
+  final String body;
   final String correctAnswerIdentifier;
-  final String? selectedAnswer;
+  final String? questionImage;
+  final String? selectedAnswerIdentifier;
   final List<Answers> answers;
   const Question({
-    required this.title,
+    required this.body,
     required this.correctAnswerIdentifier,
-    this.selectedAnswer,
+    this.questionImage,
+    this.selectedAnswerIdentifier,
     required this.answers,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'title': title,
-      'correctAnswer': correctAnswerIdentifier,
-      'selectedAnswer': selectedAnswer,
+      'body': body,
+      'correctAnswerIdentifier': correctAnswerIdentifier,
+      'questionImage': questionImage,
+      'selectedAnswer': selectedAnswerIdentifier,
       'answers': answers.map((x) => x.toMap()).toList(),
     };
   }
 
   factory Question.fromMap(Map<String, dynamic> map) {
     return Question(
-      title: map['title'] as String,
-      correctAnswerIdentifier: map['correctAnswer'] as String,
-      selectedAnswer: map['selectedAnswer'] != null
+      body: map['body'] as String,
+      correctAnswerIdentifier: map['correctAnswerIdentifier'] as String,
+      questionImage:
+          map['questionImage'] != null ? map['questionImage'] as String : null,
+      selectedAnswerIdentifier: map['selectedAnswer'] != null
           ? map['selectedAnswer'] as String
           : null,
       answers: List<Answers>.from(
@@ -96,7 +108,15 @@ class Question extends Equatable {
   }
 
   @override
-  List<Object> get props => [title, correctAnswerIdentifier, answers];
+  List<Object> get props {
+    return [
+      body,
+      correctAnswerIdentifier,
+      questionImage!,
+      selectedAnswerIdentifier!,
+      answers,
+    ];
+  }
 }
 
 class Answers extends Equatable {

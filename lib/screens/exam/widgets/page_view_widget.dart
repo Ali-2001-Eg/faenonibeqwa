@@ -2,21 +2,29 @@
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class PageWidget extends StatelessWidget {
+class PageWidget extends StatefulWidget {
   final Widget body;
-  final VoidCallback onNextPressed;
-  final VoidCallback onPreviousPressed;
+  final VoidCallback? onNextPressed;
+  final VoidCallback? onPreviousPressed;
+  final VoidCallback onSubmitted;
 
   const PageWidget({
     Key? key,
     required this.body,
-    required this.onNextPressed,
-    required this.onPreviousPressed,
+    this.onNextPressed,
+    this.onPreviousPressed,
+    required this.onSubmitted,
   }) : super(key: key);
 
+  @override
+  State<PageWidget> createState() => _PageWidgetState();
+}
+
+class _PageWidgetState extends State<PageWidget>  with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,23 +32,31 @@ class PageWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(child: body),
+          Expanded(child: widget.body),
           // 20.hSpace,
           Padding(
             padding: EdgeInsets.symmetric(vertical: 15.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                if (widget.onPreviousPressed != null)
+                  CustomButton(
+                      onTap: widget.onPreviousPressed!,
+                      text: 'الرجوع',
+                      width: context.screenWidth * 0.3,
+                      backgroundColor: const Color.fromARGB(255, 201, 73, 64)),
                 CustomButton(
-                    onTap: onPreviousPressed,
-                    text: 'الرجوع',
-                    width: context.screenWidth * 0.3,
-                    backgroundColor: const Color.fromARGB(255, 201, 73, 64)),
-                CustomButton(
-                  onTap: onNextPressed,
+                  onTap: widget.onSubmitted,
                   text: 'تأكيد',
                   width: context.screenWidth * 0.3,
+                  backgroundColor: Colors.blueAccent,
                 ),
+                if (widget.onNextPressed != null)
+                  CustomButton(
+                    onTap: widget.onNextPressed!,
+                    text: 'التالي',
+                    width: context.screenWidth * 0.3,
+                  ),
               ],
             ),
           ),
@@ -48,4 +64,8 @@ class PageWidget extends StatelessWidget {
       ),
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
