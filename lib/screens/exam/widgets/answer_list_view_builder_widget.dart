@@ -28,7 +28,8 @@ class _AnswersListWiewBuilderWidgetState
     return ListView.separated(
       itemCount: 4,
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      physics: const BouncingScrollPhysics(),
       separatorBuilder: (_, i) =>
           Padding(padding: EdgeInsets.all(10.w), child: Container()),
       itemBuilder: (context, index) {

@@ -5,22 +5,16 @@ import 'exam_info_screen.dart';
 import 'add_questions_screen.dart';
 import 'submit_exam_screen.dart';
 
-class CreateExamScreen extends ConsumerStatefulWidget {
+class CreateExamScreen extends StatelessWidget {
   static const String routeName = "/create-exam-screen";
-  const CreateExamScreen({super.key});
+  CreateExamScreen({super.key});
 
-  @override
-  ConsumerState<CreateExamScreen> createState() => _CreateExamScreenState();
-}
-
-PageController _pageController = PageController(initialPage: 0);
-
-class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
+  PageController _pageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'إضافه اختبار'),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         pageSnapping: false,
