@@ -1,9 +1,12 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class ExamModel extends Equatable {
   final String id;
-  final String? examTitle;
-  final String? examDescription;
+  final String examTitle;
+  final String examDescription;
   final double totalGrade;
   final DateTime deadlineTime;
   final int timeMinutes;
@@ -11,8 +14,8 @@ class ExamModel extends Equatable {
   final List<Question> questions;
   const ExamModel({
     required this.id,
-    this.examTitle,
-    this.examDescription,
+    required this.examTitle,
+    required this.examDescription,
     required this.totalGrade,
     required this.deadlineTime,
     required this.timeMinutes,
@@ -29,7 +32,7 @@ class ExamModel extends Equatable {
       'deadlineTime': deadlineTime.millisecondsSinceEpoch,
       'timeMinutes': timeMinutes,
       'examImageUrl': examImageUrl,
-      'questions': questions.map((x) => x.toMap()).toList(),
+      'questions': [],
     };
   }
 
@@ -55,8 +58,8 @@ class ExamModel extends Equatable {
   List<Object> get props {
     return [
       id,
-      examTitle!,
-      examDescription!,
+      examTitle,
+      examDescription,
       totalGrade,
       deadlineTime,
       timeMinutes,
@@ -68,12 +71,14 @@ class ExamModel extends Equatable {
 
 class Question extends Equatable {
   final String body;
+  final String? id;
   final String correctAnswerIdentifier;
   final String? questionImage;
   final String? selectedAnswerIdentifier;
   final List<Answers> answers;
   const Question({
     required this.body,
+    this.id,
     required this.correctAnswerIdentifier,
     this.questionImage,
     this.selectedAnswerIdentifier,
@@ -85,19 +90,20 @@ class Question extends Equatable {
       'body': body,
       'correctAnswerIdentifier': correctAnswerIdentifier,
       'questionImage': questionImage,
-      'selectedAnswer': selectedAnswerIdentifier,
-      'answers': answers.map((x) => x.toMap()).toList(),
+      'selectedAnswerIdentifier': selectedAnswerIdentifier,
+      'answers': [],
     };
   }
 
   factory Question.fromMap(Map<String, dynamic> map) {
     return Question(
       body: map['body'] as String,
+      id: map['id'] as String,
       correctAnswerIdentifier: map['correctAnswerIdentifier'] as String,
       questionImage:
           map['questionImage'] != null ? map['questionImage'] as String : null,
-      selectedAnswerIdentifier: map['selectedAnswer'] != null
-          ? map['selectedAnswer'] as String
+      selectedAnswerIdentifier: map['selectedAnswerIdentifier'] != null
+          ? map['selectedAnswerIdentifier'] as String
           : null,
       answers: List<Answers>.from(
         (map['answers'] as List<int>).map<Answers>(
@@ -111,6 +117,7 @@ class Question extends Equatable {
   List<Object> get props {
     return [
       body,
+      id!,
       correctAnswerIdentifier,
       questionImage!,
       selectedAnswerIdentifier!,

@@ -135,7 +135,7 @@ class _AddNewTripState extends ConsumerState<CreateTripScreen> {
 
   void _selectImage() async {
     // print('Ali');
-    image = await AppHelper.pickImage(context);
+    image = await AppHelper.pickAndEditImage(context);
     setState(() {});
   }
 }

@@ -6,17 +6,18 @@ import 'package:faenonibeqwa/screens/exam/widgets/page_view_widget.dart';
 class SubmitExamScreen extends StatelessWidget {
   final VoidCallback onPreviousPressed;
   final VoidCallback onSubmitted;
-
+  final Widget body;
   const SubmitExamScreen({
     Key? key,
     required this.onPreviousPressed,
     required this.onSubmitted,
+    required this.body,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PageWidget(
-      body: Container(),
+      body: body,
       onPreviousPressed: onPreviousPressed,
       onSubmitted: onSubmitted,
     );

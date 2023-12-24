@@ -24,9 +24,11 @@ class PageWidget extends StatefulWidget {
   State<PageWidget> createState() => _PageWidgetState();
 }
 
-class _PageWidgetState extends State<PageWidget>  with AutomaticKeepAliveClientMixin{
+class _PageWidgetState extends State<PageWidget>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -35,7 +37,7 @@ class _PageWidgetState extends State<PageWidget>  with AutomaticKeepAliveClientM
           Expanded(child: widget.body),
           // 20.hSpace,
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 15.h),
+            padding: EdgeInsets.symmetric(vertical: 8.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -64,7 +66,7 @@ class _PageWidgetState extends State<PageWidget>  with AutomaticKeepAliveClientM
       ),
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;

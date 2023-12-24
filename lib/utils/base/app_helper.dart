@@ -7,14 +7,31 @@ import 'package:image_picker/image_picker.dart';
 
 class AppHelper {
   //pick image
-  static FutureOr<CroppedFile?> pickImage(BuildContext context,
+  static FutureOr<File?> pickImage(BuildContext context,
+      {ImageSource imageSource = ImageSource.gallery}) async {
+    File? image;
+    try {
+      final pickedImage = await ImagePicker().pickImage(source: imageSource);
+
+      if (pickedImage != null) {
+        image = File(pickedImage.path);
+      }
+
+      return image;
+    } catch (e) {
+      if (context.mounted) customSnackbar(context: context, text: e.toString());
+    }
+    return null;
+  }
+
+  static FutureOr<CroppedFile?> pickAndEditImage(BuildContext context,
       {ImageSource imageSource = ImageSource.gallery}) async {
     CroppedFile? image;
     try {
       final pickedImage = await ImagePicker().pickImage(source: imageSource);
 
       if (pickedImage != null) {
-        image = await cropImage(File(pickedImage.path));
+        image = await _cropImage(File(pickedImage.path));
       }
 
       return image;
@@ -25,7 +42,7 @@ class AppHelper {
   }
 
   //crop image
-  static FutureOr<CroppedFile?> cropImage(File imageFile) async {
+  static FutureOr<CroppedFile?> _cropImage(File imageFile) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: imageFile.path,
         aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),

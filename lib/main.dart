@@ -45,6 +45,7 @@ void _initAwesomeLocalNotifications() {
         channelKey: 'basic_channel',
         channelName: 'Basic notifications',
         channelDescription: 'Notification channel for basic tests',
+        
       ),
     ],
     debug: true,
