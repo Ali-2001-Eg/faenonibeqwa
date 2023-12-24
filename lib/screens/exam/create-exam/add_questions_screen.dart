@@ -3,20 +3,22 @@
 import 'package:faenonibeqwa/screens/exam/widgets/question_content_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../../../utils/base/app_helper.dart';
 import '../../../utils/base/question_z.dart';
+import '../../../utils/shared/widgets/big_text.dart';
 import '../../../utils/shared/widgets/custom_button.dart';
+import '../../../utils/shared/widgets/small_text.dart';
 import '../widgets/page_view_widget.dart';
 
 class AddQuestionScreen extends StatefulWidget {
   final void Function(int pageNo) onNextPressed;
-  CroppedFile? questionImage;
   final List<QuestionZ> questions;
 
-  AddQuestionScreen({
+  const AddQuestionScreen({
     Key? key,
     required this.onNextPressed,
-    this.questionImage,
     required this.questions,
   }) : super(key: key);
 
@@ -36,8 +38,9 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
             //first question so index is 0
             QuestionContentWidget(
               questions: widget.questions,
-              questionImage: widget.questionImage,
               questionIndex: 0,
+              pickQuestionImage: () async =>
+                  await widget.questions[0].pickQuestionImage(context),
             ),
             if (widget.questions.length == 1)
               Center(child: _addNewQuestionButton),
@@ -50,12 +53,15 @@ class _AddQuestionScreenState extends State<AddQuestionScreen> {
                   itemBuilder: (_, index) {
                     return QuestionContentWidget(
                       questions: widget.questions,
-                      questionImage: widget.questionImage,
                       questionIndex: index + 1,
+                      pickQuestionImage: () async {
+                        await widget.questions[index + 1]
+                            .pickQuestionImage(context);
+                      },
                     );
                   }),
               Center(child: _addNewQuestionButton),
-            ]
+            ],
           ],
         ),
       ),

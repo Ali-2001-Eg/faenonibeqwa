@@ -17,14 +17,14 @@ import '../../../utils/shared/widgets/custom_text_field.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 
 class QuestionContentWidget extends StatefulWidget {
-  CroppedFile? questionImage;
   final List<QuestionZ> questions;
   final int questionIndex;
-  QuestionContentWidget({
+  final Future<void> Function() pickQuestionImage;
+  const QuestionContentWidget({
     Key? key,
-    this.questionImage,
     required this.questions,
     required this.questionIndex,
+    required this.pickQuestionImage,
   }) : super(key: key);
 
   @override
@@ -78,10 +78,14 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                   controller: widget
                       .questions[widget.questionIndex].questionBodyController,
                 )
-              : widget.questionImage == null
+              : widget.questions[widget.questionIndex].questionImage == null
                   ? Center(
                       child: CustomButton(
-                        onTap: pickQuestionImage,
+                        onTap: () {
+                          widget
+                              .pickQuestionImage()
+                              .then((value) => setState(() {}));
+                        },
                         text: 'اختر صوره',
                       ),
                     )
@@ -92,8 +96,10 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                               minHeight: 30.h,
                               maxHeight: 100.h,
                             ),
-                            child:
-                                Image.file(File(widget.questionImage!.path))),
+                            child: Image.file(File(widget
+                                .questions[widget.questionIndex]
+                                .questionImage!
+                                .path))),
                         10.hSpace,
                         CustomTextField(
                           controller: widget.questions[widget.questionIndex]
@@ -185,42 +191,6 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
           ),
         ],
       ),
-    );
-  }
-
-  void pickQuestionImage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const BigText(text: 'اختر مصدر الصوره'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                CroppedFile? image = await AppHelper.pickAndEditImage(context,
-                    imageSource: ImageSource.camera);
-                setState(() {
-                  widget.questionImage = image;
-                });
-
-                if (context.mounted) Navigator.pop(context);
-              },
-              child: const SmallText(text: 'كاميرا'),
-            ),
-            TextButton(
-              onPressed: () async {
-                CroppedFile? image = await AppHelper.pickAndEditImage(context,
-                    imageSource: ImageSource.gallery);
-                setState(() {
-                  widget.questionImage = image;
-                });
-                if (context.mounted) Navigator.pop(context);
-              },
-              child: const SmallText(text: 'المعرض'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

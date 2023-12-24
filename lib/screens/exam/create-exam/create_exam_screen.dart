@@ -5,15 +5,16 @@ import 'dart:io';
 import 'package:faenonibeqwa/controllers/exam_controller.dart';
 import 'package:faenonibeqwa/screens/exam/create-exam/add_questions_screen.dart';
 import 'package:faenonibeqwa/screens/exam/create-exam/exam_info_screen.dart';
+import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
+import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_cropper/image_cropper.dart';
 import '../../../models/exam_model.dart';
 import '../../../utils/base/question_z.dart';
-import 'submit_exam_screen.dart';
+import 'exam_sammary_screen.dart';
 
 class CreateExamScreen extends ConsumerStatefulWidget {
   static const String routeName = "/create-exam-screen";
@@ -34,7 +35,6 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
   //second page
   List<QuestionZ> questions = [QuestionZ()];
   File? examImage;
-  CroppedFile? questionImage;
 
   @override
   void dispose() {
@@ -72,23 +72,60 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
           ),
           //second page
           AddQuestionScreen(
-              onNextPressed: _onNextPressed, questions: questions),
-
-          //third page
-          SubmitExamScreen(
-            body: Container(),
-            onPreviousPressed: () => _onNextPressed(1),
-            onSubmitted: () {
-              _storeExamData(context).catchError((err) => customSnackbar(
-                    context: context,
-                    text: err.toString(),
-                    color: Colors.redAccent,
-                  ));
+            onNextPressed: (index) {
+              _storeQuestioImages().then((value) => _onNextPressed(index));
             },
+            questions: questions,
           ),
+
+          if (_totalGradeController.text.trim().isNotEmpty &&
+              _timeMinutesController.text.trim().isNotEmpty &&
+              examImage != null)
+
+            //third page
+            ExamSammaryScreen(
+              exam: ExamModel(
+                id: '0',
+                examTitle: _titleController.text.trim(),
+                examDescription: _descriptionController.text.trim(),
+                totalGrade: double.parse(_totalGradeController.text.trim()),
+                deadlineTime: DateTime.now(),
+                timeMinutes: int.parse(_timeMinutesController.text.trim()),
+                examImageUrl: examImage!.path,
+                questions: questions.map((e) => e.convertToQuestion()).toList(),
+              ),
+              onPreviousPressed: () => _onNextPressed(1),
+              onSubmitted: () {
+                _storeExamData(context)
+                    .then((value) => Navigator.pushNamedAndRemoveUntil(
+                        context, MainScreen.routeName, (route) => false))
+                    .catchError(((err) {
+                  customSnackbar(
+                      context: context, text: 'أكمل البيانات من فضلك');
+                }));
+              },
+            ),
         ],
       ),
     );
+  }
+
+  Future<void> _storeQuestioImages() async {
+    for (var element in questions) {
+      if (element.questionImage != null) {
+        await ref
+            .read(firebaseStorageRepoProvider)
+            .storeFileToFirebaseStorage(
+                'images', File(element.questionImage!.path))
+            .then((value) {
+          setState(() {
+            element.imageUrl = value;
+            // element.questionImage = CroppedFile(element.questionImage!.path);
+          });
+          print('question image is ${element.imageUrl}');
+        });
+      }
+    }
   }
 
   Future<void> _storeExamData(BuildContext context) async {
@@ -96,25 +133,21 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
     for (var element in questions) {
       quiz.add(element.convertToQuestion());
     }
-
-    await ref
-        .read(examControllerProvider)
-        .addExamInfoToFirebase(
-          examDescription: _descriptionController.text.trim(),
-          examTitle: _titleController.text.trim(),
-          totalGrade: num.parse(_totalGradeController.text),
-          deadlineTime: DateTime.now(),
-          timeMinutes: int.parse(_timeMinutesController.text),
-          image: examImage!,
-          context: context,
-          question: quiz,
-        )
-        .then((value) => print('done'))
-        .catchError((err) => customSnackbar(
-              context: context,
-              text: err.toString(),
-              color: Colors.redAccent,
-            ));
+    if (mounted) {
+      await ref
+          .read(examControllerProvider)
+          .addExamInfoToFirebase(
+            examDescription: _descriptionController.text.trim(),
+            examTitle: _titleController.text.trim(),
+            totalGrade: num.parse(_totalGradeController.text),
+            deadlineTime: DateTime.now(),
+            timeMinutes: int.parse(_timeMinutesController.text),
+            image: examImage!,
+            context: context,
+            question: quiz,
+          )
+          .then((value) => print('done'));
+    }
   }
 
   void _onNextPressed(int pageNumber) {

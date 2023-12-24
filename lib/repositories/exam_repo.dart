@@ -37,7 +37,7 @@ class ExamRepo {
     String imageUrl = await ref
         .read(firebaseStorageRepoProvider)
         .storeFileToFirebaseStorage(
-            'examImageUrl', image, auth.currentUser!.uid);
+            'examImageUrl', image);
     ExamModel model = ExamModel(
       id: examId,
       totalGrade: totalGrade.toDouble(),
