@@ -25,7 +25,7 @@ class TripRepository extends ChangeNotifier {
     try {
       String image = await ref
           .read(firebaseStorageRepoProvider)
-          .storeFileToFirebaseStorage('tripImages', imagePath);
+          .storeFileToFirebaseStorage('tripImages',name, imagePath);
       TripModel trip = TripModel(
         id: firestore.collection('trips').id,
         nameTrip: name,

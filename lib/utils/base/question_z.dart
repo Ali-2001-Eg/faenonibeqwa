@@ -1,12 +1,9 @@
 //to grab question data
-import 'dart:io';
 
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../models/exam_model.dart';
 import '../shared/widgets/big_text.dart';

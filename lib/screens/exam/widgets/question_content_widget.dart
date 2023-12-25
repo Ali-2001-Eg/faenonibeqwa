@@ -3,13 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 
-import '../../../utils/base/app_helper.dart';
 import '../../../utils/base/question_z.dart';
 import '../../../utils/shared/widgets/big_text.dart';
 import '../../../utils/shared/widgets/custom_button.dart';

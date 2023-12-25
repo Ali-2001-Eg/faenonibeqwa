@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -30,8 +31,9 @@ class ExamSammaryScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            10.hSpace,
             const Center(child: BigText(text: 'ملخص الاختبار')),
-            50.hSpace,
+            30.hSpace,
             SammaryImageWidget(imageUrl: exam.examImageUrl, fromNetwork: false),
             30.hSpace,
             SummaryExamComponentWidget(
@@ -80,8 +82,11 @@ class ExamSammaryScreen extends StatelessWidget {
                       SammaryImageWidget(
                           imageUrl: question.questionImage!, fromNetwork: true),
                     if (question.questionImage == null)
-                      const BigText(
-                        text: 'لا يوجد صوره مرفقه بالسؤال',
+                      const Align(
+                        alignment: Alignment.topRight,
+                        child: SmallText(
+                          text: 'لا يوجد صوره مرفقه بالسؤال',
+                        ),
                       ),
                     10.hSpace,
                     ListView.separated(

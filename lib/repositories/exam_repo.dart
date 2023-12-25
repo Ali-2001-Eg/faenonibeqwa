@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +36,7 @@ class ExamRepo {
     String imageUrl = await ref
         .read(firebaseStorageRepoProvider)
         .storeFileToFirebaseStorage(
-            'examImageUrl', image);
+            'examImageUrl',examId, image);
     ExamModel model = ExamModel(
       id: examId,
       totalGrade: totalGrade.toDouble(),
@@ -52,7 +51,6 @@ class ExamRepo {
     await firestore.collection('exams').doc(examId).set(model.toMap());
     for (var element in question) {
       questionId = const Uuid().v1();
-      print('$questionId is questioId');
       await firestore
           .collection('exams')
           .doc(examId)
@@ -61,7 +59,6 @@ class ExamRepo {
           .set(element.toMap());
 
       for (var i = 0; i <= 3; i++) {
-        print('answer is ${element.answers[i].answer}');
         await firestore
             .collection('exams')
             .doc(examId)

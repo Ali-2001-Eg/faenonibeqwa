@@ -8,7 +8,6 @@ import 'package:faenonibeqwa/screens/exam/create-exam/exam_info_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -100,7 +99,7 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
                     .then((value) => Navigator.pushNamedAndRemoveUntil(
                         context, MainScreen.routeName, (route) => false))
                     .catchError(((err) {
-                  customSnackbar(
+                  AppHelper. customSnackbar(
                       context: context, text: 'أكمل البيانات من فضلك');
                 }));
               },
@@ -111,19 +110,20 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
   }
 
   Future<void> _storeQuestioImages() async {
-    for (var element in questions) {
+    for (var i = 0; i < questions.length; i++) {
+      var element = questions[i];
       if (element.questionImage != null) {
         await ref
             .read(firebaseStorageRepoProvider)
-            .storeFileToFirebaseStorage(
-                'images', File(element.questionImage!.path))
+            .storeFileToFirebaseStorage('examImageUrl/images/',
+                (i + 1).toString(), File(element.questionImage!.path))
             .then((value) {
           setState(() {
             element.imageUrl = value;
-            // element.questionImage = CroppedFile(element.questionImage!.path);
           });
-          print('question image is ${element.imageUrl}');
         });
+      } else {
+        print('No images to push');
       }
     }
   }

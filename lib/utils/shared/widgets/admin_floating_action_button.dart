@@ -7,19 +7,19 @@ import 'package:faenonibeqwa/controllers/auth_controller.dart';
 class AdminFloatingActionButton extends ConsumerWidget {
   final IconData icon;
   final String routeName;
-  final String referKey;
+  final String heroTag;
   const AdminFloatingActionButton({
     super.key,
     required this.icon,
     required this.routeName,
-    required this.referKey,
+    required this.heroTag,
   });
 
   @override
   Widget build(BuildContext context, ref) {
     return ref.read(authControllerProvider).isAdmin
         ? FloatingActionButton(
-            key: Key(referKey),
+            heroTag: heroTag,
             onPressed: () => Navigator.pushNamed(context, routeName),
             child: Icon(
               icon,

@@ -1,11 +1,9 @@
-// ignore_for_file: body_might_complete_normally_catch_error
-
 import 'dart:math';
 
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/controllers/meeting_controller.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
+import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -77,7 +75,9 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
                           },
                         ))
                     .catchError((err) {
-                  customSnackbar(context: context, text: err.toString());
+                  AppHelper.customSnackbar(
+                      context: context, text: err.toString());
+                  return err;
                 });
               },
               child: const Text(

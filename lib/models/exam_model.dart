@@ -1,5 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
+
 
 import 'package:equatable/equatable.dart';
 
@@ -32,7 +31,6 @@ class ExamModel extends Equatable {
       'deadlineTime': deadlineTime.millisecondsSinceEpoch,
       'timeMinutes': timeMinutes,
       'examImageUrl': examImageUrl,
-      'questions': [],
     };
   }
 
@@ -90,8 +88,6 @@ class Question extends Equatable {
       'body': body,
       'correctAnswerIdentifier': correctAnswerIdentifier,
       'questionImage': questionImage,
-      'selectedAnswerIdentifier': selectedAnswerIdentifier,
-      'answers': [],
     };
   }
 

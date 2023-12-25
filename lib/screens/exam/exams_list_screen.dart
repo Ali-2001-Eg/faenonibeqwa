@@ -14,7 +14,7 @@ class ExamsListScreen extends ConsumerWidget {
       floatingActionButton: AdminFloatingActionButton(
         icon: Icons.add,
         routeName: CreateExamScreen.routeName,
-        referKey: 'createExam',
+        heroTag: 'createExam',
       ),
     );
   }

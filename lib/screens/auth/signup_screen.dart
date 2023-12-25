@@ -1,3 +1,4 @@
+import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,7 +6,6 @@ import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../utils/shared/widgets/custom_button.dart';
@@ -76,7 +76,7 @@ class SignUpScreen extends ConsumerWidget {
                 context, MainScreen.routeName, (r) => false),
           );
     } else {
-      customSnackbar(
+      AppHelper.customSnackbar(
           context: context,
           text: 'قم بإكمال كافه البيانات الخاصه بتسجيل الدخول');
     }

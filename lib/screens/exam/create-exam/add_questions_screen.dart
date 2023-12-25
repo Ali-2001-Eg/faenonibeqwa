@@ -2,14 +2,9 @@
 
 import 'package:faenonibeqwa/screens/exam/widgets/question_content_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 
-import '../../../utils/base/app_helper.dart';
 import '../../../utils/base/question_z.dart';
-import '../../../utils/shared/widgets/big_text.dart';
 import '../../../utils/shared/widgets/custom_button.dart';
-import '../../../utils/shared/widgets/small_text.dart';
 import '../widgets/page_view_widget.dart';
 
 class AddQuestionScreen extends StatefulWidget {

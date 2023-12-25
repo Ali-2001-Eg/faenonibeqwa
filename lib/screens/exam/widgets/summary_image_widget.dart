@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
@@ -27,6 +26,7 @@ class SammaryImageWidget extends StatelessWidget {
           child: fromNetwork
               ? Image.network(
                   (imageUrl),
+                  // fit: BoxFit.fill,
                 )
               : Image.file(File(imageUrl)),
         ),

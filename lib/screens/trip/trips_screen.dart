@@ -19,7 +19,7 @@ class TripsScreen extends ConsumerWidget {
       floatingActionButton: const AdminFloatingActionButton(
         icon: Icons.add,
         routeName: CreateTripScreen.routeName,
-        referKey: 'createTrip',
+        heroTag: 'createTrip',
       ),
       appBar: const CustomAppBar(title: 'الرحلات'),
       body: StreamBuilder<List<TripModel>>(

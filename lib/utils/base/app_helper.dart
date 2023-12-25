@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -60,5 +60,26 @@ class AppHelper {
         ]);
 
     return croppedFile;
+  }
+
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      customSnackbar(
+          {required BuildContext context,
+          required String text,
+          Color color = Colors.redAccent}) {
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      shape: const StadiumBorder(),
+      elevation: 0,
+      showCloseIcon: true,
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(3),
+      backgroundColor: color,
+      content: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 15.h, color: Colors.white),
+      ),
+    ));
   }
 }

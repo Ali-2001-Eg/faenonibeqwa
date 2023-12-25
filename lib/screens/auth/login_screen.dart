@@ -8,10 +8,11 @@ import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../utils/base/app_helper.dart';
 
 class LoginScreen extends ConsumerWidget {
   static const String routeName = '/login';
@@ -95,7 +96,7 @@ class LoginScreen extends ConsumerWidget {
           .then((value) => Navigator.pushNamedAndRemoveUntil(
               context, MainScreen.routeName, (route) => false));
     } else {
-      customSnackbar(
+      AppHelper.customSnackbar(
           context: context,
           text: 'قم بإكمال كافه البيانات الخاصه بتسجيل الدخول');
     }
@@ -111,7 +112,7 @@ class LoginScreen extends ConsumerWidget {
               (route) => false,
             ))
         .catchError((e) {
-      customSnackbar(
+      AppHelper.customSnackbar(
         context: context,
         text: e.toString(),
         color: Colors.red,
