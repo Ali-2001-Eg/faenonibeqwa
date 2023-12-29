@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
 
 import 'dart:io';
 
@@ -33,10 +33,10 @@ class ExamRepo {
   }) async {
     var examId = const Uuid().v1();
     String? questionId;
+    String? answerId;
     String imageUrl = await ref
         .read(firebaseStorageRepoProvider)
-        .storeFileToFirebaseStorage(
-            'examImageUrl',examId, image);
+        .storeFileToFirebaseStorage('examImageUrl', examId, image);
     ExamModel model = ExamModel(
       id: examId,
       totalGrade: totalGrade.toDouble(),
@@ -59,20 +59,90 @@ class ExamRepo {
           .set(element.toMap());
 
       for (var i = 0; i <= 3; i++) {
+        answerId = const Uuid().v4();
+
         await firestore
             .collection('exams')
             .doc(examId)
             .collection('questions')
             .doc(questionId)
-            .collection('asnwers')
-            .add(element.answers[i].toMap());
+            .collection('answers')
+            .doc(answerId)
+            .set(element.answers[i].toMap());
       }
     }
   }
+
+  Stream<List<ExamModel>> get exams {
+    return firestore.collection('exams').snapshots().map((snapshot) {
+      List<ExamModel> examList = [];
+      examList.clear();
+      for (var item in snapshot.docs) {
+        examList.add(ExamModel.fromMap(item.data()));
+      }
+      return examList;
+    });
+  }
+
+  Future<List<Question>> questions(String examId) async {
+    var quesionData = await firestore
+        .collection('exams')
+        .doc(examId)
+        .collection('questions')
+        .get();
+    List<Question> questionList = [];
+    for (var element in quesionData.docs) {
+      if (quesionData.docs.isNotEmpty) {
+        questionList.add(Question.fromMap(element.data()));
+      }
+    }
+    return questionList;
+  }
+
+  Future<List<Answers>> answers(String examId, String questionId) async {
+    var quesionData = await firestore
+        .collection('exams')
+        .doc(examId)
+        .collection('questions')
+        .doc(questionId)
+        .collection('answers')
+        .get();
+    List<Answers> answersList = [];
+    for (var element in quesionData.docs) {
+      if (quesionData.docs.isNotEmpty) {
+        answersList.add(Answers.fromMap(element.data()));
+      }
+    }
+    return answersList;
+  }
+
+  //to pass it to question doc
+  Stream<List<String>> questionIds(String examId) => firestore
+          .collection('exams')
+          .doc(examId)
+          .collection('questions')
+          .snapshots()
+          .map((query) {
+        List<String> questionIds = <String>[];
+        for (var element in query.docs) {
+          if (query.docs.isNotEmpty) {
+            questionIds.add(element.id);
+          }
+        }
+        return questionIds;
+      });
+      
 }
 
-var examData = StateProvider<ExamModel?>((ref) => null);
 final examRepoProvider = Provider((ref) => ExamRepo(
     auth: FirebaseAuth.instance,
     firestore: FirebaseFirestore.instance,
     ref: ref));
+
+
+
+final currentIndex = StateProvider<int>((ref) => 0);
+
+final selectedAnswers= StateProvider<List<String>>((ref) => <String>[]);
+
+final allQuestions = StateProvider<List<Question>>((ref) => <Question>[]);

@@ -26,7 +26,7 @@ class TripsScreen extends ConsumerWidget {
           stream: ref.read(tripControllerProvider).getTrip(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
+              return BigText(text:snapshot.error.toString());
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CustomIndicator();

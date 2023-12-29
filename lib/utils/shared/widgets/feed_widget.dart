@@ -24,7 +24,7 @@ class FeedWidget extends ConsumerWidget {
           return BigText(text: snapshot.error.toString());
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CustomIndicator();
+          return const Center(child: CustomIndicator());
         }
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return ConstrainedBox(

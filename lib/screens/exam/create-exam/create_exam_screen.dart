@@ -11,6 +11,7 @@ import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 import '../../../models/exam_model.dart';
 import '../../../utils/base/question_z.dart';
 import 'exam_sammary_screen.dart';
@@ -99,7 +100,7 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
                     .then((value) => Navigator.pushNamedAndRemoveUntil(
                         context, MainScreen.routeName, (route) => false))
                     .catchError(((err) {
-                  AppHelper. customSnackbar(
+                  AppHelper.customSnackbar(
                       context: context, text: 'أكمل البيانات من فضلك');
                 }));
               },
@@ -122,9 +123,7 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
             element.imageUrl = value;
           });
         });
-      } else {
-        print('No images to push');
-      }
+      } 
     }
   }
 
@@ -133,21 +132,19 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
     for (var element in questions) {
       quiz.add(element.convertToQuestion());
     }
-    if (mounted) {
-      await ref
-          .read(examControllerProvider)
-          .addExamInfoToFirebase(
-            examDescription: _descriptionController.text.trim(),
-            examTitle: _titleController.text.trim(),
-            totalGrade: num.parse(_totalGradeController.text),
-            deadlineTime: DateTime.now(),
-            timeMinutes: int.parse(_timeMinutesController.text),
-            image: examImage!,
-            context: context,
-            question: quiz,
-          )
-          .then((value) => print('done'));
-    }
+    await ref
+        .read(examControllerProvider)
+        .addExamInfoToFirebase(
+          examDescription: _descriptionController.text.trim(),
+          examTitle: _titleController.text.trim(),
+          totalGrade: num.parse(_totalGradeController.text),
+          deadlineTime: DateTime.now(),
+          timeMinutes: int.parse(_timeMinutesController.text),
+          image: examImage!,
+          context: context,
+          question: quiz,
+        )
+        .then((value) => print('done'));
   }
 
   void _onNextPressed(int pageNumber) {

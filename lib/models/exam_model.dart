@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 
 class ExamModel extends Equatable {
@@ -44,11 +42,7 @@ class ExamModel extends Equatable {
           DateTime.fromMillisecondsSinceEpoch(map['deadlineTime'] as int),
       timeMinutes: map['timeMinutes'] as int,
       examImageUrl: map['examImageUrl'] as String,
-      questions: List<Question>.from(
-        (map['questions'] as List<int>).map<Question>(
-          (x) => Question.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      questions: const [],
     );
   }
 
@@ -69,14 +63,14 @@ class ExamModel extends Equatable {
 
 class Question extends Equatable {
   final String body;
-  final String? id;
+  final String id;
   final String correctAnswerIdentifier;
   final String? questionImage;
-  final String? selectedAnswerIdentifier;
+  String? selectedAnswerIdentifier;
   final List<Answers> answers;
-  const Question({
+  Question({
     required this.body,
-    this.id,
+    required this.id,
     required this.correctAnswerIdentifier,
     this.questionImage,
     this.selectedAnswerIdentifier,
@@ -88,35 +82,26 @@ class Question extends Equatable {
       'body': body,
       'correctAnswerIdentifier': correctAnswerIdentifier,
       'questionImage': questionImage,
+      'id': id,
+      'selectedAnswer': selectedAnswerIdentifier
     };
   }
-
+  
   factory Question.fromMap(Map<String, dynamic> map) {
     return Question(
-      body: map['body'] as String,
-      id: map['id'] as String,
-      correctAnswerIdentifier: map['correctAnswerIdentifier'] as String,
-      questionImage:
-          map['questionImage'] != null ? map['questionImage'] as String : null,
-      selectedAnswerIdentifier: map['selectedAnswerIdentifier'] != null
-          ? map['selectedAnswerIdentifier'] as String
-          : null,
-      answers: List<Answers>.from(
-        (map['answers'] as List<int>).map<Answers>(
-          (x) => Answers.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-    );
+        body: map['body'],
+        id: map['id'],
+        correctAnswerIdentifier: map['correctAnswerIdentifier'],
+        questionImage: map['questionImage'],
+        answers: const []);
   }
 
   @override
   List<Object> get props {
     return [
       body,
-      id!,
+      id,
       correctAnswerIdentifier,
-      questionImage!,
-      selectedAnswerIdentifier!,
       answers,
     ];
   }

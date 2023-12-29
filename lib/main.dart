@@ -45,7 +45,6 @@ void _initAwesomeLocalNotifications() {
         channelKey: 'basic_channel',
         channelName: 'Basic notifications',
         channelDescription: 'Notification channel for basic tests',
-        
       ),
     ],
     debug: true,
@@ -95,9 +94,9 @@ class _MyAppState extends ConsumerState<MyApp> {
               home: Scaffold(
                 body: ref.watch(userDataProvider).when(
                   data: (user) {
-                    print('email is ${user?.email}');
-                    print('displayname is ${user?.name}');
-                    print('is admin ${user?.isAdmin}');
+                    // print('email is ${user?.email}');
+                    // print('displayname is ${user?.name}');
+                    // print('is admin ${user?.isAdmin}');
                     if (user == null) {
                       return LoginScreen();
                     }

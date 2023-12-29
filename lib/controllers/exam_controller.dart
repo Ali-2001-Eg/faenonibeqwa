@@ -40,7 +40,14 @@ class ExamController {
             ));
   }
 
-  
+  Stream<List<String>> questionIds(String examId) =>
+      examRepo.questionIds(examId);
+
+  Stream<List<ExamModel>> get exams => examRepo.exams;
+  Future<List<Question>> quesions(String examId) => examRepo.questions(examId);
+  Future<List<Answers>> answers(String examId, String questionId) =>
+      examRepo.answers(examId, questionId);
+
 }
 
 final examControllerProvider = Provider((ref) {

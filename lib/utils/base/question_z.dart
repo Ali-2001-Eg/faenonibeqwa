@@ -4,6 +4,7 @@ import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/exam_model.dart';
 import '../shared/widgets/big_text.dart';
@@ -16,6 +17,7 @@ class QuestionZ {
       List.generate(4, (index) => TextEditingController());
   int correctAnswerIndex = 0;
   String? imageUrl;
+  String id ='';
   Question convertToQuestion() {
     List<Answers> answersList = List.generate(
       4,
@@ -24,12 +26,12 @@ class QuestionZ {
         answer: answerControllers[index].text,
       ),
     );
-
     return Question(
       body: questionBodyController.text,
       correctAnswerIdentifier: answersList[correctAnswerIndex].identifier,
       questionImage: questionImage == null ? null : imageUrl,
       answers: answersList,
+      id: id,
     );
   }
   // Future<String> uploadImage(CroppedFile? file, String? imageUrl) async {
