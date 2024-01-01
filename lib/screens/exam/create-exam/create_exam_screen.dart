@@ -88,7 +88,7 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
                 id: '0',
                 examTitle: _titleController.text.trim(),
                 examDescription: _descriptionController.text.trim(),
-                totalGrade: double.parse(_totalGradeController.text.trim()),
+                totalGrade: int.parse(_totalGradeController.text.trim()),
                 deadlineTime: DateTime.now(),
                 timeMinutes: int.parse(_timeMinutesController.text.trim()),
                 examImageUrl: examImage!.path,
@@ -123,7 +123,7 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
             element.imageUrl = value;
           });
         });
-      } 
+      }
     }
   }
 

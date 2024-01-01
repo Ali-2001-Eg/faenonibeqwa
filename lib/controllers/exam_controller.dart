@@ -44,10 +44,51 @@ class ExamController {
       examRepo.questionIds(examId);
 
   Stream<List<ExamModel>> get exams => examRepo.exams;
-  Future<List<Question>> quesions(String examId) => examRepo.questions(examId);
+  Future<List<Question>> questions(String examId, int timeMinutes) =>
+      examRepo.questions(examId, timeMinutes);
   Future<List<Answers>> answers(String examId, String questionId) =>
       examRepo.answers(examId, questionId);
+  Future<void> storeExamHistory({
+    required String examId,
+    required String title,
+    required String description,
+    required String imageUrl,
+    required List<Question> questions,
+  }) =>
+      examRepo.storeExamDataToUser(
+        examId,
+        title,
+        description,
+        imageUrl,
+        questions,
+      );
+  Future<void> selectAnswer({
+    required String examId,
+    required String questionId,
+    required String selectedAnswer,
+  }) async =>
+      examRepo.selectAnswer(
+        examId,
+        questionId,
+        selectedAnswer,
+      );
+  Stream<String> getAnswerIdentifier(
+          {required String examId, required String questionId}) =>
+      examRepo.getAnswerIdentifier(examId, questionId);
 
+  Future<bool> checkUserHasTakenExam({required String examId}) =>
+      examRepo.checkUserHasTakenExam(examId);
+
+  Future<void> correctQuestionCount({
+    required String questionId,
+    required String examId,
+    required int totalGrade,
+  }) =>
+      examRepo.submitExam(
+        questionId: questionId,
+        examId: examId,
+        examGrade: totalGrade,
+      );
 }
 
 final examControllerProvider = Provider((ref) {

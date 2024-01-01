@@ -7,11 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 
-import '../../../utils/base/question_z.dart';
-import '../../../utils/shared/widgets/big_text.dart';
-import '../../../utils/shared/widgets/custom_button.dart';
-import '../../../utils/shared/widgets/custom_text_field.dart';
-import '../../../utils/shared/widgets/small_text.dart';
+import '../../../../utils/base/question_z.dart';
+import '../../../../utils/shared/widgets/big_text.dart';
+import '../../../../utils/shared/widgets/custom_button.dart';
+import '../../../../utils/shared/widgets/custom_text_field.dart';
+import '../../../../utils/shared/widgets/small_text.dart';
+
 
 class QuestionContentWidget extends StatefulWidget {
   final List<QuestionZ> questions;

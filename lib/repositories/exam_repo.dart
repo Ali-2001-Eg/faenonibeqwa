@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +40,7 @@ class ExamRepo {
         .storeFileToFirebaseStorage('examImageUrl', examId, image);
     ExamModel model = ExamModel(
       id: examId,
-      totalGrade: totalGrade.toDouble(),
+      totalGrade: totalGrade.toInt(),
       deadlineTime: deadlineTime,
       timeMinutes: timeMinutes,
       examImageUrl: imageUrl,
@@ -84,7 +85,7 @@ class ExamRepo {
     });
   }
 
-  Future<List<Question>> questions(String examId) async {
+  Future<List<Question>> questions(String examId, int timeMinutes) async {
     var quesionData = await firestore
         .collection('exams')
         .doc(examId)
@@ -113,6 +114,7 @@ class ExamRepo {
         answersList.add(Answers.fromMap(element.data()));
       }
     }
+
     return answersList;
   }
 
@@ -131,7 +133,109 @@ class ExamRepo {
         }
         return questionIds;
       });
-      
+  Future<void> storeExamDataToUser(
+    String examId,
+    String title,
+    String description,
+    String imageUrl,
+    List<Question> questions,
+  ) async {
+    await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .doc(examId)
+        .set(
+            {'title': title, 'description': description, 'imageUrl': imageUrl});
+    for (var element in questions) {
+      await firestore
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .collection('examsHistory')
+          .doc(examId)
+          .collection('questions')
+          .doc(element.body)
+          .set({
+        'body': element.body,
+        'correctAnswer': element.correctAnswerIdentifier,
+        'imageUrl': element.questionImage ?? '',
+        'selectedAnswer': '',
+      });
+    }
+  }
+
+  Future<void> selectAnswer(
+      String examId, String questionId, String selectedAnswer) async {
+    // print('tapped2');
+    return await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .doc(examId)
+        .collection('questions')
+        .doc(questionId)
+        .update({'selectedAnswer': selectedAnswer});
+  }
+
+//to make check on the answer
+  Stream<String> getAnswerIdentifier(String examId, String questionId) =>
+      firestore
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .collection('examsHistory')
+          .doc(examId)
+          .collection('questions')
+          .doc(questionId)
+          .snapshots()
+          .map((query) {
+        String selectedAnswer = '';
+        if (query.data()!.isNotEmpty) {
+          selectedAnswer = query.data()!['selectedAnswer'];
+        }
+        // print('selectedAnswer');
+        return selectedAnswer;
+      });
+  Future<bool> checkUserHasTakenExam(String examId) async {
+    var documentData = await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .doc(examId)
+        .get();
+    return documentData.exists;
+  }
+
+  Future<void> submitExam({
+    required String questionId,
+    required String examId,
+    required int examGrade,
+  }) async {
+    List<bool> correctAnswers = [];
+    String correctAnswer = '';
+    String selectedAnswer = '';
+    double totalGrade = 0;
+    var docData = await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .doc(examId)
+        .collection('questions')
+        .get();
+    for (var element in docData.docs) {
+      if (docData.docs.isNotEmpty) {
+        correctAnswer = element['correctAnswer'];
+        selectedAnswer = element['selectedAnswer'];
+        correctAnswers.add(correctAnswer == selectedAnswer);
+        print('check correct answer $correctAnswers');
+        //[true,false,false]
+        int correctAnswersCount =
+            correctAnswers.where((element) => element == true).length;
+        totalGrade = (correctAnswersCount / examGrade) * correctAnswersCount;
+        print('total grade $totalGrade');
+        print('corrct answer count $correctAnswersCount');
+      }
+    }
+  }
 }
 
 final examRepoProvider = Provider((ref) => ExamRepo(
@@ -139,10 +243,4 @@ final examRepoProvider = Provider((ref) => ExamRepo(
     firestore: FirebaseFirestore.instance,
     ref: ref));
 
-
-
 final currentIndex = StateProvider<int>((ref) => 0);
-
-final selectedAnswers= StateProvider<List<String>>((ref) => <String>[]);
-
-final allQuestions = StateProvider<List<Question>>((ref) => <Question>[]);

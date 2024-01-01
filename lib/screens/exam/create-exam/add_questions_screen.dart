@@ -1,11 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 
-import 'package:faenonibeqwa/screens/exam/widgets/question_content_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/base/question_z.dart';
 import '../../../utils/shared/widgets/custom_button.dart';
-import '../widgets/page_view_widget.dart';
+import 'widgets/page_view_widget.dart';
+import 'widgets/question_content_widget.dart';
 
 class AddQuestionScreen extends StatefulWidget {
   final void Function(int pageNo) onNextPressed;

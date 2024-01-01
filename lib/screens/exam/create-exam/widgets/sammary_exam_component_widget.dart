@@ -2,7 +2,7 @@ import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../utils/shared/widgets/small_text.dart';
+import '../../../../utils/shared/widgets/small_text.dart';
 
 class SummaryExamComponentWidget extends StatelessWidget {
   const SummaryExamComponentWidget({

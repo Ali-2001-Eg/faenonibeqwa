@@ -5,13 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'package:faenonibeqwa/screens/exam/widgets/page_view_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 
 import '../../../models/exam_model.dart';
 import '../../../utils/shared/widgets/big_text.dart';
-import '../widgets/sammary_exam_component_widget.dart';
-import '../widgets/summary_image_widget.dart';
+
+import 'widgets/page_view_widget.dart';
+import 'widgets/sammary_exam_component_widget.dart';
+import 'widgets/summary_image_widget.dart';
 
 class ExamSammaryScreen extends StatelessWidget {
   final VoidCallback onPreviousPressed;

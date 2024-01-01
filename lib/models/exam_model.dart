@@ -4,7 +4,7 @@ class ExamModel extends Equatable {
   final String id;
   final String examTitle;
   final String examDescription;
-  final double totalGrade;
+  final int totalGrade;
   final DateTime deadlineTime;
   final int timeMinutes;
   final String examImageUrl;
@@ -37,7 +37,7 @@ class ExamModel extends Equatable {
       id: map['id'] as String,
       examTitle: map['examTitle'] as String,
       examDescription: map['examDescription'] as String,
-      totalGrade: map['totalGrade'] as double,
+      totalGrade: map['totalGrade'] as int,
       deadlineTime:
           DateTime.fromMillisecondsSinceEpoch(map['deadlineTime'] as int),
       timeMinutes: map['timeMinutes'] as int,
