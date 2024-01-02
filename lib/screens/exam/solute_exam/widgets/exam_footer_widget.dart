@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:faenonibeqwa/controllers/exam_controller.dart';
+import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,13 +20,16 @@ class ExamFooterWidget extends StatelessWidget {
     Key? key,
     required this.ref,
     required this.snap,
-    required this.examId, required this.totalGrade,
+    required this.examId,
+    required this.totalGrade,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: ref.read(currentIndex.state).state > 0
+          ? MainAxisAlignment.spaceEvenly
+          : MainAxisAlignment.center,
       children: [
         CustomButton(
             width: 100,
@@ -37,10 +41,16 @@ class ExamFooterWidget extends StatelessWidget {
                 ref.read(currentIndex.state).state++;
               } else {
                 //submit exam
-                ref.read(examControllerProvider).correctQuestionCount(
-                    questionId: snap.data![ref.read(currentIndex)].body,
-                    examId: examId,
-                    totalGrade: totalGrade,);
+                ref
+                    .read(examControllerProvider)
+                    .submitExam(
+                      examId: examId,
+                      totalGrade: totalGrade,
+                    )
+                    .then((value) => Navigator.pushNamedAndRemoveUntil(
+                        context, MainScreen.routeName, (route) => false))
+                    .catchError((err) => AppHelper.customSnackbar(
+                        context: context, text: err.toString()));
               }
             },
             text: ref.read(currentIndex.state).state < snap.data!.length - 1

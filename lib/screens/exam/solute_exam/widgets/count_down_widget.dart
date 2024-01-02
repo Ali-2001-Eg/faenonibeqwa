@@ -1,14 +1,23 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/exam_controller.dart';
+import '../../../../utils/base/app_helper.dart';
+import '../../../home/main_sceen.dart';
 
 class CountdownWidget extends StatefulWidget {
   final int timeMinutes;
+  final WidgetRef ref;
+  final String examId;
+  final int totalGrade;
   const CountdownWidget({
     Key? key,
     required this.timeMinutes,
+    required this.ref,
+    required this.examId,
+    required this.totalGrade,
   }) : super(key: key);
 
   @override
@@ -31,7 +40,18 @@ class _CountdownWidgetState extends State<CountdownWidget>
   double progress = 1.0;
 
   void notify() {
-    if (countText == '0:00:00') {}
+    if (countText == '0:00:00') {
+      widget.ref
+          .read(examControllerProvider)
+          .submitExam(
+            examId: widget.examId,
+            totalGrade: widget.totalGrade,
+          )
+          .then((value) => Navigator.pushNamedAndRemoveUntil(
+              context, MainScreen.routeName, (route) => false))
+          .catchError((err) =>
+              AppHelper.customSnackbar(context: context, text: err.toString()));
+    }
   }
 
   @override
@@ -67,31 +87,13 @@ class _CountdownWidgetState extends State<CountdownWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            SizedBox(
-              width: 60.w,
-              height: 60.h,
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.grey.shade300,
-                value: progress,
-                strokeWidth: 6,
-              ),
-            ),
-            AnimatedBuilder(
-              animation: controller,
-              builder: (context, child) => SmallText(
-                text: countText,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ],
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) => SmallText(
+        text: countText,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 }

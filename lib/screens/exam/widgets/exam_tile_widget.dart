@@ -1,11 +1,9 @@
 import 'package:faenonibeqwa/models/exam_model.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
-import 'package:faenonibeqwa/screens/trip/trip_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../../models/trip_model.dart';
 import '../../../utils/shared/widgets/custom_button.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 

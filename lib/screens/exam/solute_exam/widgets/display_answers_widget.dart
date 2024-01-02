@@ -10,6 +10,8 @@ import '../../../../utils/shared/widgets/big_text.dart';
 import '../../../../utils/shared/widgets/custom_indicator.dart';
 import 'answer_card.dart';
 
+import 'shimmer_widget.dart';
+
 class DisplayAnswersWidget extends ConsumerWidget {
   final Question question;
   final String examId;
@@ -70,6 +72,10 @@ class DisplayAnswersWidget extends ConsumerWidget {
                   );
                 });
               }
+              //shimmer effect
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const ShimmerWidget();
+              }
 
               return Center(
                 child: Container(),
@@ -87,3 +93,4 @@ class DisplayAnswersWidget extends ConsumerWidget {
     );
   }
 }
+

@@ -79,13 +79,11 @@ class ExamController {
   Future<bool> checkUserHasTakenExam({required String examId}) =>
       examRepo.checkUserHasTakenExam(examId);
 
-  Future<void> correctQuestionCount({
-    required String questionId,
+  Future<void> submitExam({
     required String examId,
     required int totalGrade,
   }) =>
       examRepo.submitExam(
-        questionId: questionId,
         examId: examId,
         examGrade: totalGrade,
       );

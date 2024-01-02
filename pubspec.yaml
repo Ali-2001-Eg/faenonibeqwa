@@ -45,6 +45,7 @@ dependencies:
   flutter_screenutil: null
   flutter_svg: ^2.0.0
   google_sign_in: ^6.1.6
+  image_cropper: ^5.0.1
   image_picker: ^1.0.1
   paymob_payment: ^0.0.1+1
   permission_handler: null
@@ -53,7 +54,7 @@ dependencies:
   webview_flutter: ^4.4.2
   # zego_uikit_prebuilt_call: ^3.6.1
   zego_uikit_prebuilt_video_conference: ^2.6.3
-  image_cropper: ^5.0.1
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0

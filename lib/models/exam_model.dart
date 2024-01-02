@@ -61,6 +61,7 @@ class ExamModel extends Equatable {
   }
 }
 
+// ignore: must_be_immutable
 class Question extends Equatable {
   final String body;
   final String id;

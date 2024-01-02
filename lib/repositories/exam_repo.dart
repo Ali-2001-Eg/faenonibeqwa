@@ -206,7 +206,6 @@ class ExamRepo {
   }
 
   Future<void> submitExam({
-    required String questionId,
     required String examId,
     required int examGrade,
   }) async {
@@ -214,6 +213,7 @@ class ExamRepo {
     String correctAnswer = '';
     String selectedAnswer = '';
     double totalGrade = 0;
+    int correctAnswersCount = 0;
     var docData = await firestore
         .collection('users')
         .doc(auth.currentUser!.uid)
@@ -226,15 +226,24 @@ class ExamRepo {
         correctAnswer = element['correctAnswer'];
         selectedAnswer = element['selectedAnswer'];
         correctAnswers.add(correctAnswer == selectedAnswer);
-        print('check correct answer $correctAnswers');
+        // print('check correct answer $correctAnswers');
         //[true,false,false]
-        int correctAnswersCount =
+        correctAnswersCount =
             correctAnswers.where((element) => element == true).length;
-        totalGrade = (correctAnswersCount / examGrade) * correctAnswersCount;
-        print('total grade $totalGrade');
-        print('corrct answer count $correctAnswersCount');
+        // print('corrct answer count $correctAnswersCount');
       }
     }
+    totalGrade = (correctAnswersCount / correctAnswers.length) * examGrade;
+    // print('total grade $totalGrade');
+    //push to firebase
+    await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .doc(examId)
+        .update({
+      'studentGrade': '$totalGrade/$examGrade',
+    });
   }
 }
 
