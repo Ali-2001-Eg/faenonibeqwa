@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
 import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/question_details.dart';
+import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,41 +30,42 @@ class SoluteExamScreen extends ConsumerWidget {
         // appBar: CustomAppBar(title: exam.examTitle),
         body: Padding(
           padding: const EdgeInsets.only(top: 20.0),
-          child: Column(
-            children: [
-              QuizAppBar(
-                timeMinutes: exam.timeMinutes,
-                ref: ref,
-                examId: exam.id,
-                totalGrade: exam.totalGrade,
-                examTitle: exam.examTitle,
-              ),
-              40.hSpace,
-              Consumer(builder: (context, ref, child) {
-                return FutureBuilder<List<Question>>(
-                  future: ref
-                      .read(examControllerProvider)
-                      .questions(exam.id, exam.timeMinutes),
-                  builder: (_, AsyncSnapshot<List<Question>> snap) {
-                    if (snap.hasError) {
-                      return Center(
-                          child: BigText(
-                        text: snap.error.toString(),
-                        textAlign: TextAlign.center,
-                        color: Colors.red,
-                      ));
-                    }
-                    if (snap.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CustomIndicator());
-                    }
-                    if (snap.hasData && snap.data!.isNotEmpty) {
-                      _storeExamData(ref, snap, exam.id);
-                      //initial
-                      late Question question;
-                      question = snap.data![ref.watch(currentIndex)];
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                QuizAppBar(
+                  timeMinutes: exam.timeMinutes,
+                  ref: ref,
+                  examId: exam.id,
+                  totalGrade: exam.totalGrade,
+                  examTitle: exam.examTitle,
+                ),
+                40.hSpace,
+                Consumer(builder: (context, ref, child) {
+                  return FutureBuilder<List<Question>>(
+                    future: ref
+                        .read(examControllerProvider)
+                        .questions(exam.id, exam.timeMinutes),
+                    builder: (_, AsyncSnapshot<List<Question>> snap) {
+                      if (snap.hasError) {
+                        return Center(
+                            child: BigText(
+                          text: snap.error.toString(),
+                          textAlign: TextAlign.center,
+                          color: Colors.red,
+                        ));
+                      }
+                      if (snap.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CustomIndicator());
+                      }
+                      if (snap.hasData && snap.data!.isNotEmpty) {
+                        _storeExamData(ref, snap, exam.id);
+                        //initial
+                        late Question question;
+                        question = snap.data![ref.watch(currentIndex)];
 
-                      return Expanded(
-                        child: Container(
+                        return Container(
+                          height: context.screenHeight,
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: const BoxDecoration(
                             color: Colors.white,
@@ -96,19 +98,19 @@ class SoluteExamScreen extends ConsumerWidget {
                               ),
                             ],
                           ),
+                        );
+                      }
+                      return const Center(
+                        child: BigText(
+                          text: 'لا يوجد اسئله',
+                          fontSize: 28,
                         ),
                       );
-                    }
-                    return const Center(
-                      child: BigText(
-                        text: 'لا يوجد اسئله',
-                        fontSize: 28,
-                      ),
-                    );
-                  },
-                );
-              }),
-            ],
+                    },
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),
