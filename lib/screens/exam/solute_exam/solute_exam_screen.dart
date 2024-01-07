@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
+import 'package:faenonibeqwa/ads/banner_widget.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/question_details.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
@@ -32,6 +33,7 @@ class SoluteExamScreen extends ConsumerWidget {
           padding: const EdgeInsets.only(top: 20.0),
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 QuizAppBar(
                   timeMinutes: exam.timeMinutes,
@@ -65,7 +67,7 @@ class SoluteExamScreen extends ConsumerWidget {
                         question = snap.data![ref.watch(currentIndex)];
 
                         return Container(
-                          height: context.screenHeight,
+                          height: context.screenHeight * 0.84,
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: const BoxDecoration(
                             color: Colors.white,
@@ -75,19 +77,21 @@ class SoluteExamScreen extends ConsumerWidget {
                             ),
                           ),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              30.hSpace,
+                              // 30.hSpace,
 
                               QuestionDetails(
                                 questionBody: question.body,
                                 questionImage: question.questionImage,
                                 ref: ref,
                               ),
-                              30.hSpace,
-                              DisplayAnswersWidget(
-                                  examId: exam.id, question: question),
-                              30.hSpace,
+                              // 30.hSpace,
+                              Expanded(
+                                child: DisplayAnswersWidget(
+                                    examId: exam.id, question: question),
+                              ),
+                              // 30.hSpace,
 
                               //footer
                               ExamFooterWidget(
@@ -96,6 +100,7 @@ class SoluteExamScreen extends ConsumerWidget {
                                 examId: exam.id,
                                 totalGrade: exam.totalGrade,
                               ),
+                              BannerWidget(ref: ref),
                             ],
                           ),
                         );

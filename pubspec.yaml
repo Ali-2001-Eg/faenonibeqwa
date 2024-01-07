@@ -40,7 +40,7 @@ dependencies:
   firebase_storage: ^11.5.1
   flutter:
     sdk: flutter
-  flutter_logs: ^2.1.11
+  # flutter_logs: ^2.1.11
   flutter_riverpod: ^2.3.6
   flutter_screenutil: null
   flutter_svg: ^2.0.0
@@ -55,7 +55,7 @@ dependencies:
   # zego_uikit_prebuilt_call: ^3.6.1
   zego_uikit_prebuilt_video_conference: ^2.6.3
   shimmer: ^3.0.0
-
+  google_mobile_ads: ^4.0.0
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

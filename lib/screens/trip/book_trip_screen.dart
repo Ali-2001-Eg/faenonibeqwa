@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:faenonibeqwa/ads/banner_widget.dart';
 import 'package:faenonibeqwa/controllers/trip_controller.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
@@ -129,6 +130,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
               //     color: Colors.red,
               //   ),
               // ),
+              BannerWidget(ref: ref),
             ],
           ),
         ),

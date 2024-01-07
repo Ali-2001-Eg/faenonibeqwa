@@ -27,8 +27,9 @@ void main() async {
   _initAwesomeLocalNotifications();
   FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  String? token = await FirebaseMessaging.instance.getToken();
-  print('token is $token');
+  // String? token = await FirebaseMessaging.instance.getToken();
+  // print('token is $token');
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -73,6 +74,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    
     return ScreenUtilInit(
         designSize: const Size(360, 690),
         minTextAdapt: true,

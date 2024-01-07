@@ -1,3 +1,4 @@
+import 'package:faenonibeqwa/ads/banner_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -85,13 +86,18 @@ class MeetingScreen extends ConsumerWidget {
         _handelExitFromMeeting(ref);
       },
       child: SafeArea(
-        child: ZegoUIKitPrebuiltVideoConference(
-          appID: AppConstants.appId,
-          appSign: AppConstants.appSign,
-          userID: ref.read(authControllerProvider).userInfo.uid,
-          userName: ref.read(authControllerProvider).userInfo.displayName!,
-          conferenceID: channelId,
-          config: config,
+        child: Column(
+          children: [
+            ZegoUIKitPrebuiltVideoConference(
+              appID: AppConstants.appId,
+              appSign: AppConstants.appSign,
+              userID: ref.read(authControllerProvider).userInfo.uid,
+              userName: ref.read(authControllerProvider).userInfo.displayName!,
+              conferenceID: channelId,
+              config: config,
+            ),
+            BannerWidget(ref: ref),
+          ],
         ),
       ),
     );
