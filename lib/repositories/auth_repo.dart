@@ -67,15 +67,18 @@ class AuthRepo extends ChangeNotifier {
   }
 
   //get user data
-  Future<UserModel?> get getUserData async {
-    UserModel? user;
-    var userData =
-        await firestore.collection('users').doc(auth.currentUser!.uid).get();
-    if (userData.data() != null) {
-      user = UserModel.fromMap(userData.data()!);
-    }
-    return user;
-  }
+  
+  Stream<UserModel?> get getUserData => firestore
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .snapshots()
+          .map((query) {
+        UserModel? user;
+        if (query.exists) {
+          user = UserModel.fromMap(query.data()!);
+        }
+        return user;
+      });
 
   Future<User?> user() async => auth.currentUser;
 

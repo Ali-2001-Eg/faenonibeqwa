@@ -19,14 +19,11 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (kDebugMode) {
-      print('admin => ${ref.read(authControllerProvider).isAdmin}');
-    }
     return Scaffold(
       appBar: CustomAppBar(
         title: 'فَأَعِينُونِي بِقُوَّةٍ',
         actions: [
-          if (ref.read(authControllerProvider).isAdmin)
+          if (ref.read(userDataProvider).value!.isAdmin)
             Padding(
               padding: const EdgeInsets.only(left: 10).w,
               child: IconButton(
@@ -56,7 +53,6 @@ class HomeScreen extends ConsumerWidget {
             children: [
               10.hSpace,
               const FeedWidget(),
-              
               const BannerWidget(),
             ],
           ),

@@ -12,7 +12,7 @@ class AuthController {
   });
   Future<void> signInWithGoggleAccount() async =>
       await authRepo.signInWithGoogleAccount();
-  Future<UserModel?> get getUserData => authRepo.getUserData;
+  Stream<UserModel?> get getUserData => authRepo.getUserData;
   Future<User?> get user => authRepo.user();
   String get getPhotoUrl => authRepo.getPhotoUrl;
   String get getName => authRepo.getName;
@@ -33,12 +33,7 @@ final authControllerProvider = Provider((ref) {
 });
 
 //future provider
-final userDataProvider = FutureProvider<UserModel?>((ref) async {
-  final authController = ref.read(authControllerProvider);
-  return authController.getUserData;
-});
-//stream provider
-final userStream = StreamProvider((ref) {
-    final userProvider = ref.watch(userDataProvider);
-    return Stream.value(userProvider.value);
+final userDataProvider = StreamProvider<UserModel?>((ref) {
+  final stream = ref.read(authControllerProvider).getUserData;
+  return stream;
 });

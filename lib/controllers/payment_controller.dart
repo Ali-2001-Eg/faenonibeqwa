@@ -10,6 +10,9 @@ class PaymenController {
 
   Future<void> subscibe({required PlanEnum planType}) =>
       paymentRepo.subscribe(planType);
+  bool get subscriptionEnded => paymentRepo.subscriptionEnded;
+  PlanEnum get planType => paymentRepo.subscriptionPlan;
+  Future<void> get changePlanAfterEndDate => paymentRepo.changePlanAfterEndDate;
 }
 
 final paymentControllerProvider = Provider((ref) {

@@ -1,4 +1,5 @@
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
+import 'package:faenonibeqwa/controllers/payment_controller.dart';
 import 'package:faenonibeqwa/models/exam_model.dart';
 import 'package:faenonibeqwa/repositories/admob_repo.dart';
 import 'package:faenonibeqwa/repositories/auth_repo.dart';
@@ -74,9 +75,10 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        'subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
     return GestureDetector(
       onTap: () {
-        if (kDebugMode) {}
         _checkSubscribtionAndEnterExam(context);
       },
       child: Container(
@@ -145,21 +147,20 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
             const SizedBox(height: 10),
             Center(
               child: CustomButton(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return SoluteExamScreen(
-                          exam: widget.examModel,
-                        );
-                      },
-                    ),
-                  );
-                },
-                text: 'ادخل الآن',
-                textColor: Colors.white,
-              ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return SoluteExamScreen(
+                            exam: widget.examModel,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  text: 'ادخل الآن',
+                  textColor: Colors.white),
             )
           ],
         ),
@@ -170,8 +171,11 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
   void _checkSubscribtionAndEnterExam(BuildContext context) {
     ref.read(premiumAccount).when(
           data: (preimum) {
-            print('premium account ===>> $preimum');
-            if (preimum) {
+            if (ref.read(paymentControllerProvider).subscriptionEnded) {
+              ref.read(paymentControllerProvider).changePlanAfterEndDate;
+            }
+            if (preimum &&
+                !ref.read(paymentControllerProvider).subscriptionEnded) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return SoluteExamScreen(
                   exam: widget.examModel,
