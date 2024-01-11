@@ -37,6 +37,7 @@ class ExamsListScreen extends ConsumerWidget {
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   return ExamTileWidget(
+                    ref: ref,
                     examModel: snap.data![index],
                   );
                 },

@@ -17,6 +17,7 @@ class AuthController {
   String get getPhotoUrl => authRepo.getPhotoUrl;
   String get getName => authRepo.getName;
   bool get isAdmin => authRepo.isAdmin;
+  bool get isPremium => authRepo.isPremium;
   User get userInfo => authRepo.auth.currentUser!;
   Future<void> get signout => authRepo.signout();
   Future<void> signup(

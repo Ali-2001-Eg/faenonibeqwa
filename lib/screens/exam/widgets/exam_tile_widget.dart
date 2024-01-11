@@ -1,28 +1,116 @@
+import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/exam_model.dart';
+import 'package:faenonibeqwa/repositories/admob_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
+import 'package:faenonibeqwa/utils/base/app_helper.dart';
+import 'package:faenonibeqwa/utils/base/subsicription_dialoge.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../utils/shared/widgets/custom_button.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 
-class ExamTileWidget extends StatelessWidget {
+class ExamTileWidget extends ConsumerStatefulWidget {
   final ExamModel examModel;
+  final WidgetRef ref;
   const ExamTileWidget({
     super.key,
     required this.examModel,
+    required this.ref,
   });
+
+  @override
+  ConsumerState<ExamTileWidget> createState() => _ExamTileWidgetState();
+}
+
+InterstitialAd? _interstitial;
+
+class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: ref.read(admobRepoProvider).interstitialAdUnitId!,
+        request: const AdRequest(),
+        adLoadCallback:
+            InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
+          setState(() {
+            _interstitial = ad;
+          });
+        }, onAdFailedToLoad: (LoadAdError error) {
+          setState(() {
+            _interstitial = null;
+          });
+        }));
+  }
+
+  // ignore: unused_element
+  Future<void> _showInterstitialAd() async {
+    if (_interstitial != null) {
+      _interstitial!.fullScreenContentCallback = FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        ad.dispose();
+        if (kDebugMode) {
+          print('ad is  ${ad.adUnitId}');
+        }
+
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        if (kDebugMode) {
+          print('failed to show $error');
+        }
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      setState(() {
+        _interstitial!.show();
+        _interstitial = null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return SoluteExamScreen(
-            exam: examModel,
+        if (kDebugMode) {
+          print('account premium => ${ref.read(authControllerProvider).isPremium}');
+        }
+        if (ref.read(authControllerProvider).isPremium ||
+            ref.read(authControllerProvider).isPremium) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return SoluteExamScreen(
+              exam: widget.examModel,
+            );
+          }));
+        } else {
+          AppHelper.customSnackbar(
+            context: context,
+            text: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
           );
-        }));
+          Future.delayed(
+              const Duration(seconds: 1),
+              () => showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return const SubsicriptionDialog();
+                  })).then((value) {
+            if (ref.read(authControllerProvider).isPremium) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SoluteExamScreen(
+                  exam: widget.examModel,
+                );
+              }));
+            } else {
+              AppHelper.customSnackbar(
+                context: context,
+                text: 'لم تتم عمليه الاشتراك',
+              );
+            }
+          });
+        }
       },
       child: Container(
         padding: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
@@ -43,7 +131,7 @@ class ExamTileWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
-                imageUrl: examModel.examImageUrl,
+                imageUrl: widget.examModel.examImageUrl,
                 height: 120.h,
                 fit: BoxFit.cover,
                 width: double.infinity,
@@ -57,7 +145,7 @@ class ExamTileWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: SmallText(
-                      text: 'اسم الاختبار / ${examModel.examTitle}',
+                      text: 'اسم الاختبار / ${widget.examModel.examTitle}',
                       color: Colors.black,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -68,7 +156,8 @@ class ExamTileWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: SmallText(
-                    text: 'مده الاختبار / ${examModel.timeMinutes} دقيقه',
+                    text:
+                        'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
                   ),
@@ -81,7 +170,7 @@ class ExamTileWidget extends StatelessWidget {
               child: SmallText(
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                text: 'الوصف / ${examModel.examDescription}',
+                text: 'الوصف / ${widget.examModel.examDescription}',
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
               ),
@@ -95,7 +184,7 @@ class ExamTileWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) {
                         return SoluteExamScreen(
-                          exam: examModel,
+                          exam: widget.examModel,
                         );
                       },
                     ),

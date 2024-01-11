@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:faenonibeqwa/utils/enums/plan_enum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../repositories/payment_repo.dart';
@@ -8,9 +8,8 @@ class PaymenController {
 
   PaymenController(this.paymentRepo);
 
-  Future<void> getPaymentAuth() => paymentRepo.getAuthPayment();
-  Future<void> getOrderId({required num price,required BuildContext context,required String phoneNumber}) =>
-      paymentRepo.getOrderId(price: price, context: context,phoneNumber: phoneNumber);
+  Future<void> subscibe({required PlanEnum planType}) =>
+      paymentRepo.subscribe(planType);
 }
 
 final paymentControllerProvider = Provider((ref) {

@@ -52,6 +52,7 @@ class AuthRepo extends ChangeNotifier {
           photoUrl: ref.read(displayPhotoUrl),
           email: ref.read(displayEmail),
           isAdmin: false,
+          isPremium: false,
           notificationToken: (await FirebaseMessaging.instance.getToken())!);
       await firestore
           .collection('users')
@@ -86,6 +87,8 @@ class AuthRepo extends ChangeNotifier {
 
   //check role
   bool get isAdmin => ref.watch(userDataProvider).value!.isAdmin;
+
+  bool get isPremium => ref.watch(userDataProvider).value!.isPremium;
 
   Future<void> signout() async {
     try {

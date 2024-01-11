@@ -74,7 +74,6 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    
     return ScreenUtilInit(
         designSize: const Size(360, 690),
         minTextAdapt: true,
@@ -96,7 +95,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               home: Scaffold(
                 body: ref.watch(userDataProvider).when(
                   data: (user) {
-                    // print('email is ${user?.email}');
+                    print('premium is ${user?.isPremium}');
                     // print('displayname is ${user?.name}');
                     // print('is admin ${user?.isAdmin}');
                     if (user == null) {
@@ -108,6 +107,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                   error: (error, stackTrace) {
                     if (kDebugMode) {
                       print('error is ${error.toString()}');
+                      print('error is ${stackTrace.toString()}');
                     }
                     return Scaffold(
                       body: Center(

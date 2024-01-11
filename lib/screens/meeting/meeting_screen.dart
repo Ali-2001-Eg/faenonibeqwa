@@ -86,7 +86,7 @@ class MeetingScreen extends ConsumerWidget {
         _handelExitFromMeeting(ref);
       },
       child: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
             ZegoUIKitPrebuiltVideoConference(
               appID: AppConstants.appId,
@@ -96,7 +96,7 @@ class MeetingScreen extends ConsumerWidget {
               conferenceID: channelId,
               config: config,
             ),
-            BannerWidget(ref: ref),
+            const BannerWidget(),
           ],
         ),
       ),

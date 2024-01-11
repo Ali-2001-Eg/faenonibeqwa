@@ -8,30 +8,33 @@ class AdmobRepo {
   Future<InitializationStatus> initialization;
   AdmobRepo(this.initialization);
 
-  String? get bannerAdUnitId {
+  String? get interstitialAdUnitId {
     if (kDebugMode) {
       if (Platform.isAndroid) {
-        return 'ca-app-pub-8174345989688428/2356101379';
+        return 'ca-app-pub-8174345989688428/2328181214';
       } else {
         print('release');
-        return 'ca-app-pub-8174345989688428/2356101379';
+        return 'ca-app-pub-8174345989688428/2328181214';
+      }
+    }
+    return null;
+  }
+  String? get rewardAdUnitId {
+    if (kDebugMode) {
+      if (Platform.isAndroid) {
+        return 'ca-app-pub-8174345989688428/4600472404';
+      } else {
+        print('release');
+        return 'ca-app-pub-8174345989688428/4600472404';
       }
     }
     return null;
   }
 
-  BannerAdListener get bannerAdListener => BannerAdListener(
-        onAdLoaded: (ad) => print('ad loaded'),
-        onAdClosed: (ad) => print('ad closed'),
-        onAdFailedToLoad: (ad, err) {
-          ad.dispose;
-          print('ad failed to load $err');
-        },
-        onAdOpened: (ad)=>print('ad opened'),
-      );
+ 
 }
 
-final admibRepoProvider = Provider<AdmobRepo>((ref) {
+final admobRepoProvider = Provider<AdmobRepo>((ref) {
   Future<InitializationStatus> initialization = MobileAds.instance.initialize();
   return AdmobRepo(initialization);
 });

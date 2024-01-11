@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:faenonibeqwa/controllers/payment_controller.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:paymob_payment/paymob_payment.dart';
 
@@ -27,11 +26,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
   final numberOfPeopleController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   PaymobResponse? response;
-  @override
-  void initState() {
-    ref.read(paymentControllerProvider).getPaymentAuth();
-    super.initState();
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +125,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
               //     color: Colors.red,
               //   ),
               // ),
-              BannerWidget(ref: ref),
+              const BannerWidget(),
             ],
           ),
         ),

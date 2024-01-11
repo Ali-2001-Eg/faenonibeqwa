@@ -4,14 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'package:faenonibeqwa/controllers/admob_controller.dart';
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
-import 'package:faenonibeqwa/repositories/admob_repo.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 
 import '../../ads/banner_widget.dart';
 import '../../utils/shared/widgets/feed_widget.dart';
@@ -60,7 +56,8 @@ class HomeScreen extends ConsumerWidget {
             children: [
               10.hSpace,
               const FeedWidget(),
-              BannerWidget(ref: ref),
+              
+              const BannerWidget(),
             ],
           ),
         ),
@@ -68,4 +65,3 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 }
-

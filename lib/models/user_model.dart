@@ -1,5 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:equatable/equatable.dart';
+import 'package:faenonibeqwa/utils/extensions/string_extension.dart';
+
+import '../utils/enums/plan_enum.dart';
 
 class UserModel extends Equatable {
   final String name;
@@ -8,6 +12,9 @@ class UserModel extends Equatable {
   final String email;
   final bool isAdmin;
   final String notificationToken;
+  final bool isPremium;
+  final PlanEnum? planEnum;
+  final DateTime? timeToFinishSubscribtion;
   const UserModel({
     required this.name,
     required this.uid,
@@ -15,6 +22,9 @@ class UserModel extends Equatable {
     required this.email,
     required this.isAdmin,
     required this.notificationToken,
+    required this.isPremium,
+    this.planEnum = PlanEnum.notSubscribed,
+    this.timeToFinishSubscribtion,
   });
 
   @override
@@ -26,6 +36,9 @@ class UserModel extends Equatable {
       email,
       isAdmin,
       notificationToken,
+      isPremium,
+      planEnum!,
+      timeToFinishSubscribtion!,
     ];
   }
 
@@ -37,6 +50,8 @@ class UserModel extends Equatable {
       'email': email,
       'isAdmin': isAdmin,
       'notificationToken': notificationToken,
+      'premium': isPremium,
+      'planEnum': planEnum!.type,
     };
   }
 
@@ -48,25 +63,13 @@ class UserModel extends Equatable {
       email: map['email'] as String,
       isAdmin: map['isAdmin'] as bool,
       notificationToken: map['notificationToken'] as String,
+      isPremium: map['premium'] as bool,
+      timeToFinishSubscribtion: map['timeToFinishSubscribtion'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['timeToFinishSubscribtion'])
+          : null,
+      planEnum: map['planEnum'] != null
+          ? (map['planEnum'] as String).toEnum()
+          : PlanEnum.notSubscribed,
     );
   }
-
-  UserModel copyWith({
-    String? name,
-    String? uid,
-    String? photoUrl,
-    String? email,
-    bool? isAdmin,
-    String? notificationToken,
-  }) {
-    return UserModel(
-      name: name ?? this.name,
-      uid: uid ?? this.uid,
-      photoUrl: photoUrl ?? this.photoUrl,
-      email: email ?? this.email,
-      isAdmin: isAdmin ?? this.isAdmin,
-      notificationToken: notificationToken ?? this.notificationToken,
-    );
-  }
-
 }

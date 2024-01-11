@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore_for_file: avoid_print
+
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../controllers/admob_controller.dart';
-import '../repositories/admob_repo.dart';
 
 class BannerWidget extends StatefulWidget {
-  final WidgetRef ref;
   const BannerWidget({
     Key? key,
-    required this.ref,
   }) : super(key: key);
 
   @override
@@ -19,26 +19,54 @@ class BannerWidget extends StatefulWidget {
 class _BannerWidgetState extends State<BannerWidget> {
   BannerAd? banner;
   @override
-  void didChangeDependencies() {
-    widget.ref.read(admobControllerProvider).initialization.then((value) {
+  void initState() {
+    setState(() {
+      // MobileAds.instance.initialize();
+
       banner = BannerAd(
-        adUnitId: widget.ref.read(admobControllerProvider).bannerAdUnitId!,
+        adUnitId: 'ca-app-pub-8174345989688428/2356101379',
         size: AdSize.banner,
         request: const AdRequest(),
-        listener: widget.ref.read(admibRepoProvider).bannerAdListener,
+        listener: bannerAdListener,
       )..load();
-      setState(() {});
     });
-    super.didChangeDependencies();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    banner!.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return banner != null
-        ? SizedBox(
-            height: 60,
-            child: AdWidget(ad: banner!),
-          )
-        : const SizedBox.shrink();
+        ? SizedBox(height: 60, child: AdWidget(ad: banner!))
+        : SizedBox.square(
+            child: Container(color: Colors.black),
+          );
+  }
+
+  BannerAdListener get bannerAdListener => BannerAdListener(
+        onAdLoaded: (ad) => print('ad loaded'),
+        onAdClosed: (ad) => print('ad closed'),
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose;
+        },
+        onAdOpened: (ad) => print('ad opened'),
+      );
+
+  String? get bannerAdUnitId {
+    if (kDebugMode) {
+      if (Platform.isAndroid) {
+        return 'ca-app-pub-8174345989688428/2356101379';
+      } else {
+        print('release');
+        return 'ca-app-pub-8174345989688428/2356101379';
+      }
+    }
+    return null;
   }
 }

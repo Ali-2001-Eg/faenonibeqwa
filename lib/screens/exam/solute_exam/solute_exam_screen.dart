@@ -100,7 +100,7 @@ class SoluteExamScreen extends ConsumerWidget {
                                 examId: exam.id,
                                 totalGrade: exam.totalGrade,
                               ),
-                              BannerWidget(ref: ref),
+                              const BannerWidget(),
                             ],
                           ),
                         );
