@@ -33,7 +33,7 @@ class PaymentRepo {
         break;
       //to be updated after finishing this phase
       case PlanEnum.monthly:
-        duration = const Duration(seconds: 10);
+        duration = const Duration(days: 30);
         break;
       case PlanEnum.semiAnnually:
         duration = const Duration(days: 100);

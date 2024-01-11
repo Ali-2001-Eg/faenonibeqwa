@@ -171,7 +171,7 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
   void _checkSubscribtionAndEnterExam(BuildContext context) {
     ref.read(premiumAccount).when(
           data: (preimum) {
-            if (ref.read(paymentControllerProvider).subscriptionEnded) {
+            if (ref.read(paymentControllerProvider).subscriptionEnded&&preimum) {
               ref.read(paymentControllerProvider).changePlanAfterEndDate;
             }
             if (preimum &&
