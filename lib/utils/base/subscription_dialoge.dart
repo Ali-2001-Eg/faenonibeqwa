@@ -10,8 +10,8 @@ import 'package:paymob_payment/paymob_payment.dart';
 import '../shared/widgets/big_text.dart';
 import '../shared/widgets/plan_widget.dart';
 
-class SubsicriptionDialog extends ConsumerWidget {
-  const SubsicriptionDialog({super.key});
+class SubscriptionDialog extends ConsumerWidget {
+  const SubscriptionDialog({super.key});
 
   @override
   Widget build(BuildContext context, ref) {

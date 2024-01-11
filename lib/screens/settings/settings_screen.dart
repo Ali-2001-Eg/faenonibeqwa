@@ -1,6 +1,6 @@
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
-import 'package:faenonibeqwa/utils/base/subsicription_dialoge.dart';
+import 'package:faenonibeqwa/utils/base/subscription_dialoge.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +37,8 @@ class SettingsScreen extends ConsumerWidget {
                 } else {
                   showModalBottomSheet(
                       context: context,
-
                       builder: (context) {
-                        return const SubsicriptionDialog();
+                        return const SubscriptionDialog();
                       });
                 }
               },

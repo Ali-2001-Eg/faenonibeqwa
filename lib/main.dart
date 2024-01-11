@@ -2,6 +2,7 @@
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
+import 'package:faenonibeqwa/repositories/auth_repo.dart';
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_constants.dart';
@@ -95,7 +96,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               home: Scaffold(
                 body: ref.watch(userDataProvider).when(
                   data: (user) {
-                    print('premium is ${user?.isPremium}');
+                    print('premium is ${ref.read(premiumAccount).value}');
                     // print('displayname is ${user?.name}');
                     // print('is admin ${user?.isAdmin}');
                     if (user == null) {

@@ -1,9 +1,10 @@
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/exam_model.dart';
 import 'package:faenonibeqwa/repositories/admob_repo.dart';
+import 'package:faenonibeqwa/repositories/auth_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
-import 'package:faenonibeqwa/utils/base/subsicription_dialoge.dart';
+import 'package:faenonibeqwa/utils/base/subscription_dialoge.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,42 +76,8 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (kDebugMode) {
-          print('account premium => ${ref.read(authControllerProvider).isPremium}');
-        }
-        if (ref.read(authControllerProvider).isPremium ||
-            ref.read(authControllerProvider).isPremium) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return SoluteExamScreen(
-              exam: widget.examModel,
-            );
-          }));
-        } else {
-          AppHelper.customSnackbar(
-            context: context,
-            text: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
-          );
-          Future.delayed(
-              const Duration(seconds: 1),
-              () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return const SubsicriptionDialog();
-                  })).then((value) {
-            if (ref.read(authControllerProvider).isPremium) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return SoluteExamScreen(
-                  exam: widget.examModel,
-                );
-              }));
-            } else {
-              AppHelper.customSnackbar(
-                context: context,
-                text: 'لم تتم عمليه الاشتراك',
-              );
-            }
-          });
-        }
+        if (kDebugMode) {}
+        _checkSubscribtionAndEnterExam(context);
       },
       child: Container(
         padding: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
@@ -198,5 +165,48 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
         ),
       ),
     );
+  }
+
+  void _checkSubscribtionAndEnterExam(BuildContext context) {
+    ref.read(premiumAccount).when(
+          data: (preimum) {
+            print('premium account ===>> $preimum');
+            if (preimum) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SoluteExamScreen(
+                  exam: widget.examModel,
+                );
+              }));
+            } else {
+              AppHelper.customSnackbar(
+                context: context,
+                text: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
+              );
+              Future.delayed(
+                  const Duration(seconds: 1),
+                  () => showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return const SubscriptionDialog();
+                      })).then((value) {
+                if (preimum) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return SoluteExamScreen(
+                      exam: widget.examModel,
+                    );
+                  }));
+                } else {
+                  AppHelper.customSnackbar(
+                    context: context,
+                    text: 'لم تتم عمليه الاشتراك',
+                  );
+                }
+              });
+            }
+          },
+          error: (error, stackTrace) => AppHelper.customSnackbar(
+              context: context, text: 'هناك مشكله في ${error.toString()}'),
+          loading: () => null,
+        );
   }
 }

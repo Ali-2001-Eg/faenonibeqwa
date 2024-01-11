@@ -37,3 +37,8 @@ final userDataProvider = FutureProvider<UserModel?>((ref) async {
   final authController = ref.read(authControllerProvider);
   return authController.getUserData;
 });
+//stream provider
+final userStream = StreamProvider((ref) {
+    final userProvider = ref.watch(userDataProvider);
+    return Stream.value(userProvider.value);
+});
