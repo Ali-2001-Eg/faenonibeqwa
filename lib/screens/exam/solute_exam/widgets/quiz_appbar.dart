@@ -65,7 +65,7 @@ class QuizAppBar extends StatelessWidget {
                   .then((value) => Navigator.pushNamedAndRemoveUntil(
                       context, MainScreen.routeName, (route) => false))
                   .catchError((err) => AppHelper.customSnackbar(
-                      context: context, text: err.toString()));
+                      context: context, title: err.toString()));
             },
             child: const CircleAvatar(
               radius: 18,

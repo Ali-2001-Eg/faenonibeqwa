@@ -50,7 +50,7 @@ class ExamFooterWidget extends StatelessWidget {
                     .then((value) => Navigator.pushNamedAndRemoveUntil(
                         context, MainScreen.routeName, (route) => false))
                     .catchError((err) => AppHelper.customSnackbar(
-                        context: context, text: err.toString()));
+                        context: context, title: err.toString()));
               }
             },
             text: ref.read(currentIndex.state).state < snap.data!.length - 1
@@ -67,7 +67,7 @@ class ExamFooterWidget extends StatelessWidget {
                     ref.read(currentIndex.state).state--;
                   } else {
                     AppHelper.customSnackbar(
-                        context: context, text: 'أول سؤال');
+                        context: context, title: 'أول سؤال');
                   }
                 },
                 text: 'السابق')

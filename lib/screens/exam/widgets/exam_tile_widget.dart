@@ -75,8 +75,9 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
     print(
-        'subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
+        'time to be changed in firestore ${DateTime.now().add(Duration(seconds: 30)).millisecondsSinceEpoch}');
     return GestureDetector(
       onTap: () {
         _checkSubscribtionAndEnterExam(context);
@@ -169,48 +170,27 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
   }
 
   void _checkSubscribtionAndEnterExam(BuildContext context) {
-    ref.read(premiumAccount).when(
-          data: (preimum) {
-            if (ref.read(paymentControllerProvider).subscriptionEnded&&preimum) {
-              ref.read(paymentControllerProvider).changePlanAfterEndDate;
-            }
-            if (preimum &&
-                !ref.read(paymentControllerProvider).subscriptionEnded) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return SoluteExamScreen(
-                  exam: widget.examModel,
-                );
-              }));
-            } else {
-              AppHelper.customSnackbar(
-                context: context,
-                text: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
-              );
-              Future.delayed(
-                  const Duration(seconds: 1),
-                  () => showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return const SubscriptionDialog();
-                      })).then((value) {
-                if (preimum) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return SoluteExamScreen(
-                      exam: widget.examModel,
-                    );
-                  }));
-                } else {
-                  AppHelper.customSnackbar(
-                    context: context,
-                    text: 'لم تتم عمليه الاشتراك',
-                  );
-                }
-              });
-            }
-          },
-          error: (error, stackTrace) => AppHelper.customSnackbar(
-              context: context, text: 'هناك مشكله في ${error.toString()}'),
-          loading: () => null,
+    if (ref.read(paymentControllerProvider).subscriptionEnded) {
+      ref.read(paymentControllerProvider).changePlanAfterEndDate;
+    }
+    if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return SoluteExamScreen(
+          exam: widget.examModel,
         );
+      }));
+    } else {
+      AppHelper.customSnackbar(
+        context: context,
+        title: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
+      );
+      Future.delayed(
+          const Duration(seconds: 1),
+          () => showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return const SubscriptionDialog();
+              }));
+    }
   }
 }

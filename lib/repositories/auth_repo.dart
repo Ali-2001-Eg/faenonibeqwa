@@ -133,17 +133,7 @@ class AuthRepo extends ChangeNotifier {
     }
   }
 
-  Stream<bool> premiumAccount() => firestore
-          .collection('users')
-          .doc(auth.currentUser!.uid)
-          .snapshots()
-          .map((query) {
-        bool premium = false;
-        if (query.exists) {
-          premium = query.data()!['premium'];
-        }
-        return premium;
-      });
+  
 }
 
 //provider
@@ -155,8 +145,3 @@ final displayEmail = StateProvider<String>((ref) => '');
 final displayPhotoUrl = StateProvider<String>((ref) => '');
 //create admin الخطوه الجايه لما اعمل
 final isAdmin = StateProvider<bool>((ref) => false);
-
-final premiumAccount = StreamProvider<bool>((ref) {
-  final stream = ref.read(authRepoProvider).premiumAccount();
-  return stream;
-});

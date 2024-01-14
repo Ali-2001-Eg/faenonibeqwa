@@ -2,12 +2,13 @@ import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/controllers/payment_controller.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/enums/plan_enum.dart';
+import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:paymob_payment/paymob_payment.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import '../shared/widgets/big_text.dart';
 import '../shared/widgets/plan_widget.dart';
 
@@ -25,11 +26,12 @@ class SubscriptionDialog extends ConsumerWidget {
         const SmallText(
             text: 'كل الخدمات ستكون متاحه من فيديوهات و بث مباشر و ملخصات'),
         //free trail
-        PlanWidget(
-          title: 'تجربه مجانيه لمده 15 يوم',
-          btnText: 'مجانا',
-          onTap: () => _freeTrailSubscribe(ref, context),
-        ),
+        if (ref.read(userDataProvider).value!.freePlanEnded == false)
+          PlanWidget(
+            title: 'تجربه مجانيه لمده 15 يوم',
+            btnText: 'مجانا',
+            onTap: () => _freeTrailSubscribe(ref, context),
+          ),
         //monthly
         PlanWidget(
           title: 'للاشتراك الشهري',
@@ -56,8 +58,9 @@ class SubscriptionDialog extends ConsumerWidget {
     if (ref.read(paymentControllerProvider).planType == PlanEnum.annually) {
       AppHelper.customSnackbar(
         context: context,
-        text: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
-        color: context.theme.appBarTheme.backgroundColor!,
+        title: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
+        status: ToastStatus.success,
+        snackbarPosition: ToastGravity.TOP,
       );
       return;
     }
@@ -65,9 +68,9 @@ class SubscriptionDialog extends ConsumerWidget {
     else if (!ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
         context: context,
-        text:
-            'باقي الاشتراك جاري بالفعل باقي ${timeago.format(ref.read(userDataProvider).value!.timeToFinishSubscribtion!)}',
-        color: context.theme.appBarTheme.backgroundColor!,
+        title: ' الاشتراك جاري بالفعل باقي ${_reminingDays(ref)} يوما',
+        status: ToastStatus.success,
+        snackbarPosition: ToastGravity.TOP,
       );
       return;
     } else {
@@ -82,20 +85,28 @@ class SubscriptionDialog extends ConsumerWidget {
                 ref
                     .read(paymentControllerProvider)
                     .subscibe(planType: PlanEnum.annually);
+                if (ref.read(userDataProvider).value!.planEnum ==
+                    PlanEnum.annually) {
+                  Future.delayed(
+                      const Duration(seconds: 1),
+                      () => AppHelper.customSnackbar(
+                            context: context,
+                            status: ToastStatus.success,
+                            snackbarPosition: ToastGravity.TOP,
+                            title:
+                                'تم الاشتراك المجاني لمده العام الدراسي بالكامل',
+                          ));
+                }
               } else {
                 AppHelper.customSnackbar(
                   context: context,
-                  text: 'هناك خطأ في العمليه ${responsedata.message}',
+                  title: 'هناك خطأ في العمليه ${responsedata.message}',
                 );
               }
             },
           )
           .then(
-            (value) => AppHelper.customSnackbar(
-              context: context,
-              color: context.theme.appBarTheme.backgroundColor!,
-              text: 'تم الاشتراك المجاني لمده العام الدراسي بالكامل',
-            ),
+            (value) {},
           );
     }
   }
@@ -106,8 +117,9 @@ class SubscriptionDialog extends ConsumerWidget {
     if (ref.read(paymentControllerProvider).planType == PlanEnum.semiAnnually) {
       AppHelper.customSnackbar(
         context: context,
-        text: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
-        color: context.theme.appBarTheme.backgroundColor!,
+        title: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
+        status: ToastStatus.success,
+        snackbarPosition: ToastGravity.TOP,
       );
       return;
     }
@@ -115,38 +127,44 @@ class SubscriptionDialog extends ConsumerWidget {
     else if (!ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
         context: context,
-        text:
-            'باقي الاشتراك جاري بالفعل باقي ${timeago.format(ref.read(userDataProvider).value!.timeToFinishSubscribtion!)}',
-        color: context.theme.appBarTheme.backgroundColor!,
+        title: ' الاشتراك جاري بالفعل باقي ${_reminingDays(ref)} يوما',
+        status: ToastStatus.success,
+        snackbarPosition: ToastGravity.TOP,
       );
       return;
     } else {
       return PaymobPayment.instance
           .pay(
-            context: context,
-            currency: "EGP",
-            amountInCents: "8000",
-            billingData: PaymobBillingData(),
-            onPayment: (responsedata) {
-              if (responsedata.success == true) {
-                ref
-                    .read(paymentControllerProvider)
-                    .subscibe(planType: PlanEnum.semiAnnually);
-              } else {
-                AppHelper.customSnackbar(
-                  context: context,
-                  text: 'هناك خطأ في العمليه ${responsedata.message}',
-                );
-              }
-            },
-          )
-          .then(
-            (value) => AppHelper.customSnackbar(
+        context: context,
+        currency: "EGP",
+        amountInCents: "8000",
+        billingData: PaymobBillingData(),
+        onPayment: (responsedata) {
+          if (responsedata.success == true) {
+            ref
+                .read(paymentControllerProvider)
+                .subscibe(planType: PlanEnum.semiAnnually);
+          } else {
+            AppHelper.customSnackbar(
               context: context,
-              color: context.theme.appBarTheme.backgroundColor!,
-              text: 'تم الاشتراك المجاني لمده ترم دراسي كامل من الان',
-            ),
-          );
+              title: 'هناك خطأ في العمليه ${responsedata.message}',
+            );
+          }
+        },
+      )
+          .then(
+        (value) {
+          if (ref.read(userDataProvider).value!.planEnum ==
+              PlanEnum.semiAnnually) {
+            AppHelper.customSnackbar(
+              context: context,
+              status: ToastStatus.success,
+              snackbarPosition: ToastGravity.TOP,
+              title: 'تم الاشتراك المجاني لمده ترم دراسي كامل من الان',
+            );
+          }
+        },
+      );
     }
   }
 
@@ -155,69 +173,74 @@ class SubscriptionDialog extends ConsumerWidget {
     //check plan type
     if (ref.read(paymentControllerProvider).planType == PlanEnum.monthly) {
       AppHelper.customSnackbar(
-        context: context,
-        text: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
-        color: context.theme.appBarTheme.backgroundColor!,
-      );
+          context: context,
+          title: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
+          status: ToastStatus.success);
       return;
     }
     //check end date
     else if (!ref.read(paymentControllerProvider).subscriptionEnded) {
-      print('subscriotion');
       AppHelper.customSnackbar(
-        context: context,
-        text:
-            'باقي الاشتراك جاري بالفعل باقي ${timeago.format(ref.read(userDataProvider).value!.timeToFinishSubscribtion!)}',
-        color: context.theme.appBarTheme.backgroundColor!,
-      );
+          context: context,
+          title: ' الاشتراك جاري بالفعل باقي ${_reminingDays(ref)} يوما',
+          status: ToastStatus.success);
       return;
     }
     return PaymobPayment.instance
         .pay(
-          context: context,
-          currency: "EGP",
-          amountInCents: "5000",
-          billingData: PaymobBillingData(),
-          onPayment: (responsedata) {
-            if (responsedata.success == true) {
-              ref
-                  .read(paymentControllerProvider)
-                  .subscibe(planType: PlanEnum.monthly);
-            } else {
-              AppHelper.customSnackbar(
-                context: context,
-                text: 'هناك خطأ في العمليه ${responsedata.message}',
-              );
-            }
-          },
-        )
-        .then(
-          (value) => AppHelper.customSnackbar(
+      context: context,
+      currency: "EGP",
+      amountInCents: "5000",
+      billingData: PaymobBillingData(),
+      onPayment: (responsedata) {
+        if (responsedata.success == true) {
+          ref
+              .read(paymentControllerProvider)
+              .subscibe(planType: PlanEnum.monthly);
+        } else {
+          AppHelper.customSnackbar(
             context: context,
-            color: context.theme.appBarTheme.backgroundColor!,
-            text: 'تم الاشتراك المجاني لمده 30 يوما من الان',
-          ),
-        );
+            title: 'هناك خطأ في العمليه ${responsedata.message}',
+          );
+        }
+      },
+    )
+        .then(
+      (value) {
+        if (ref.read(userDataProvider).value!.planEnum == PlanEnum.monthly) {
+          AppHelper.customSnackbar(
+            context: context,
+            status: ToastStatus.success,
+            snackbarPosition: ToastGravity.TOP,
+            title: 'تم الاشتراك المجاني لمده 30 يوما من الان',
+          );
+        }
+      },
+    );
   }
+
+  int _reminingDays(WidgetRef ref) => ref
+      .read(userDataProvider)
+      .value!
+      .timeToFinishSubscribtion!
+      .difference(DateTime.now())
+      .inDays;
 
   Future _freeTrailSubscribe(WidgetRef ref, BuildContext context) async {
     //check plan type
     if (ref.read(paymentControllerProvider).planType == PlanEnum.freeTrail) {
       AppHelper.customSnackbar(
-        context: context,
-        text: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
-        color: context.theme.appBarTheme.backgroundColor!,
-      );
+          context: context,
+          title: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
+          status: ToastStatus.success);
       return;
     }
     //check end date
     else if (!ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
-        context: context,
-        text:
-            'باقي الاشتراك جاري بالفعل باقي ${timeago.format(ref.read(userDataProvider).value!.timeToFinishSubscribtion!)}',
-        color: context.theme.appBarTheme.backgroundColor!,
-      );
+          context: context,
+          title: ' الاشتراك جاري بالفعل باقي ${_reminingDays(ref)} يوما',
+          status: ToastStatus.success);
       return;
     } else {
       return ref
@@ -226,8 +249,9 @@ class SubscriptionDialog extends ConsumerWidget {
           .then(
             (value) => AppHelper.customSnackbar(
               context: context,
-              color: context.theme.appBarTheme.backgroundColor!,
-              text: 'تم الاشتراك المجاني لمده 15 يوما من الان',
+              status: ToastStatus.success,
+              snackbarPosition: ToastGravity.TOP,
+              title: 'تم الاشتراك المجاني لمده 15 يوما من الان',
             ),
           );
     }

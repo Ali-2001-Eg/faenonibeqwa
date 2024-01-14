@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
+import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,7 +22,8 @@ class AppHelper {
 
       return image;
     } catch (e) {
-      if (context.mounted) customSnackbar(context: context, text: e.toString());
+      if (context.mounted)
+        customSnackbar(context: context, title: e.toString());
     }
     return null;
   }
@@ -36,7 +40,8 @@ class AppHelper {
 
       return image;
     } catch (e) {
-      if (context.mounted) customSnackbar(context: context, text: e.toString());
+      if (context.mounted)
+        customSnackbar(context: context, title: e.toString());
     }
     return null;
   }
@@ -62,24 +67,32 @@ class AppHelper {
     return croppedFile;
   }
 
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
-      customSnackbar(
-          {required BuildContext context,
-          required String text,
-          Color color = Colors.redAccent}) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      shape: const StadiumBorder(),
-      elevation: 0,
-      showCloseIcon: true,
-      behavior: SnackBarBehavior.floating,
-      margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.all(3),
-      backgroundColor: color,
-      content: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 15.h, color: Colors.white),
-      ),
-    ));
+  static void customSnackbar({
+    required BuildContext context,
+    required String title,
+    ToastStatus status = ToastStatus.error,
+    ToastGravity snackbarPosition = ToastGravity.BOTTOM,
+  }) {
+    Color color;
+    switch (status) {
+      case ToastStatus.success:
+        color = context.theme.appBarTheme.backgroundColor!;
+        break;
+      case ToastStatus.warning:
+        color = const Color.fromARGB(255, 179, 117, 24);
+        break;
+      case ToastStatus.error:
+        color = Colors.red;
+        break;
+    }
+
+    Fluttertoast.showToast(
+        msg: title,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: snackbarPosition,
+        timeInSecForIosWeb: 1,
+        backgroundColor: color,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }

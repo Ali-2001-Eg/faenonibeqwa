@@ -57,10 +57,11 @@ class PaymentRepo {
   PlanEnum get subscriptionPlan =>
       ref.read(userDataProvider).value!.planEnum ?? PlanEnum.notSubscribed;
 
-  Future<void> get  changePlanAfterEndDate async => await firestore.collection('users').doc(auth.currentUser!.uid).update({
-        'plan': PlanEnum.notSubscribed.type,
-        'premium': false,
-      });
+  Future<void> get changePlanAfterEndDate async => await firestore.collection('users').doc(auth.currentUser!.uid).update({
+      'plan': PlanEnum.notSubscribed.type,
+      'premium': false,
+      'freePlanEnded':true
+    });
 }
 
 final paymentRepoProvider = Provider((ref) =>

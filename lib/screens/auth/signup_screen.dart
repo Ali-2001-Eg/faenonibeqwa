@@ -78,7 +78,7 @@ class SignUpScreen extends ConsumerWidget {
     } else {
       AppHelper.customSnackbar(
           context: context,
-          text: 'قم بإكمال كافه البيانات الخاصه بتسجيل الدخول');
+          title: 'قم بإكمال كافه البيانات الخاصه بتسجيل الدخول');
     }
   }
 }

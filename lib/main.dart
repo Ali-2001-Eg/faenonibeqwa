@@ -96,7 +96,7 @@ class _MyAppState extends ConsumerState<MyApp> {
               home: Scaffold(
                 body: ref.watch(userDataProvider).when(
                   data: (user) {
-                    print('premium is ${ref.read(premiumAccount).value}');
+                    // print('premium is ${ref.read(premiumAccount).value}');
                     // print('displayname is ${user?.name}');
                     // print('is admin ${user?.isAdmin}');
                     if (user == null) {

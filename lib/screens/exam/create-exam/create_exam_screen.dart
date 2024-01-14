@@ -100,7 +100,7 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
                         context, MainScreen.routeName, (route) => false))
                     .catchError(((err) {
                   AppHelper.customSnackbar(
-                      context: context, text: 'أكمل البيانات من فضلك');
+                      context: context, title: 'أكمل البيانات من فضلك');
                 }));
               },
             ),

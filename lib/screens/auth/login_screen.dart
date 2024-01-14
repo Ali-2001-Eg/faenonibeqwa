@@ -98,7 +98,7 @@ class LoginScreen extends ConsumerWidget {
     } else {
       AppHelper.customSnackbar(
           context: context,
-          text: 'قم بإكمال كافه البيانات الخاصه بتسجيل الدخول');
+          title: 'قم بإكمال كافه البيانات الخاصه بتسجيل الدخول');
     }
   }
 
@@ -114,8 +114,7 @@ class LoginScreen extends ConsumerWidget {
         .catchError((e) {
       AppHelper.customSnackbar(
         context: context,
-        text: e.toString(),
-        color: Colors.red,
+        title: e.toString(),
       );
     });
   }

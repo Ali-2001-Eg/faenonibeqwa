@@ -76,7 +76,7 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
                         ))
                     .catchError((err) {
                   AppHelper.customSnackbar(
-                      context: context, text: err.toString());
+                      context: context, title: err.toString());
                   return err;
                 });
               },

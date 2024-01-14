@@ -17,4 +17,6 @@ extension ConvertPlan on String {
         return PlanEnum.notSubscribed;
     }
   }
+
+  int toInt() => int.parse(this);
 }

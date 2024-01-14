@@ -1,7 +1,7 @@
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/utils/base/subscription_dialoge.dart';
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,8 +31,8 @@ class SettingsScreen extends ConsumerWidget {
                 if (ref.read(authControllerProvider).isPremium) {
                   AppHelper.customSnackbar(
                     context: context,
-                    text: 'تم الاشتراك بالفعل',
-                    color: context.theme.appBarTheme.backgroundColor!,
+                    title: 'تم الاشتراك بالفعل',
+                    status: ToastStatus.success,
                   );
                 } else {
                   showModalBottomSheet(

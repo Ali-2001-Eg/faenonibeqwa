@@ -13,6 +13,7 @@ class UserModel extends Equatable {
   final bool isAdmin;
   final String notificationToken;
   final bool isPremium;
+  final bool? freePlanEnded;
   final PlanEnum? planEnum;
   final DateTime? timeToFinishSubscribtion;
   const UserModel({
@@ -25,10 +26,11 @@ class UserModel extends Equatable {
     required this.isPremium,
     this.planEnum = PlanEnum.notSubscribed,
     this.timeToFinishSubscribtion,
+    this.freePlanEnded,
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       name,
       uid,
@@ -37,8 +39,9 @@ class UserModel extends Equatable {
       isAdmin,
       notificationToken,
       isPremium,
-      planEnum!,
-      timeToFinishSubscribtion!,
+      planEnum,
+      freePlanEnded,
+      timeToFinishSubscribtion,
     ];
   }
 
@@ -52,6 +55,7 @@ class UserModel extends Equatable {
       'notificationToken': notificationToken,
       'premium': isPremium,
       'planEnum': planEnum!.type,
+      'freePlanEnded': freePlanEnded??false,
     };
   }
 
@@ -62,6 +66,7 @@ class UserModel extends Equatable {
       photoUrl: map['photoUrl'] as String,
       email: map['email'] as String,
       isAdmin: map['isAdmin'] as bool,
+      freePlanEnded: map['freePlanEnded'] as bool? ??false,
       notificationToken: map['notificationToken'] as String,
       isPremium: map['premium'] as bool,
       timeToFinishSubscribtion: map['timeToFinishSubscribtion'] != null
