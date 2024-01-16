@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:faenonibeqwa/controllers/exam_controller.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:flutter/foundation.dart';
@@ -27,44 +25,48 @@ class ExamFooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: ref.read(currentIndex.state).state > 0
+      mainAxisAlignment: ref.watch(currentIndex.notifier).state > 0
           ? MainAxisAlignment.spaceEvenly
           : MainAxisAlignment.center,
       children: [
         CustomButton(
             width: 100,
             onTap: () {
-              if (ref.read(currentIndex.state).state < snap.data!.length - 1) {
+              if (ref.watch(currentIndex.notifier).state <
+                  snap.data!.length - 1) {
                 if (kDebugMode) {
-                  print(ref.read(currentIndex.state).state);
+                  print(ref.watch(currentIndex.notifier).state);
                 }
-                ref.read(currentIndex.state).state++;
+                ref.watch(currentIndex.notifier).state++;
               } else {
                 //submit exam
                 ref
-                    .read(examControllerProvider)
+                    .watch(examControllerProvider)
                     .submitExam(
                       examId: examId,
                       totalGrade: totalGrade,
                     )
                     .then((value) => Navigator.pushNamedAndRemoveUntil(
                         context, MainScreen.routeName, (route) => false))
-                    .catchError((err) => AppHelper.customSnackbar(
-                        context: context, title: err.toString()));
+                    .catchError((err) {
+                  AppHelper.customSnackbar(
+                      context: context, title: err.toString());
+                  return err;
+                });
               }
             },
-            text: ref.read(currentIndex.state).state < snap.data!.length - 1
+            text: ref.watch(currentIndex.notifier).state < snap.data!.length - 1
                 ? 'التالي'
                 : 'إنهاء الاختبار'),
-        ref.read(currentIndex.state).state > 0
+        ref.watch(currentIndex.notifier).state > 0
             ? CustomButton(
                 width: 100,
                 onTap: () {
-                  if (ref.read(currentIndex.state).state > 0) {
+                  if (ref.watch(currentIndex.notifier).state > 0) {
                     if (kDebugMode) {
-                      print(ref.read(currentIndex.state).state);
+                      print(ref.watch(currentIndex.notifier).state);
                     }
-                    ref.read(currentIndex.state).state--;
+                    ref.watch(currentIndex.notifier).state--;
                   } else {
                     AppHelper.customSnackbar(
                         context: context, title: 'أول سؤال');

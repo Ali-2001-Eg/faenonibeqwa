@@ -24,7 +24,7 @@ class DisplayAnswersWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<List<String>>(
-      stream: ref.read(examControllerProvider).questionIds(examId),
+      stream: ref.watch(examControllerProvider).questionIds(examId),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(
@@ -40,14 +40,14 @@ class DisplayAnswersWidget extends ConsumerWidget {
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           return FutureBuilder<List<Answers>>(
             future: ref
-                .read(examControllerProvider)
+                .watch(examControllerProvider)
                 .answers(examId, snapshot.data![ref.watch(currentIndex)]),
             builder: (_, snapshot) {
               if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                 return StatefulBuilder(builder: (context, setState) {
                   return ListView.separated(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     itemCount: snapshot.data!.length,
                     separatorBuilder: (_, i) =>
                         Padding(padding: EdgeInsets.all(5.w)),
@@ -56,7 +56,7 @@ class DisplayAnswersWidget extends ConsumerWidget {
                       return Consumer(builder: (context, ref, child) {
                         return InkWell(
                           onTap: () {
-                            ref.read(examControllerProvider).selectAnswer(
+                            ref.watch(examControllerProvider).selectAnswer(
                                 examId: examId,
                                 questionId: question.body,
                                 selectedAnswer: answer.identifier);
@@ -93,4 +93,3 @@ class DisplayAnswersWidget extends ConsumerWidget {
     );
   }
 }
-

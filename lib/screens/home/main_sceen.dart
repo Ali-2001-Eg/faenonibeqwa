@@ -11,6 +11,7 @@ import '../../utils/providers/home_provider.dart';
 import '../exam/exams_list_screen.dart';
 import 'home_screen.dart';
 
+@immutable
 class MainScreen extends ConsumerWidget {
   static const String routeName = '/home-screen';
   const MainScreen({super.key});
@@ -18,7 +19,7 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //to rebuild the screen
-    final selectedTabIndex = ref.watch(homeIndexState.state).state;
+    final selectedTabIndex = ref.watch(homeNotifierProvider);
 
     return Scaffold(
       body: IndexedStack(
@@ -36,7 +37,8 @@ class MainScreen extends ConsumerWidget {
         currentIndex: selectedTabIndex,
         landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
         onTap: (value) {
-          ref.read(homeProvider).changeIndex(value);
+          //notifier to access home provider notifier
+          ref.watch(homeNotifierProvider.notifier).changeIndex(value);
         },
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

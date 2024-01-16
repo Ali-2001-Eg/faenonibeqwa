@@ -49,8 +49,11 @@ class _CountdownWidgetState extends State<CountdownWidget>
           )
           .then((value) => Navigator.pushNamedAndRemoveUntil(
               context, MainScreen.routeName, (route) => false))
-          .catchError((err) => AppHelper.customSnackbar(
-              context: context, title: err.toString()));
+          .catchError((err) {
+            AppHelper.customSnackbar(
+              context: context, title: err.toString());
+          return err;
+          });
     }
   }
 

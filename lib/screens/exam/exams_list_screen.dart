@@ -18,7 +18,7 @@ class ExamsListScreen extends ConsumerWidget {
     return Scaffold(
       appBar: const CustomAppBar(title: 'الاختبارات'),
       body: StreamBuilder<List<ExamModel>>(
-          stream: ref.read(examControllerProvider).exams,
+          stream: ref.watch(examControllerProvider).exams,
           builder: (_, snap) {
             if (snap.hasError) {
               return Center(

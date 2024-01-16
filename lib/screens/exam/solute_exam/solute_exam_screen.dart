@@ -66,42 +66,44 @@ class SoluteExamScreen extends ConsumerWidget {
                         late Question question;
                         question = snap.data![ref.watch(currentIndex)];
 
-                        return Container(
-                          height: context.screenHeight * 0.84,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30),
-                              topRight: Radius.circular(30),
+                        return SingleChildScrollView(
+                          child: Container(
+                            height: context.screenHeight * 0.84,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
+                              ),
                             ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              // 30.hSpace,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                // 30.hSpace,
 
-                              QuestionDetails(
-                                questionBody: question.body,
-                                questionImage: question.questionImage,
-                                ref: ref,
-                              ),
-                              // 30.hSpace,
-                              Expanded(
-                                child: DisplayAnswersWidget(
-                                    examId: exam.id, question: question),
-                              ),
-                              // 30.hSpace,
+                                QuestionDetails(
+                                  questionBody: question.body,
+                                  questionImage: question.questionImage,
+                                  ref: ref,
+                                ),
+                                // 30.hSpace,
+                                Expanded(
+                                  child: DisplayAnswersWidget(
+                                      examId: exam.id, question: question),
+                                ),
+                                // 30.hSpace,
 
-                              //footer
-                              ExamFooterWidget(
-                                ref: ref,
-                                snap: snap,
-                                examId: exam.id,
-                                totalGrade: exam.totalGrade,
-                              ),
-                              const BannerWidget(),
-                            ],
+                                //footer
+                                ExamFooterWidget(
+                                  ref: ref,
+                                  snap: snap,
+                                  examId: exam.id,
+                                  totalGrade: exam.totalGrade,
+                                ),
+                                const BannerWidget(),
+                              ],
+                            ),
                           ),
                         );
                       }

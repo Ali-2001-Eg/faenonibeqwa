@@ -12,7 +12,9 @@ import 'package:uuid/uuid.dart';
 
 import 'package:faenonibeqwa/models/exam_model.dart';
 
-class ExamRepo {
+import '../utils/typedefs/app_typedefs.dart';
+
+class ExamRepo{
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
   final ProviderRef ref;
@@ -74,7 +76,7 @@ class ExamRepo {
     }
   }
 
-  Stream<List<ExamModel>> get exams {
+  ExamsStream get exams {
     return firestore.collection('exams').snapshots().map((snapshot) {
       List<ExamModel> examList = [];
       examList.clear();
@@ -85,7 +87,7 @@ class ExamRepo {
     });
   }
 
-  Future<List<Question>> questions(String examId, int timeMinutes) async {
+  Questions questions(String examId, int timeMinutes) async {
     var quesionData = await firestore
         .collection('exams')
         .doc(examId)
@@ -100,7 +102,7 @@ class ExamRepo {
     return questionList;
   }
 
-  Future<List<Answers>> answers(String examId, String questionId) async {
+ Answer answers(String examId, String questionId) async {
     var quesionData = await firestore
         .collection('exams')
         .doc(examId)
@@ -119,7 +121,7 @@ class ExamRepo {
   }
 
   //to pass it to question doc
-  Stream<List<String>> questionIds(String examId) => firestore
+  QuestionsIds questionIds(String examId) => firestore
           .collection('exams')
           .doc(examId)
           .collection('questions')
@@ -245,6 +247,8 @@ class ExamRepo {
       'studentGrade': '$totalGrade/$examGrade',
     });
   }
+
+  
 }
 
 final examRepoProvider = Provider((ref) => ExamRepo(

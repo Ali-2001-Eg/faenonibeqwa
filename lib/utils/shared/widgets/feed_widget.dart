@@ -18,7 +18,7 @@ class FeedWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<List<MeetingModel>>(
-      stream: ref.read(meetingControllerProvider).feeds,
+      stream: ref.watch(meetingControllerProvider).feeds,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return BigText(text: snapshot.error.toString());
@@ -98,7 +98,7 @@ class FeedWidget extends ConsumerWidget {
               MeetingScreen.routeName,
               arguments: {
                 'channelId': feed.channelId,
-                'userID': ref.read(authControllerProvider).userInfo.uid,
+                'userID': ref.watch(authControllerProvider).userInfo.uid,
                 'isBroadcaster': false,
                 'title': feed.title,
               },

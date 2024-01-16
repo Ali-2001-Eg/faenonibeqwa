@@ -69,7 +69,7 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
                           arguments: {
                             'channelId': channeld,
                             'userID':
-                                ref.read(authControllerProvider).userInfo.uid,
+                                ref.watch(authControllerProvider).userInfo.uid,
                             'isBroadcaster': true,
                             'title': _titleController.text.trim(),
                           },

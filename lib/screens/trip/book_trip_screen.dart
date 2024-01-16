@@ -82,7 +82,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
               CustomButton(
                 onTap: () {
                   if (formKey.currentState!.validate()) {
-                    // ref.read(paymentControllerProvider).getOrderId(
+                    // ref.watch(paymentControllerProvider).getOrderId(
                     //       context: context,
                     //       price: widget.price *
                     //           num.parse(numberOfPeopleController.text.trim())
@@ -97,7 +97,7 @@ class _BookTripNowState extends ConsumerState<BookTripNow> {
                       billingData: PaymobBillingData(),
                       onPayment: (responsedata) {
                         if (responsedata.success == true) {
-                          ref.read(tripControllerProvider).saveTripPayment(
+                          ref.watch(tripControllerProvider).saveTripPayment(
                                 tripPrice: widget.price,
                                 success: responsedata.success,
                                 numberOfPeople: int.parse(

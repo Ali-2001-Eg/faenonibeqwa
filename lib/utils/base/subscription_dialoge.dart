@@ -16,7 +16,7 @@ class SubscriptionDialog extends ConsumerWidget {
   const SubscriptionDialog({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context,WidgetRef  ref) {
     return Container(
       width: context.screenWidth,
       decoration: BoxDecoration(
@@ -26,7 +26,7 @@ class SubscriptionDialog extends ConsumerWidget {
         const SmallText(
             text: 'كل الخدمات ستكون متاحه من فيديوهات و بث مباشر و ملخصات'),
         //free trail
-        if (ref.read(userDataProvider).value!.freePlanEnded == false)
+        if (ref.watch(userDataProvider).value!.freePlanEnded == false)
           PlanWidget(
             title: 'تجربه مجانيه لمده 15 يوم',
             btnText: 'مجانا',
@@ -257,3 +257,4 @@ class SubscriptionDialog extends ConsumerWidget {
     }
   }
 }
+

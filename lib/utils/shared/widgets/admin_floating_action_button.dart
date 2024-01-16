@@ -17,7 +17,7 @@ class AdminFloatingActionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    return ref.read(authControllerProvider).isAdmin
+    return ref.watch(authControllerProvider).isAdmin
         ? FloatingActionButton(
             heroTag: heroTag,
             onPressed: () => Navigator.pushNamed(context, routeName),

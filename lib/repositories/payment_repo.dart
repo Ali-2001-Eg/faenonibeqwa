@@ -66,7 +66,4 @@ class PaymentRepo {
 
 final paymentRepoProvider = Provider((ref) =>
     PaymentRepo(ref, FirebaseFirestore.instance, FirebaseAuth.instance));
-final firstToken = StateProvider<String>((ref) => "");
-final finalToken = StateProvider<String>((ref) => "");
-final orderID = StateProvider<int>((ref) => 0);
-final loadingFinalToken = StateProvider<bool>((ref) => false);
+

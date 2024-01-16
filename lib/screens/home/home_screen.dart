@@ -23,7 +23,7 @@ class HomeScreen extends ConsumerWidget {
       appBar: CustomAppBar(
         title: 'فَأَعِينُونِي بِقُوَّةٍ',
         actions: [
-          if (ref.read(userDataProvider).value!.isAdmin)
+          if (ref.watch(userDataProvider).value!.isAdmin)
             Padding(
               padding: const EdgeInsets.only(left: 10).w,
               child: IconButton(

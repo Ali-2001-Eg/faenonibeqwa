@@ -22,13 +22,13 @@ class SettingsScreen extends ConsumerWidget {
           children: [
             CustomButton(
               text: 'تسجيل خروج',
-              onTap: () => ref.read(authControllerProvider).signout.then(
+              onTap: () => ref.watch(authControllerProvider).signout.then(
                   (value) => Navigator.pushNamedAndRemoveUntil(
                       context, LoginScreen.routeName, (route) => false)),
             ),
             CustomButton(
               onTap: () {
-                if (ref.read(authControllerProvider).isPremium) {
+                if (ref.watch(authControllerProvider).isPremium) {
                   AppHelper.customSnackbar(
                     context: context,
                     title: 'تم الاشتراك بالفعل',

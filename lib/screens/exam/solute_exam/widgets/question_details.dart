@@ -37,7 +37,7 @@ class QuestionDetails extends StatelessWidget {
           child: Align(
             alignment: AlignmentDirectional.topStart,
             child: BigText(
-              text: 'س${ref.read(currentIndex) + 1}:  $questionBody ',
+              text: 'س${ref.watch(currentIndex) + 1}:  $questionBody ',
             ),
           ),
         ),

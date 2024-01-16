@@ -91,8 +91,8 @@ class MeetingScreen extends ConsumerWidget {
             ZegoUIKitPrebuiltVideoConference(
               appID: AppConstants.appId,
               appSign: AppConstants.appSign,
-              userID: ref.read(authControllerProvider).userInfo.uid,
-              userName: ref.read(authControllerProvider).userInfo.displayName!,
+              userID: ref.watch(authControllerProvider).userInfo.uid,
+              userName: ref.watch(authControllerProvider).userInfo.displayName!,
               conferenceID: channelId,
               config: config,
             ),
