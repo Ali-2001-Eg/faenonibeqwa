@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:faenonibeqwa/repositories/exam_repo.dart';
-import 'package:tuple/tuple.dart';
 
 import '../models/exam_model.dart';
 import '../utils/providers/app_providers.dart';

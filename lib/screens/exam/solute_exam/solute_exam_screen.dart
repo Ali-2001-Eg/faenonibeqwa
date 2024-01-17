@@ -14,8 +14,6 @@ import 'package:shimmer/shimmer.dart';
 import '../../../models/exam_model.dart';
 import '../../../utils/base/app_helper.dart';
 import '../../../utils/providers/app_providers.dart';
-import '../../../utils/shared/widgets/big_text.dart';
-import '../../../utils/shared/widgets/custom_indicator.dart';
 import 'widgets/exam_footer_widget.dart';
 import 'widgets/quiz_appbar.dart';
 

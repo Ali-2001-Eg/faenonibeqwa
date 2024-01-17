@@ -1,4 +1,3 @@
-import 'package:faenonibeqwa/models/exam_model.dart';
 import 'package:faenonibeqwa/screens/exam/create-exam/create_exam_screen.dart';
 import 'package:faenonibeqwa/screens/exam/widgets/exam_tile_widget.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/admin_floating_action_button.dart';

@@ -4,7 +4,6 @@ import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../models/trip_model.dart';
 import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/admin_floating_action_button.dart';
 import 'create_trip_screen.dart';

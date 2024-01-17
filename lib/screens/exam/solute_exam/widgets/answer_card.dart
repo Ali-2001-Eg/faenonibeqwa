@@ -21,7 +21,6 @@ class AnswerCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('answer');
     return ref
         .watch(answerCardStream(AnswersParameters(examId, questionBody)))
         .when(data: (data) {
