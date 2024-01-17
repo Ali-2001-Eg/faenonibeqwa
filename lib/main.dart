@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
-import 'package:faenonibeqwa/repositories/auth_repo.dart';
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_constants.dart';
@@ -17,6 +15,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:paymob_payment/paymob_payment.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'utils/providers/app_providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

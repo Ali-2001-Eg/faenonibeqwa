@@ -3,8 +3,8 @@ import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../controllers/exam_controller.dart';
 import '../../../../utils/base/app_helper.dart';
+import '../../../../utils/providers/app_providers.dart';
 import '../../../home/main_sceen.dart';
 
 class CountdownWidget extends StatefulWidget {

@@ -3,14 +3,17 @@ import 'package:faenonibeqwa/ads/banner_widget.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/question_details.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
+import 'package:faenonibeqwa/utils/typedefs/app_typedefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:faenonibeqwa/controllers/exam_controller.dart';
-import 'package:faenonibeqwa/repositories/exam_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/display_answers_widget.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../models/exam_model.dart';
+import '../../../utils/base/app_helper.dart';
+import '../../../utils/providers/app_providers.dart';
 import '../../../utils/shared/widgets/big_text.dart';
 import '../../../utils/shared/widgets/custom_indicator.dart';
 import 'widgets/exam_footer_widget.dart';
@@ -43,77 +46,77 @@ class SoluteExamScreen extends ConsumerWidget {
                   examTitle: exam.examTitle,
                 ),
                 40.hSpace,
-                Consumer(builder: (context, ref, child) {
-                  return FutureBuilder<List<Question>>(
-                    future: ref
-                        .read(examControllerProvider)
-                        .questions(exam.id, exam.timeMinutes),
-                    builder: (_, AsyncSnapshot<List<Question>> snap) {
-                      if (snap.hasError) {
-                        return Center(
-                            child: BigText(
-                          text: snap.error.toString(),
-                          textAlign: TextAlign.center,
-                          color: Colors.red,
-                        ));
-                      }
-                      if (snap.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CustomIndicator());
-                      }
-                      if (snap.hasData && snap.data!.isNotEmpty) {
-                        _storeExamData(ref, snap, exam.id);
-                        //initial
-                        late Question question;
-                        question = snap.data![ref.watch(currentIndex)];
+                ref
+                    .watch(questionsProvider(
+                        QuestionParameters(exam.id, exam.timeMinutes)))
+                    .when(data: (data) {
+                  _storeExamData(ref, data, exam.id);
+                  //initial
+                  late Question question;
+                  question = data[ref.watch(currentIndex)];
 
-                        return SingleChildScrollView(
-                          child: Container(
-                            height: context.screenHeight * 0.84,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30),
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                // 30.hSpace,
-
-                                QuestionDetails(
-                                  questionBody: question.body,
-                                  questionImage: question.questionImage,
-                                  ref: ref,
-                                ),
-                                // 30.hSpace,
-                                Expanded(
-                                  child: DisplayAnswersWidget(
-                                      examId: exam.id, question: question),
-                                ),
-                                // 30.hSpace,
-
-                                //footer
-                                ExamFooterWidget(
-                                  ref: ref,
-                                  snap: snap,
-                                  examId: exam.id,
-                                  totalGrade: exam.totalGrade,
-                                ),
-                                const BannerWidget(),
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                      return const Center(
-                        child: BigText(
-                          text: 'لا يوجد اسئله',
-                          fontSize: 28,
+                  return SingleChildScrollView(
+                    child: Container(
+                      height: context.screenHeight * 0.84,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
                         ),
-                      );
-                    },
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          // 30.hSpace,
+
+                          QuestionDetails(
+                            questionBody: question.body,
+                            questionImage: question.questionImage,
+                            ref: ref,
+                          ),
+                          // 30.hSpace,
+                          Expanded(
+                            child: DisplayAnswersWidget(
+                                examId: exam.id, question: question),
+                          ),
+                          // 30.hSpace,
+
+                          //footer
+                          ExamFooterWidget(
+                            ref: ref,
+                            snap: data,
+                            examId: exam.id,
+                            totalGrade: exam.totalGrade,
+                          ),
+                          const BannerWidget(),
+                        ],
+                      ),
+                    ),
+                  );
+                }, error: (err, stackTrace) {
+                  AppHelper.customSnackbar(
+                      context: context, title: err.toString());
+                  return Container();
+                }, loading: () {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: List.generate(
+                          6,
+                          (index) => Container(
+                            padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.all(15),
+                            width: context.screenWidth,
+                            height: 50.0.h,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                        )),
                   );
                 }),
               ],
@@ -125,7 +128,7 @@ class SoluteExamScreen extends ConsumerWidget {
   }
 
   Future<void> _storeExamData(
-      WidgetRef ref, AsyncSnapshot<List<Question>> snap, String examId) async {
+      WidgetRef ref, List<Question> snap, String examId) async {
     if (!await ref
         .read(examControllerProvider)
         .checkUserHasTakenExam(examId: examId)) {
@@ -134,7 +137,7 @@ class SoluteExamScreen extends ConsumerWidget {
             title: exam.examTitle,
             description: exam.examDescription,
             imageUrl: exam.examImageUrl,
-            questions: snap.data!,
+            questions: snap,
           );
     }
   }

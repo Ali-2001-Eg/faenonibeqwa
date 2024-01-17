@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
-import 'package:faenonibeqwa/controllers/meeting_controller.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../utils/providers/app_providers.dart';
 
 class CreateMeetingScreen extends ConsumerStatefulWidget {
   static const String routeName = '/create-meeting-sceen';

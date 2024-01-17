@@ -4,8 +4,8 @@ import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../controllers/trip_controller.dart';
 import '../../../models/trip_model.dart';
+import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/admin_floating_action_button.dart';
 import 'create_trip_screen.dart';
 import 'item_trip.dart';
@@ -22,34 +22,36 @@ class TripsScreen extends ConsumerWidget {
         heroTag: 'createTrip',
       ),
       appBar: const CustomAppBar(title: 'الرحلات'),
-      body: StreamBuilder<List<TripModel>>(
-          stream: ref.read(tripControllerProvider).getTrip(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return BigText(text:snapshot.error.toString());
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CustomIndicator();
-            }
-            if (snapshot.data!.isEmpty) {
-              return const Center(
-                child: BigText(
-                  text: 'لا يوجد رحلات بعد',
-                  fontSize: 28,
-                ),
-              );
-            }
-
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
+      body: 
+      
+        ref.watch(tripStream).when(data: (data) {
+      if (data.isEmpty) {
+        return const Expanded(
+          child: Center(
+            child: BigText(
+              text:  'لا يوجد رحلات بعد',
+              fontSize: 28,
+            ),
+          ),
+        );
+      }
+      return    ListView.builder(
+              itemCount: data.length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return ItemTrip(
-                  tripModel: snapshot.data![index],
+                  tripModel: data[index],
                 );
               },
             );
-          }),
+    }, error: (error, stackTrace) {
+      return BigText(text: error.toString());
+    }, loading: () {
+      return const Center(child: CustomIndicator());
+    })
+      
+      
+      
     );
   }
 }

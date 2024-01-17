@@ -1,8 +1,5 @@
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
-import 'package:faenonibeqwa/controllers/payment_controller.dart';
 import 'package:faenonibeqwa/models/exam_model.dart';
 import 'package:faenonibeqwa/repositories/admob_repo.dart';
-import 'package:faenonibeqwa/repositories/auth_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/base/subscription_dialoge.dart';
@@ -13,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../../../utils/providers/app_providers.dart';
 import '../../../utils/shared/widgets/custom_button.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 
@@ -76,8 +74,10 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
   @override
   Widget build(BuildContext context) {
     // print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
-    print(
-        'time to be changed in firestore ${DateTime.now().add(Duration(seconds: 30)).millisecondsSinceEpoch}');
+    if (kDebugMode) {
+      print(
+        'time to be changed in firestore ${DateTime.now().add(const Duration(seconds: 30)).millisecondsSinceEpoch}');
+    }
     return GestureDetector(
       onTap: () {
         _checkSubscribtionAndEnterExam(context);

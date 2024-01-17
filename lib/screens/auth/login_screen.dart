@@ -1,6 +1,3 @@
-// ignore_for_file: body_might_complete_normally_catch_error, unused_element
-
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/signup_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
@@ -13,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../utils/base/app_helper.dart';
+import '../../utils/providers/app_providers.dart';
 
 class LoginScreen extends ConsumerWidget {
   static const String routeName = '/login';
@@ -102,6 +100,7 @@ class LoginScreen extends ConsumerWidget {
     }
   }
 
+  // ignore: unused_element
   void _googleSignIn(WidgetRef ref, BuildContext context) {
     ref
         .read(authControllerProvider)
@@ -116,6 +115,7 @@ class LoginScreen extends ConsumerWidget {
         context: context,
         title: e.toString(),
       );
+      return e;
     });
   }
 }

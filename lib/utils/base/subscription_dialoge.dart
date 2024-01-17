@@ -1,5 +1,3 @@
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
-import 'package:faenonibeqwa/controllers/payment_controller.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/enums/plan_enum.dart';
 import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
@@ -9,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:paymob_payment/paymob_payment.dart';
+import '../providers/app_providers.dart';
 import '../shared/widgets/big_text.dart';
 import '../shared/widgets/plan_widget.dart';
 

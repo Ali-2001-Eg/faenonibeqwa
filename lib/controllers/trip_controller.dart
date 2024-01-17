@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:faenonibeqwa/repositories/trip_repo.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/trip_model.dart';
 
@@ -34,8 +33,3 @@ class TripController {
         phoneNumber: phoneNumber,
       );
 }
-
-final tripControllerProvider = Provider((ref) {
-  final tripRepo = ref.read(tripRepoProvider);
-  return TripController(tripRepo);
-});

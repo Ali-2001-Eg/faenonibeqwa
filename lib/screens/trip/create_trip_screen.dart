@@ -10,8 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 
-import '../../../controllers/trip_controller.dart';
 import '../../utils/base/app_helper.dart';
+import '../../utils/providers/app_providers.dart';
 
 class CreateTripScreen extends ConsumerStatefulWidget {
   static const String routeName = '/add-new-trip';

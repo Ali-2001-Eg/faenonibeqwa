@@ -1,13 +1,14 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
+import 'package:faenonibeqwa/utils/typedefs/app_typedefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:faenonibeqwa/repositories/exam_repo.dart';
+import 'package:tuple/tuple.dart';
 
 import '../models/exam_model.dart';
+import '../utils/providers/app_providers.dart';
 
 class ExamController {
   final ProviderRef ref;
@@ -44,10 +45,12 @@ class ExamController {
       examRepo.questionIds(examId);
 
   Stream<List<ExamModel>> get exams => examRepo.exams;
-  Future<List<Question>> questions(String examId, int timeMinutes) =>
-      examRepo.questions(examId, timeMinutes);
-  Future<List<Answers>> answers(String examId, String questionId) =>
-      examRepo.answers(examId, questionId);
+//questionParameters is tuple
+  Future<List<Question>> questions(QuestionParameters questionParameters) =>
+      examRepo.questions(questionParameters.item1, questionParameters.item2);
+
+  Future<List<Answers>> answers(AnswersParameters answersParameters) =>
+      examRepo.answers(answersParameters.item1,answersParameters.item2);
   Future<void> storeExamHistory({
     required String examId,
     required String title,
@@ -73,8 +76,8 @@ class ExamController {
         selectedAnswer,
       );
   Stream<String> getAnswerIdentifier(
-          {required String examId, required String questionId}) =>
-      examRepo.getAnswerIdentifier(examId, questionId);
+          AnswersIdentiferParameters parameters) =>
+      examRepo.getAnswerIdentifier(parameters.item1, parameters.item2);
 
   Future<bool> checkUserHasTakenExam({required String examId}) =>
       examRepo.checkUserHasTakenExam(examId);
@@ -89,7 +92,3 @@ class ExamController {
       );
 }
 
-final examControllerProvider = Provider((ref) {
-  final examRepo = ref.read(examRepoProvider);
-  return ExamController(ref: ref, examRepo: examRepo);
-});

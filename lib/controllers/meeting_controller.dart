@@ -2,10 +2,7 @@ import 'package:faenonibeqwa/models/meeting_model.dart';
 import 'package:faenonibeqwa/repositories/meeting_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final meetingControllerProvider = Provider((ref) {
-  final meetingRepo = ref.watch(meetingRepoProvider);
-  return MeetingController(ref, meetingRepo);
-});
+
 
 class MeetingController {
   final MeetingRepo meetingRepo;

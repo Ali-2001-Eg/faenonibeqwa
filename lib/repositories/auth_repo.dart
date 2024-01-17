@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uuid/uuid.dart';
 
+import '../utils/providers/app_providers.dart';
+
 class AuthRepo extends ChangeNotifier {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
@@ -136,12 +138,5 @@ class AuthRepo extends ChangeNotifier {
   
 }
 
-//provider
-final authRepoProvider = Provider<AuthRepo>(
-    (ref) => AuthRepo(FirebaseAuth.instance, FirebaseFirestore.instance, ref));
-//state providers
-final displayName = StateProvider<String>((ref) => '');
-final displayEmail = StateProvider<String>((ref) => '');
-final displayPhotoUrl = StateProvider<String>((ref) => '');
-//create admin الخطوه الجايه لما اعمل
-final isAdmin = StateProvider<bool>((ref) => false);
+
+

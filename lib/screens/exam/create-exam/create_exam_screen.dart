@@ -2,17 +2,16 @@
 
 import 'dart:io';
 
-import 'package:faenonibeqwa/controllers/exam_controller.dart';
 import 'package:faenonibeqwa/screens/exam/create-exam/add_questions_screen.dart';
 import 'package:faenonibeqwa/screens/exam/create-exam/exam_info_screen.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
-import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/exam_model.dart';
 import '../../../utils/base/question_z.dart';
+import '../../../utils/providers/app_providers.dart';
 import 'exam_sammary_screen.dart';
 
 class CreateExamScreen extends ConsumerStatefulWidget {

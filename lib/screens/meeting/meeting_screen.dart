@@ -3,11 +3,10 @@ import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/utils/base/app_constants.dart';
 import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
 
-import '../../controllers/meeting_controller.dart';
+import '../../utils/providers/app_providers.dart';
 
 class MeetingScreen extends ConsumerWidget {
   static const String routeName = '/meeting-sceen';

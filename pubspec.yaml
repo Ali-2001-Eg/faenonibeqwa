@@ -57,6 +57,7 @@ dependencies:
   shimmer: ^3.0.0
   google_mobile_ads: ^4.0.0
   fluttertoast: ^8.2.4
+  tuple: ^2.0.2
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

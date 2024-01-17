@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
+
+import '../../providers/app_providers.dart';
 
 class AdminFloatingActionButton extends ConsumerWidget {
   final IconData icon;

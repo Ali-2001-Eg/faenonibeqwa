@@ -1,11 +1,10 @@
-// ignore_for_file: deprecated_member_use
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../utils/enums/plan_enum.dart';
+import '../utils/providers/app_providers.dart';
 
 class PaymentRepo {
   final ProviderRef ref;
@@ -63,7 +62,4 @@ class PaymentRepo {
       'freePlanEnded':true
     });
 }
-
-final paymentRepoProvider = Provider((ref) =>
-    PaymentRepo(ref, FirebaseFirestore.instance, FirebaseAuth.instance));
 

@@ -7,7 +7,7 @@ import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
 
-import '../../controllers/auth_controller.dart';
+import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/custom_button.dart';
 
 class SignUpScreen extends ConsumerWidget {

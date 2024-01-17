@@ -1,10 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
 
 import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +10,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:faenonibeqwa/models/exam_model.dart';
 
+import '../utils/providers/app_providers.dart';
 import '../utils/typedefs/app_typedefs.dart';
 
 class ExamRepo{
@@ -251,9 +250,4 @@ class ExamRepo{
   
 }
 
-final examRepoProvider = Provider((ref) => ExamRepo(
-    auth: FirebaseAuth.instance,
-    firestore: FirebaseFirestore.instance,
-    ref: ref));
 
-final currentIndex = StateProvider<int>((ref) => 0);

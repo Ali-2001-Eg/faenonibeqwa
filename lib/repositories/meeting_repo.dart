@@ -81,5 +81,3 @@ class MeetingRepo extends ChangeNotifier {
   }
 }
 
-final meetingRepoProvider = Provider((ref) =>
-    MeetingRepo(ref, FirebaseAuth.instance, FirebaseFirestore.instance));

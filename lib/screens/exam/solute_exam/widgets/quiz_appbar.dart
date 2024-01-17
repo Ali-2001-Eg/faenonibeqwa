@@ -3,8 +3,8 @@ import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../controllers/exam_controller.dart';
 import '../../../../utils/base/app_helper.dart';
+import '../../../../utils/providers/app_providers.dart';
 import '../../../../utils/shared/widgets/big_text.dart';
 
 class QuizAppBar extends StatelessWidget {
@@ -64,8 +64,11 @@ class QuizAppBar extends StatelessWidget {
                   )
                   .then((value) => Navigator.pushNamedAndRemoveUntil(
                       context, MainScreen.routeName, (route) => false))
-                  .catchError((err) => AppHelper.customSnackbar(
-                      context: context, title: err.toString()));
+                  .catchError((err) {
+                AppHelper.customSnackbar(
+                    context: context, title: err.toString());
+                return err;
+              });
             },
             child: const CircleAvatar(
               radius: 18,

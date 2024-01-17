@@ -1,17 +1,16 @@
-import 'package:faenonibeqwa/controllers/exam_controller.dart';
 import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../models/exam_model.dart';
-import '../../../../repositories/exam_repo.dart';
 import '../../../../utils/base/app_helper.dart';
+import '../../../../utils/providers/app_providers.dart';
 import '../../../../utils/shared/widgets/custom_button.dart';
 
 class ExamFooterWidget extends StatelessWidget {
   final WidgetRef ref;
-  final AsyncSnapshot<List<Question>> snap;
+  final List<Question> snap;
   final String examId;
   final int totalGrade;
   const ExamFooterWidget({
@@ -33,7 +32,7 @@ class ExamFooterWidget extends StatelessWidget {
             width: 100,
             onTap: () {
               if (ref.watch(currentIndex.notifier).state <
-                  snap.data!.length - 1) {
+                  snap.length - 1) {
                 if (kDebugMode) {
                   print(ref.watch(currentIndex.notifier).state);
                 }
@@ -55,7 +54,7 @@ class ExamFooterWidget extends StatelessWidget {
                 });
               }
             },
-            text: ref.watch(currentIndex.notifier).state < snap.data!.length - 1
+            text: ref.watch(currentIndex.notifier).state < snap.length - 1
                 ? 'التالي'
                 : 'إنهاء الاختبار'),
         ref.watch(currentIndex.notifier).state > 0

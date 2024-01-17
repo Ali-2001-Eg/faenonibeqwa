@@ -1,5 +1,4 @@
 import 'package:faenonibeqwa/utils/enums/plan_enum.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../repositories/payment_repo.dart';
 
@@ -14,7 +13,3 @@ class PaymenController {
   PlanEnum get planType => paymentRepo.subscriptionPlan;
   Future<void> get changePlanAfterEndDate => paymentRepo.changePlanAfterEndDate;
 }
-
-final paymentControllerProvider = Provider((ref) {
-  return PaymenController(ref.read(paymentRepoProvider));
-});

@@ -1,16 +1,14 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/book_trip_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:faenonibeqwa/models/trip_model.dart';
 
-import '../utils/providers/storage_provider.dart';
+import '../utils/providers/app_providers.dart';
 
 class TripRepository extends ChangeNotifier {
   final FirebaseFirestore firestore;
@@ -91,5 +89,3 @@ class TripRepository extends ChangeNotifier {
   }
 }
 
-final tripRepoProvider = Provider(
-    (ref) => TripRepository(firestore: FirebaseFirestore.instance, ref: ref));

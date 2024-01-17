@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:faenonibeqwa/ads/banner_widget.dart';
-import 'package:faenonibeqwa/controllers/trip_controller.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:paymob_payment/paymob_payment.dart';
 
+import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/custom_text_field.dart';
 
 class BookTripNow extends ConsumerStatefulWidget {

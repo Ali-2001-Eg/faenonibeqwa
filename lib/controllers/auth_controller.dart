@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:faenonibeqwa/models/user_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../repositories/auth_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,13 +26,5 @@ class AuthController {
       authRepo.login(email, password);
 }
 
-final authControllerProvider = Provider((ref) {
-  final authRepository = ref.read(authRepoProvider);
-  return AuthController(authRepo: authRepository);
-});
 
-//future provider
-final userDataProvider = StreamProvider<UserModel?>((ref) {
-  final stream = ref.read(authControllerProvider).getUserData;
-  return stream;
-});
+

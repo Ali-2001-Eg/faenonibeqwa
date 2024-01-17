@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
+// ignore: unused_import
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -22,8 +23,9 @@ class AppHelper {
 
       return image;
     } catch (e) {
-      if (context.mounted)
+      if (context.mounted) {
         customSnackbar(context: context, title: e.toString());
+      }
     }
     return null;
   }
@@ -40,8 +42,9 @@ class AppHelper {
 
       return image;
     } catch (e) {
-      if (context.mounted)
+      if (context.mounted) {
         customSnackbar(context: context, title: e.toString());
+      }
     }
     return null;
   }

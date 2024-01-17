@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 // ignore: unused_import
 import 'package:uuid/uuid.dart';
 
@@ -24,7 +23,3 @@ class FirebaseStorageRepo {
     return downloadUrl;
   }
 }
-
-final firebaseStorageRepoProvider = Provider(
-  (ref) => FirebaseStorageRepo(FirebaseStorage.instance),
-);

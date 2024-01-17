@@ -12,6 +12,3 @@ class HomeProvider extends StateNotifier<int> {
   }
 }
 
-//state notifier provider takes two generics
-final homeNotifierProvider =
-    StateNotifierProvider<HomeProvider, int>((ref) => HomeProvider(0));
