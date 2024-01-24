@@ -1,6 +1,8 @@
-//providers
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faenonibeqwa/controllers/paper_controller.dart';
+import 'package:faenonibeqwa/repositories/lectures_repo.dart';
 import 'package:faenonibeqwa/utils/typedefs/app_typedefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../controllers/exam_controller.dart';
+import '../../controllers/lectures_controller.dart';
 import '../../controllers/meeting_controller.dart';
 import '../../controllers/payment_controller.dart';
 import '../../controllers/trip_controller.dart';
@@ -15,11 +18,13 @@ import '../../models/user_model.dart';
 import '../../repositories/auth_repo.dart';
 import '../../repositories/exam_repo.dart';
 import '../../repositories/meeting_repo.dart';
+import '../../repositories/paper_repo.dart';
 import '../../repositories/payment_repo.dart';
 import '../../repositories/trip_repo.dart';
 import 'home_provider.dart';
 import 'storage_provider.dart';
 
+//providers
 final authRepoProvider = Provider<AuthRepo>(
     (ref) => AuthRepo(FirebaseAuth.instance, FirebaseFirestore.instance, ref));
 final authControllerProvider = Provider((ref) {
@@ -56,6 +61,22 @@ final tripControllerProvider = Provider((ref) {
   final tripRepo = ref.read(tripRepoProvider);
   return TripController(tripRepo);
 });
+final lecturesPepoProvider = Provider(
+    (ref) => LecturesRepo(firestore: FirebaseFirestore.instance, ref: ref));
+
+final lecturesControllerProvider = Provider((ref) {
+  final lecturesRepo = ref.read(lecturesPepoProvider);
+  return LecturesController(lecturesRepo: lecturesRepo);
+});
+final paperRepoProvider = Provider(
+    (ref) => PaperRepo(firestore: FirebaseFirestore.instance, ref: ref));
+
+final paperControllerProvider = Provider((ref) {
+  final papeRepo = ref.read(paperRepoProvider);
+  return PaperController(
+    paperRepo: papeRepo,
+  );
+});
 
 final firebaseStorageRepoProvider = Provider(
   (ref) => FirebaseStorageRepo(FirebaseStorage.instance),
@@ -72,8 +93,12 @@ final isAdmin = StateProvider<bool>((ref) => false);
 final homeNotifierProvider =
     StateNotifierProvider<HomeProvider, int>((ref) => HomeProvider(0));
 
-//change notifier providers
-
+final videoNotifier =
+    StateNotifierProvider.autoDispose<LectureVideoNotifier, File?>(
+        (ref) => LectureVideoNotifier(null));
+final pdfPathNotifier =
+    StateNotifierProvider.autoDispose<PdfPathNotifier, String?>(
+        (ref) => PdfPathNotifier(null));
 //future providers
 //used tuple to pass two parameters
 final questionsProvider =

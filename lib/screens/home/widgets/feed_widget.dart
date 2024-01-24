@@ -7,9 +7,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../models/meeting_model.dart';
-import '../../providers/app_providers.dart';
-import 'big_text.dart';
-import 'custom_indicator.dart';
+import '../../../utils/providers/app_providers.dart';
+import '../../../utils/shared/widgets/big_text.dart';
+import '../../../utils/shared/widgets/custom_indicator.dart';
+
 
 class FeedWidget extends ConsumerWidget {
   const FeedWidget({super.key});

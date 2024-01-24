@@ -40,8 +40,9 @@ class ExamController {
             ));
   }
 
-  Stream<List<String>> questionIds(String examId) =>
-      examRepo.questionIds(examId);
+  Stream<List<String>> questionIds(String examId) async*{
+    yield* examRepo.questionIds(examId);
+  }
 
   Stream<List<ExamModel>> get exams => examRepo.exams;
 //questionParameters is tuple

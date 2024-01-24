@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +23,27 @@ class AppHelper {
       }
 
       return image;
+    } catch (e) {
+      if (context.mounted) {
+        customSnackbar(context: context, title: e.toString());
+      }
+    }
+    return null;
+  }
+
+  static FutureOr<File?> pickVideo(
+    BuildContext context,
+  ) async {
+    File? video;
+    try {
+      final pickedVideo =
+          await ImagePicker().pickVideo(source: ImageSource.gallery);
+
+      if (pickedVideo != null) {
+        video = File(pickedVideo.path);
+      }
+
+      return video;
     } catch (e) {
       if (context.mounted) {
         customSnackbar(context: context, title: e.toString());
@@ -97,5 +119,24 @@ class AppHelper {
         backgroundColor: color,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+ static Future<String?> pickFile(context) async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+      );
+      if (result != null) {
+        PlatformFile file = result.files.first;
+        String filePath = file.path!;
+        return filePath;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      customSnackbar(context: context, title: e.toString());
+      return null;
+    }
   }
 }

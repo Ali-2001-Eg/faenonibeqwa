@@ -19,4 +19,5 @@ extension ConvertPlan on String {
   }
 
   int toInt() => int.parse(this);
+  Uri get toUri => Uri.parse(this);
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, unused_import
 
+import 'package:faenonibeqwa/screens/lectures/lectures_list_screen.dart';
 import 'package:faenonibeqwa/screens/settings/settings_screen.dart';
 import 'package:faenonibeqwa/screens/trip/trips_screen.dart';
 
@@ -27,7 +28,7 @@ class MainScreen extends ConsumerWidget {
         index: selectedTabIndex,
         children: const [
           HomeScreen(),
-          TripsScreen(),
+          LecturesListScreen(),
           ExamsListScreen(),
           SettingsScreen(),
         ],
