@@ -10,6 +10,7 @@ class PaperRepo {
   final ProviderRef ref;
 
   PaperRepo({required this.firestore, required this.ref});
+  //upload files
   Future<void> uploadPaper(String title, String filePath) async {
     final int fileNameIndex = filePath.lastIndexOf('/') + 1;
     final String fileName = filePath.substring(fileNameIndex);
@@ -19,4 +20,16 @@ class PaperRepo {
     PaperModel paper = PaperModel(title: title, filePath: fileUrl);
     await firestore.collection('papers').doc(title).set(paper.toMap());
   }
+
+  //get file
+  Stream<List<PaperModel>> get papers =>
+      firestore.collection('papers').snapshots().map((query) {
+        final List<PaperModel> papers = [];
+        for (var paper in query.docs) {
+          if (paper.data().isNotEmpty) {
+            papers.add(PaperModel.fromMap(paper.data()));
+          }
+        }
+        return papers;
+      });
 }

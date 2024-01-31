@@ -38,9 +38,9 @@ class MainScreen extends ConsumerWidget {
         type: BottomNavigationBarType.fixed,
         currentIndex: selectedTabIndex,
         landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-        onTap: (value) {
+        onTap: (index) {
           //notifier to access home provider notifier
-          ref.watch(homeNotifierProvider.notifier).changeIndex(value);
+          ref.watch(homeNotifierProvider.notifier).changeIndex(index);
         },
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

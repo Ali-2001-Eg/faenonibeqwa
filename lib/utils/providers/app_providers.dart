@@ -88,6 +88,8 @@ final displayName = StateProvider<String>((ref) => '');
 final displayEmail = StateProvider<String>((ref) => '');
 final displayPhotoUrl = StateProvider<String>((ref) => '');
 final isAdmin = StateProvider<bool>((ref) => false);
+final isCached = StateProvider<bool>((ref) => false);
+final isDownloading = StateProvider<bool>((ref) => false);
 
 //state notifiers providers
 final homeNotifierProvider =
@@ -144,5 +146,10 @@ final tripStream = StreamProvider((ref) {
 
 final feedsStream = StreamProvider((ref) {
   final stream = ref.watch(meetingControllerProvider).feeds;
+  return stream;
+});
+
+final papersStream = StreamProvider((ref) {
+  final stream = ref.watch(paperControllerProvider).papers;
   return stream;
 });

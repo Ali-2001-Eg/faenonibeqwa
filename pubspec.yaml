@@ -56,8 +56,12 @@ dependencies:
   uuid: null
   webview_flutter: ^4.4.2
   zego_uikit_prebuilt_video_conference: ^2.6.3
+  # zego_uikit_signaling_plugin:  
   chewie: ^1.7.4
   video_player: ^2.8.2
+  path_provider: ^2.1.2
+  syncfusion_flutter_pdfviewer: ^24.1.47
+  flutter_cache_manager: ^3.3.1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

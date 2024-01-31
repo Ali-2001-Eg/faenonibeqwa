@@ -1,4 +1,5 @@
 import 'package:faenonibeqwa/repositories/paper_repo.dart';
+import 'package:faenonibeqwa/models/paper_model.dart';
 
 class PaperController {
   final PaperRepo paperRepo;
@@ -9,4 +10,6 @@ class PaperController {
     required String filePath,
   }) =>
       paperRepo.uploadPaper(title, filePath);
+
+  Stream<List<PaperModel>> get papers => paperRepo.papers;
 }

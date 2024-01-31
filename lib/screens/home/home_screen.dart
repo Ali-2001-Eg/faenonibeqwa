@@ -11,8 +11,11 @@ import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import '../../ads/banner_widget.dart';
 import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/admin_floating_action_button.dart';
+import '../../utils/shared/widgets/big_text.dart';
+import '../../utils/shared/widgets/small_text.dart';
 import '../meeting/create_meeting_screen.dart';
 import 'widgets/feed_widget.dart';
+import 'widgets/paper_widget.dart';
 
 class HomeScreen extends ConsumerWidget {
   static const String routeName = '/home';
@@ -53,15 +56,17 @@ class HomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               10.hSpace,
+              if (ref.watch(isDownloading)) ...[
+                const LinearProgressIndicator(),
+              ],
               const FeedWidget(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.h),
-                child: const BannerWidget(),
-              ),
+              const PapersWidget(),
+              const BannerWidget(),
             ],
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: const AdminFloatingActionButton(
         heroTag: 'add document',
         icon: Icons.picture_as_pdf,
