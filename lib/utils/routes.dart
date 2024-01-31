@@ -5,7 +5,7 @@ import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/screens/trip/create_trip_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/home/main_sceen.dart';
+import '../screens/main_sceen.dart';
 import 'base/error_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {

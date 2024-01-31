@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:faenonibeqwa/screens/home/main_sceen.dart';
+import 'package:faenonibeqwa/screens/main_sceen.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';

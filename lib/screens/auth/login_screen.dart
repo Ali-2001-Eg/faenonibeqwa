@@ -2,7 +2,7 @@
 
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/screens/auth/signup_screen.dart';
-import 'package:faenonibeqwa/screens/home/main_sceen.dart';
+import 'package:faenonibeqwa/screens/main_sceen.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';

@@ -1,15 +1,15 @@
 // ignore_for_file: deprecated_member_use, unused_import
 
-import 'package:faenonibeqwa/screens/home/settings_screen.dart';
+import 'package:faenonibeqwa/screens/settings/settings_screen.dart';
 import 'package:faenonibeqwa/screens/trip/trips_screen.dart';
 
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/providers/home_provider.dart';
-import '../exam/exams_list_screen.dart';
-import 'home_screen.dart';
+import '../utils/providers/home_provider.dart';
+import 'exam/exams_list_screen.dart';
+import 'home/home_screen.dart';
 
 class MainScreen extends ConsumerWidget {
   static const String routeName = '/home-screen';

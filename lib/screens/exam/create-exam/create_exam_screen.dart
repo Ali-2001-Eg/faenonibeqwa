@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:faenonibeqwa/controllers/exam_controller.dart';
 import 'package:faenonibeqwa/screens/exam/create-exam/add_questions_screen.dart';
 import 'package:faenonibeqwa/screens/exam/create-exam/exam_info_screen.dart';
-import 'package:faenonibeqwa/screens/home/main_sceen.dart';
+import 'package:faenonibeqwa/screens/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/customSnackbar.dart';

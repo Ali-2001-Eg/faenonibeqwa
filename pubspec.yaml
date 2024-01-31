@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=2.19.6 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -29,7 +29,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   awesome_notifications: ^0.8.2
+  # better_player: 
   cached_network_image: ^3.3.0
+  chewie: ^1.7.4
   cloud_firestore: ^4.13.0
   cupertino_icons: ^1.0.2
   dio: ^5.3.4
@@ -45,15 +47,16 @@ dependencies:
   flutter_screenutil: null
   flutter_svg: ^2.0.0
   google_sign_in: ^6.1.6
-  image_picker: ^1.0.1
-  paymob_payment: ^0.0.1+1
+  image_cropper: ^5.0.1
+  image_picker: ^1.0.7
+  paymob_payment: 
   permission_handler: null
   timeago: ^3.6.0
   uuid: null
+  video_compress: ^3.1.2
+  video_player: ^2.2.2
   webview_flutter: ^4.4.2
-  # zego_uikit_prebuilt_call: ^3.6.1
   zego_uikit_prebuilt_video_conference: ^2.6.3
-  image_cropper: ^5.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -72,7 +75,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-  #   - images/a_dot_ham.jpeg
+    - assets/images/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

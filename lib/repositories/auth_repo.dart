@@ -85,7 +85,7 @@ class AuthRepo extends ChangeNotifier {
   String get getName => ref.watch(userDataProvider).value!.name;
 
   //check role
-  bool get isAdmin => ref.watch(userDataProvider).value!.isAdmin;
+  bool get isAdmin => ref.watch(userDataProvider).value?.isAdmin ?? false;
 
   Future<void> signout() async {
     try {
