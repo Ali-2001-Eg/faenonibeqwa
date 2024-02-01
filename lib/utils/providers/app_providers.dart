@@ -61,11 +61,11 @@ final tripControllerProvider = Provider((ref) {
   final tripRepo = ref.read(tripRepoProvider);
   return TripController(tripRepo);
 });
-final lecturesPepoProvider = Provider(
+final lecturesRepoProvider = Provider(
     (ref) => LecturesRepo(firestore: FirebaseFirestore.instance, ref: ref));
 
 final lecturesControllerProvider = Provider((ref) {
-  final lecturesRepo = ref.read(lecturesPepoProvider);
+  final lecturesRepo = ref.read(lecturesRepoProvider);
   return LecturesController(lecturesRepo: lecturesRepo);
 });
 final paperRepoProvider = Provider(
@@ -90,6 +90,7 @@ final displayPhotoUrl = StateProvider<String>((ref) => '');
 final isAdmin = StateProvider<bool>((ref) => false);
 final isCached = StateProvider<bool>((ref) => false);
 final isDownloading = StateProvider<bool>((ref) => false);
+final isLoading = StateProvider<bool>((ref) => false);
 
 //state notifiers providers
 final homeNotifierProvider =
