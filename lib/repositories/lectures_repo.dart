@@ -79,9 +79,16 @@ class LecturesRepo {
     return image;
   }
 
-  clearVideo() {
-    ref.read(videoProvider.notifier).state = null;
-  }
+  Stream<List<LecturesModel>> get videos =>
+      firestore.collection('lectures').snapshots().map((query) {
+        final List<LecturesModel> lectures = [];
+        if (query.docs.isNotEmpty) {
+          for (var video in query.docs) {
+            lectures.add(LecturesModel.fromMap(video.data()));
+          }
+        }
+        return lectures;
+      });
 }
 
 final uploadVideoRepoProvider = Provider(

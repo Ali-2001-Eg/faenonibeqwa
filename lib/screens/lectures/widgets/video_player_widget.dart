@@ -38,7 +38,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               aspectRatio: 16 / 9,
               autoInitialize: true,
               autoPlay: widget.fromNetwotk ? false : true,
-              placeholder: const CircularProgressIndicator(color: Colors.amber),
+              // placeholder: const CircularProgressIndicator(color: Colors.amber),
               zoomAndPan: true,
             )));
   }

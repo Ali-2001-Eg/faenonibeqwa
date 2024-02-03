@@ -154,3 +154,8 @@ final papersStream = StreamProvider((ref) {
   final stream = ref.watch(paperControllerProvider).papers;
   return stream;
 });
+
+final lecturesStream = StreamProvider((ref) {
+  final stream = ref.watch(lecturesRepoProvider).videos;
+  return stream;
+});
