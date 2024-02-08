@@ -39,25 +39,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               padding: const EdgeInsets.only(left: 10).w,
               child: IconButton(
                 onPressed: () {
-                  NotificationRepo().sendNotification(
-                    'fovZXRkBT02EgnhnYOHwb_:APA91bFyW43kSMlP7wpR-SyxgCOUHt4HLD1mU2lhkXjJPccARb7Wusb3CW70rWMHSw6cwirVF4Htgneps3SO-TzbD7vxRHlkKllpAnTOT68FKkAT47gANPEZhZ7CQoGlJNohODI5cHvK',
-                    "qwwwqwq",
-                    'bbb',
-                    notifcationData: NotifcationModel(
-                      title: 'title',
-                      body: 'body',
-                      time: 'time',
-                    ),
-                  );
-                  print('sss');
-                  // AwesomeNotifications().createNotification(
-                  //     content: NotificationContent(
-                  //   id: 10,
-                  //   channelKey: 'basic_channel',
-                  //   title: 'Simple Notification',
-                  //   body: 'Test Awesome Notification',
-                  // ));
-                  // Navigator.pushNamed(context, CreateMeetingScreen.routeName);
+                  AwesomeNotifications().createNotification(
+                      content: NotificationContent(
+                    id: 10,
+                    channelKey: 'basic_channel',
+                    title: 'Simple Notification',
+                    body: 'Test Awesome Notification',
+                  ));
+                  Navigator.pushNamed(context, CreateMeetingScreen.routeName);
                 },
                 tooltip: 'قم بإنشاء محادثه بينك و بين أصدقائك',
                 icon: const Icon(

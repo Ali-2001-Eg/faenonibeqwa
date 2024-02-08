@@ -22,70 +22,23 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'utils/providers/app_providers.dart';
 
+Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+  print('message from background message: ${message.data}');
+  AwesomeNotifications().createNotificationFromJsonData(message.data);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FlutterDownloader.initialize(
-      debug:
-          true, // optional: set to false to disable printing logs to console (default: true)
-      ignoreSsl: true
-      // option: set to false to disable working with http links (default: false)
-      );
-  await AwesomeNotifications().initialize(
-    "resource://drawable/notification",
-    [
-      NotificationChannel(
-        channelKey: 'firebase key',
-        channelName: 'firebase channel',
-        channelDescription: 'firebase for test',
-        playSound: true,
-        channelShowBadge: true,
-      )
-    ],
-  );
-  // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-  FirebaseMessaging.onBackgroundMessage((message) async {
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: Random().nextInt(10000),
-        channelKey: 'firebase key',
-        title: message.notification!.title,
-        body: message.notification!.body,
-      ),
-    );
-    print(message.data);
-
-    if (message.notification != null) {
-      print("body onBackgroundMessage ===========");
-      print(message.notification!.body);
-      print("body onBackgroundMessage ===========");
-    }
-  });
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: Random().nextInt(10000),
-        channelKey: 'firebase key',
-        title: message.notification!.title,
-        body: message.notification!.body,
-      ),
-    );
-    print(message.data);
-
-    if (message.notification != null) {
-      print("body onMessage===========");
-      print(message.notification!.body);
-      print("body onMessage ===========");
-    }
-  });
-
   PaymobPayment.instance.initialize(
     apiKey: AppConstants.apiKey,
     integrationID: AppConstants.integrationId,
     iFrameID: 787143,
   );
+  _initAwesomeLocalNotifications();
   FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // String? token = await FirebaseMessaging.instance.getToken();
+  // print('token is $token');
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -95,12 +48,42 @@ Future<void> _handleBackgroundMessage(RemoteMessage message) async {
   AwesomeNotifications().createNotificationFromJsonData(message.data);
 }
 
-class MyApp extends StatelessWidget {
+void _initAwesomeLocalNotifications() {
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: 'Basic notifications',
+        channelDescription: 'Notification channel for basic tests',
+      ),
+    ],
+    debug: true,
+  );
+}
+
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      } else {
+        print('notification permission is granted');
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(FirebaseAuth.instance.currentUser?.email);
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,

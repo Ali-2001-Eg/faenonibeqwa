@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:chewie/chewie.dart';
 import 'package:faenonibeqwa/utils/extensions/string_extension.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
@@ -38,7 +36,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               aspectRatio: 16 / 9,
               autoInitialize: true,
               autoPlay: widget.fromNetwotk ? false : true,
-              placeholder: const CircularProgressIndicator(color: Colors.amber),
+              // placeholder: const CircularProgressIndicator(color: Colors.amber),
               zoomAndPan: true,
             )));
   }
@@ -53,6 +51,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     if (_videoPlayerController.value.isInitialized) {
+      // _videoPlayerController.value.
       return AspectRatio(
         aspectRatio: _videoPlayerController.value.aspectRatio,
         child: Chewie(controller: _chewieController),

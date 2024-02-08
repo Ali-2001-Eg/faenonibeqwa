@@ -80,9 +80,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.rocket,
+              Icons.video_library_sharp,
             ),
-            label: 'الرحلات',
+            label: 'المحاضرات',
             // activeIcon: Icon(
             //   Icons.rocket_launch,
             //   color: context.theme.hoverColor,

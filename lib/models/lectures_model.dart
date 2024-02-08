@@ -1,5 +1,3 @@
-
-
 import 'package:equatable/equatable.dart';
 
 class LecturesModel extends Equatable {
@@ -15,7 +13,6 @@ class LecturesModel extends Equatable {
     required this.lectureThumbnail,
     required this.audienceUid,
   });
-  
 
   @override
   List<Object> get props {
@@ -56,13 +53,12 @@ class LecturesModel extends Equatable {
 
   factory LecturesModel.fromMap(Map<String, dynamic> map) {
     return LecturesModel(
-      name: map['name'] as String,
-      id: map['id'] as String,
-      lectureUrl: map['lectureUrl'] as String,
-      lectureThumbnail: map['lectureThumbnail'] as String,
-      audienceUid: List<String>.from((map['audienceUid'] as List<String>),
-    ));
+        name: map['name'] as String,
+        id: map['id'] as String,
+        lectureUrl: map['lectureUrl'] as String,
+        lectureThumbnail: map['lectureThumbnail'] as String,
+        audienceUid: List<String>.from(
+          (map['audienceUid']),
+        ));
   }
-
-  
 }
