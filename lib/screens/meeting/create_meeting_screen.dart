@@ -5,6 +5,7 @@ import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../models/notification_model.dart';
 import '../../utils/providers/app_providers.dart';
 
 class CreateMeetingScreen extends ConsumerStatefulWidget {
@@ -55,30 +56,49 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 100),
               ),
               onPressed: () {
-                var channeld = Random().nextInt(10000).toString();
-                ref
-                    .read(meetingControllerProvider)
-                    .startMeeting(
-                      title: _titleController.text.trim(),
-                      isBrodcater: true,
-                      channelId: channeld,
-                    )
-                    .then((value) => Navigator.pushNamed(
-                          context,
-                          MeetingScreen.routeName,
-                          arguments: {
-                            'channelId': channeld,
-                            'userID':
-                                ref.watch(authControllerProvider).userInfo.uid,
-                            'isBroadcaster': true,
-                            'title': _titleController.text.trim(),
-                          },
-                        ))
-                    .catchError((err) {
+                if (_titleController.text.isNotEmpty) {
+                  var channeld = Random().nextInt(10000).toString();
+
+                  ref
+                      .read(meetingControllerProvider)
+                      .startMeeting(
+                        title: _titleController.text.trim(),
+                        isBrodcater: true,
+                        channelId: channeld,
+                      )
+                      .then((value) {
+                        ref
+                            .watch(notificationRepoProvider)
+                            .sendPremiumNotification(
+                              'استعدوا للبث المباشر',
+                              _titleController.text.trim(),
+                              notifcationData: NotifcationModel(
+                                time: DateTime.now().toString(),
+                              ),
+                            );
+                      })
+                      .then((value) => Navigator.pushNamed(
+                            context,
+                            MeetingScreen.routeName,
+                            arguments: {
+                              'channelId': channeld,
+                              'userID': ref
+                                  .watch(authControllerProvider)
+                                  .userInfo
+                                  .uid,
+                              'isBroadcaster': true,
+                              'title': _titleController.text.trim(),
+                            },
+                          ))
+                      .catchError((err) {
+                        AppHelper.customSnackbar(
+                            context: context, title: err.toString());
+                        return err;
+                      });
+                } else {
                   AppHelper.customSnackbar(
-                      context: context, title: err.toString());
-                  return err;
-                });
+                      context: context, title: 'ضع عنونا للمكالمه');
+                }
               },
               child: const Text(
                 "ابدأ المكالمه",

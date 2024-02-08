@@ -40,9 +40,7 @@ class LecturesListScreen extends StatelessWidget {
                 itemBuilder: (ctx, index) {
                   final lecture = data[index];
                   return LectureWidget(
-                    lecturepath: lecture.lectureUrl,
-                    title: lecture.name,
-                    audienceNo: lecture.audienceUid.length.toString(),
+                    lecture: lecture,
                   );
                 },
               );

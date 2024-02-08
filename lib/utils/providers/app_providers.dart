@@ -18,6 +18,7 @@ import '../../models/user_model.dart';
 import '../../repositories/auth_repo.dart';
 import '../../repositories/exam_repo.dart';
 import '../../repositories/meeting_repo.dart';
+import '../../repositories/notification_repo.dart';
 import '../../repositories/paper_repo.dart';
 import '../../repositories/payment_repo.dart';
 import '../../repositories/trip_repo.dart';
@@ -61,8 +62,10 @@ final tripControllerProvider = Provider((ref) {
   final tripRepo = ref.read(tripRepoProvider);
   return TripController(tripRepo);
 });
-final lecturesRepoProvider = Provider(
-    (ref) => LecturesRepo(firestore: FirebaseFirestore.instance, ref: ref));
+final lecturesRepoProvider = Provider((ref) => LecturesRepo(
+    firestore: FirebaseFirestore.instance,
+    ref: ref,
+    auth: FirebaseAuth.instance));
 
 final lecturesControllerProvider = Provider((ref) {
   final lecturesRepo = ref.read(lecturesRepoProvider);
@@ -81,7 +84,9 @@ final paperControllerProvider = Provider((ref) {
 final firebaseStorageRepoProvider = Provider(
   (ref) => FirebaseStorageRepo(FirebaseStorage.instance),
 );
-
+final notificationRepoProvider = Provider((ref) {
+  return NotificationRepo();
+});
 //state providers
 final currentIndex = StateProvider<int>((ref) => 0);
 final displayName = StateProvider<String>((ref) => '');
@@ -156,6 +161,6 @@ final papersStream = StreamProvider((ref) {
 });
 
 final lecturesStream = StreamProvider((ref) {
-  final stream = ref.watch(lecturesRepoProvider).videos;
+  final stream = ref.watch(lecturesControllerProvider).videos;
   return stream;
 });

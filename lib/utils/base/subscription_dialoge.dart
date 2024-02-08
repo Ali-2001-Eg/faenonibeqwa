@@ -3,6 +3,7 @@ import 'package:faenonibeqwa/utils/enums/plan_enum.dart';
 import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +16,7 @@ class SubscriptionDialog extends ConsumerWidget {
   const SubscriptionDialog({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef  ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       width: context.screenWidth,
       decoration: BoxDecoration(
@@ -79,11 +80,13 @@ class SubscriptionDialog extends ConsumerWidget {
             currency: "EGP",
             amountInCents: "15000",
             billingData: PaymobBillingData(),
-            onPayment: (responsedata) {
+            onPayment: (responsedata) async {
               if (responsedata.success == true) {
                 ref
                     .read(paymentControllerProvider)
                     .subscibe(planType: PlanEnum.annually);
+                await FirebaseMessaging.instance.subscribeToTopic('premium');
+
                 if (ref.read(userDataProvider).value!.planEnum ==
                     PlanEnum.annually) {
                   Future.delayed(
@@ -138,11 +141,12 @@ class SubscriptionDialog extends ConsumerWidget {
         currency: "EGP",
         amountInCents: "8000",
         billingData: PaymobBillingData(),
-        onPayment: (responsedata) {
+        onPayment: (responsedata) async {
           if (responsedata.success == true) {
             ref
                 .read(paymentControllerProvider)
                 .subscibe(planType: PlanEnum.semiAnnually);
+            await FirebaseMessaging.instance.subscribeToTopic('premium');
           } else {
             AppHelper.customSnackbar(
               context: context,
@@ -191,11 +195,12 @@ class SubscriptionDialog extends ConsumerWidget {
       currency: "EGP",
       amountInCents: "5000",
       billingData: PaymobBillingData(),
-      onPayment: (responsedata) {
+      onPayment: (responsedata) async {
         if (responsedata.success == true) {
           ref
               .read(paymentControllerProvider)
               .subscibe(planType: PlanEnum.monthly);
+          await FirebaseMessaging.instance.subscribeToTopic('premium');
         } else {
           AppHelper.customSnackbar(
             context: context,
@@ -225,9 +230,9 @@ class SubscriptionDialog extends ConsumerWidget {
       .difference(DateTime.now())
       .inDays;
 
-  Future _freeTrailSubscribe(WidgetRef ref, BuildContext context) async {
+  Future<void> _freeTrailSubscribe(WidgetRef ref, BuildContext context) async {
     //check plan type
-    if (ref.read(paymentControllerProvider).planType == PlanEnum.freeTrail) {
+    if (ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
           context: context,
           title: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
@@ -242,6 +247,8 @@ class SubscriptionDialog extends ConsumerWidget {
           status: ToastStatus.success);
       return;
     } else {
+      await FirebaseMessaging.instance.subscribeToTopic('premium');
+      
       return ref
           .read(paymentControllerProvider)
           .subscibe(planType: PlanEnum.freeTrail)
@@ -256,4 +263,3 @@ class SubscriptionDialog extends ConsumerWidget {
     }
   }
 }
-

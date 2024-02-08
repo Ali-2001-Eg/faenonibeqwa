@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:faenonibeqwa/models/notification_model.dart';
 import 'package:faenonibeqwa/screens/home/add_document_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,13 +33,7 @@ class HomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 10).w,
               child: IconButton(
                 onPressed: () {
-                  AwesomeNotifications().createNotification(
-                      content: NotificationContent(
-                    id: 10,
-                    channelKey: 'basic_channel',
-                    title: 'Simple Notification',
-                    body: 'Test Awesome Notification',
-                  ));
+                  
                   Navigator.pushNamed(context, CreateMeetingScreen.routeName);
                 },
                 tooltip: 'قم بإنشاء محادثه بينك و بين أصدقائك',

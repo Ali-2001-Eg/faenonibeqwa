@@ -3,6 +3,7 @@ import 'package:faenonibeqwa/repositories/admob_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/base/subscription_dialoge.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -169,7 +170,7 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
     );
   }
 
-  void _checkSubscribtionAndEnterExam(BuildContext context) {
+  Future<void> _checkSubscribtionAndEnterExam(BuildContext context) async {
     if (ref.read(paymentControllerProvider).subscriptionEnded) {
       ref.read(paymentControllerProvider).changePlanAfterEndDate;
     }
@@ -180,10 +181,13 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
         );
       }));
     } else {
-      AppHelper.customSnackbar(
+      await FirebaseMessaging.instance.unsubscribeFromTopic('premium');
+if(context.mounted) {
+  AppHelper.customSnackbar(
         context: context,
         title: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
       );
+}
       Future.delayed(
           const Duration(seconds: 1),
           () => showModalBottomSheet(
