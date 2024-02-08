@@ -21,7 +21,7 @@ class BigText extends StatelessWidget {
     return Text(
       text,
       style: context.theme.textTheme.displayMedium!.copyWith(
-        color: context.theme.textTheme.displayMedium!.color,
+        color: color ?? context.theme.textTheme.displayMedium!.color,
         fontWeight: fontWeight,
         fontSize: fontSize,
       ),

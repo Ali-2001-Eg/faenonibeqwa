@@ -54,12 +54,16 @@ class ItemTrip extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: SmallText(
-                    text: 'اسم الرحله / ${tripModel.nameTrip}',
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
+                SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: SmallText(
+                      text: 'اسم الرحله / ${tripModel.nameTrip}',
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 Padding(
@@ -76,6 +80,8 @@ class ItemTrip extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: SmallText(
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
                 text: 'الوصف / ${tripModel.description}',
                 color: Colors.black,
                 fontWeight: FontWeight.w500,

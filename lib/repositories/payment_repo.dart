@@ -1,119 +1,65 @@
-// ignore_for_file: deprecated_member_use
 
-import 'dart:developer';
-
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
-import 'package:faenonibeqwa/screens/payment/visa_card_view.dart';
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/base/app_constants.dart';
-import '../utils/shared/data/api_client.dart';
+import '../utils/enums/plan_enum.dart';
+import '../utils/providers/app_providers.dart';
 
 class PaymentRepo {
   final ProviderRef ref;
+  final FirebaseFirestore firestore;
+  final FirebaseAuth auth;
 
-  PaymentRepo(this.ref);
+  PaymentRepo(this.ref, this.firestore, this.auth);
 
-  Future<void> getAuthPayment() async {
-    await ApiClient.postData(
-      url: AppConstants.baseUrl + AppConstants.authTokenUrl,
-      data: {
-        "api_key": AppConstants.apiKey,
-      },
-    ).then((value) {
-      ref.read(firstToken.state).update((state) => value.data['token']);
-
-      log('First Token ${ref.read(firstToken.state).state}');
-    }).catchError((error) {
-      log(error);
+  //for subsicription
+  Future<void> subscribe(PlanEnum planType) async {
+    Duration duration = _determineEndSubsicriptionTime(planType);
+    await firestore.collection('users').doc(auth.currentUser!.uid).update({
+      'premium': true,
+      'timeToFinishSubscribtion':
+          DateTime.now().add(duration).millisecondsSinceEpoch,
+      'plan': planType.type,
     });
   }
 
-  Future<void> getOrderId({
-    required num price,
-    required String phoneNumber,
-    required BuildContext context,
-  }) async {
-    await ApiClient.postData(
-      url: AppConstants.baseUrl + AppConstants.orderID,
-      data: {
-        "auth_token": ref.read(firstToken.state).state,
-        "delivery_needed": "false",
-        "amount_cents": price,
-        "currency": "EGP",
-        "items": []
-      },
-    ).then((value) async {
-      ref.read(orderID.state).update((state) => value.data['id']);
-
-      await _getPaymentRequest(
-        price: price,
-        context: context,
-        phoneNumber: phoneNumber,
-      );
-      // log('final token is ${ref.read(finalToken.state).state}');
-      // log('loading is ${ref.read(loadingFinalToken.state).state}');
-    });
+  Duration _determineEndSubsicriptionTime(PlanEnum planType) {
+    Duration duration;
+    switch (planType) {
+      case PlanEnum.freeTrail:
+        duration = const Duration(days: 15);
+        break;
+      //to be updated after finishing this phase
+      case PlanEnum.monthly:
+        duration = const Duration(days: 30);
+        break;
+      case PlanEnum.semiAnnually:
+        duration = const Duration(days: 100);
+        break;
+      case PlanEnum.annually:
+        duration = const Duration(days: 365);
+        break;
+      case PlanEnum.notSubscribed:
+        //to be ignored
+        duration = const Duration(days: 0);
+        break;
+    }
+    return duration;
   }
 
-  Future<void> _getPaymentRequest({
-    required num price,
-    required BuildContext context,
-    required String phoneNumber,
-  }) async {
-    // ref.watch(loadingFinalToken.state).update((state) => true);
-    // log('loading before ${ref.read(loadingFinalToken.state).state}');
+  bool get subscriptionEnded => ref
+      .read(userDataProvider)
+      .value!
+      .timeToFinishSubscribtion!
+      .isBefore(DateTime.now());
+  PlanEnum get subscriptionPlan =>
+      ref.read(userDataProvider).value!.planEnum ?? PlanEnum.notSubscribed;
 
-    await ApiClient.postData(
-      url: AppConstants.baseUrl + AppConstants.paymentKeyRequest,
-      data: {
-        "auth_token": ref.read(firstToken.state).state,
-        "amount_cents": price,
-        "expiration": 3600,
-        "order_id": ref.read(orderID.state).state,
-        "billing_data": {
-          "apartment": "NA",
-          "email": ref.read(authControllerProvider).userInfo.uid,
-          "floor": "NA",
-          "first_name": ref.read(authControllerProvider).userInfo.displayName,
-          "street": "phone",
-          "building": "NA",
-          "phone_number": phoneNumber,
-          "shipping_method": "NA",
-          "postal_code": "NA",
-          "city": "NA",
-          "country": "NA",
-          "last_name": "NA",
-          "state": "NA"
-        },
-        "currency": "EGP",
-        "integration_id": AppConstants.integrationId
-      },
-    ).then((value) async {
-      ref.read(finalToken.state).update((state) => value.data['token']);
-      log('finalToken ${ref.read(finalToken.state).state}');
-      log('order ${ref.read(orderID.state).state}');
-
-      if (context.mounted) {
-        await Navigator.push(context, MaterialPageRoute(
-          builder: (_) {
-            return VisaCardView(
-              finalToken: ref.read(finalToken.state).state,
-            );
-          },
-        )).catchError((error) {
-          log(error.toString());
-        });
-      }
-    }).catchError((error) {
-      log(error.toString());
+  Future<void> get changePlanAfterEndDate async => await firestore.collection('users').doc(auth.currentUser!.uid).update({
+      'plan': PlanEnum.notSubscribed.type,
+      'premium': false,
+      'freePlanEnded':true
     });
-  }
 }
 
-final paymentRepoProvider = Provider((ref) => PaymentRepo(ref));
-final firstToken = StateProvider<String>((ref) => "");
-final finalToken = StateProvider<String>((ref) => "");
-final orderID = StateProvider<int>((ref) => 0);
-final loadingFinalToken = StateProvider<bool>((ref) => false);

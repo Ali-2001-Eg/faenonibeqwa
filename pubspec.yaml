@@ -28,34 +28,41 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cloud_firestore: ^4.13.0
-  cupertino_icons: ^1.0.2
-  equatable: ^2.0.5
-  
-  firebase_auth: ^4.13.0
-  #videosdk: ^1.1.3
-  firebase_core: ^2.22.0
   flutter:
     sdk: flutter
-
+  awesome_notifications: ^0.8.2
+  cached_network_image: ^3.3.0
+  cloud_firestore: ^4.13.0
+  cupertino_icons: ^1.0.2
+  file_picker: ^6.1.1
+  # dio: ^5.3.4
+  equatable: ^2.0.5
+  firebase_auth: ^4.13.0
+  firebase_core: ^2.22.0
+  firebase_messaging: ^14.7.6
+  firebase_storage: ^11.5.1
   flutter_riverpod: ^2.3.6
   flutter_screenutil: null
-  flutter_svg: ^2.0.0
+  fluttertoast: ^8.2.4
+  google_mobile_ads: ^4.0.0
   google_sign_in: ^6.1.6
-  dio: ^5.3.4
-  permission_handler: 
-  uuid: null
-  timeago: ^3.6.0
-  firebase_storage: ^11.5.1
-  flutter_logs: ^2.1.11
-  zego_uikit_prebuilt_call: ^3.6.1
-  zego_uikit_signaling_plugin: 
-  zego_uikit_prebuilt_video_conference: any
-  cached_network_image: ^3.0.0
-  webview_flutter: ^4.4.2
+  image_cropper: ^5.0.1
   image_picker: ^1.0.1
-
-  
+  paymob_payment: ^0.0.1+1
+  permission_handler: null
+  shimmer: ^3.0.0
+  timeago: ^3.6.0
+  tuple: ^2.0.2
+  uuid: null
+  webview_flutter: ^4.4.2
+  zego_uikit_prebuilt_video_conference: ^2.6.3
+  # zego_uikit_signaling_plugin:  
+  chewie: ^1.7.4
+  video_player: ^2.8.2
+  path_provider: ^2.1.2
+  video_compress: ^3.1.2
+  syncfusion_flutter_pdfviewer: ^24.1.47
+  flutter_cache_manager: ^3.3.1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -83,17 +90,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+        # - asset: fonts/Schyler-Italic.ttf
+    #       style: Cairo
+    - family: Metropolis
+      fonts:
+        - asset: assets/fonts/Metropolis-Bold.ttf
+        # - asset: assets/fonts/Cairo-Bold.ttf
+        #   weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

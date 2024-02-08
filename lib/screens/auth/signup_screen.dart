@@ -1,9 +1,13 @@
-import 'package:faenonibeqwa/screens/auth/login_screen.dart';
-import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
+import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../controllers/auth_controller.dart';
+
+import 'package:faenonibeqwa/screens/home/main_sceen.dart';
+import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
+
+import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/custom_button.dart';
 
 class SignUpScreen extends ConsumerWidget {
@@ -15,27 +19,50 @@ class SignUpScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Form(
-        key: _formkey,
-        child: Column(children: [
-          CustomTextField(
-              controller: _emailController, hintText: 'Email Address'),
-          20.xSpace,
-          CustomTextField(
-              controller: _passwordController, hintText: 'Password'),
-          20.xSpace,
-          CustomTextField(
-              controller: _usernameController, hintText: 'Username'),
-          20.xSpace,
-          CustomButton(onTap: () => _signup(ref, context), text: 'Register'),
-        ]),
+      resizeToAvoidBottomInset: true,
+      extendBody: true,
+      appBar: const CustomAppBar(title: 'إنشاء حساب'),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formkey,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomTextField(
+                  controller: _usernameController,
+                  hintText: 'اسم المستخدم',
+                ),
+                20.hSpace,
+                CustomTextField(
+                  controller: _emailController,
+                  hintText: 'البريد الألكتروني',
+                ),
+                20.hSpace,
+                CustomTextField(
+                  controller: _passwordController,
+                  hintText: 'الرقم السرى',
+                ),
+                20.hSpace,
+                CustomButton(
+                  onTap: () => _signup(ref, context),
+                  text: 'إنشاء حساب',
+                  fontSize: 18,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 
   void _signup(WidgetRef ref, BuildContext context) {
-    if (_formkey.currentState!.validate()) {
+    if (_formkey.currentState!.validate() &&
+        _emailController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty &&
+        _usernameController.text.isNotEmpty) {
       ref
           .read(authControllerProvider)
           .signup(
@@ -45,8 +72,13 @@ class SignUpScreen extends ConsumerWidget {
             '',
           )
           .then(
-            (value) => Navigator.pushNamed(context, LoginScreen.routeName),
+            (value) => Navigator.pushNamedAndRemoveUntil(
+                context, MainScreen.routeName, (r) => false),
           );
+    } else {
+      AppHelper.customSnackbar(
+          context: context,
+          title: 'قم بإكمال كافه البيانات الخاصه بتسجيل الدخول');
     }
   }
 }

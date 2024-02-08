@@ -1,12 +1,12 @@
+import 'package:faenonibeqwa/ads/banner_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/utils/base/app_constants.dart';
 import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
 
-import '../../controllers/meeting_controller.dart';
+import '../../utils/providers/app_providers.dart';
 
 class MeetingScreen extends ConsumerWidget {
   static const String routeName = '/meeting-sceen';
@@ -80,20 +80,23 @@ class MeetingScreen extends ConsumerWidget {
       ..bottomMenuBarConfig = zegoBottomMenuBarConfig
       ..turnOnCameraWhenJoining = false
       ..topMenuBarConfig = zegoTopMenuBarConfig;
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (t) {
         _handelExitFromMeeting(ref);
-
-        return true;
       },
       child: SafeArea(
-        child: ZegoUIKitPrebuiltVideoConference(
-          appID: AppConstants.appId,
-          appSign: AppConstants.appSign,
-          userID: ref.read(authControllerProvider).userInfo.uid,
-          userName: ref.read(authControllerProvider).userInfo.displayName!,
-          conferenceID: channelId,
-          config: config,
+        child: Stack(
+          children: [
+            ZegoUIKitPrebuiltVideoConference(
+              appID: AppConstants.appId,
+              appSign: AppConstants.appSign,
+              userID: ref.watch(authControllerProvider).userInfo.uid,
+              userName: ref.watch(authControllerProvider).userInfo.displayName!,
+              conferenceID: channelId,
+              config: config,
+            ),
+            const BannerWidget(),
+          ],
         ),
       ),
     );

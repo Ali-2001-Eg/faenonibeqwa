@@ -8,14 +8,12 @@ import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/providers/storage_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../controllers/auth_controller.dart';
 import '../utils/base/app_constants.dart';
 import '../utils/shared/data/api_client.dart';
-import '../utils/shared/widgets/snackbar.dart';
 
 class MeetingRepo extends ChangeNotifier {
   final ProviderRef ref;
@@ -23,8 +21,6 @@ class MeetingRepo extends ChangeNotifier {
   final FirebaseFirestore firestore;
 
   MeetingRepo(this.ref, this.auth, this.firestore);
-
- 
 
   Future<void> startMeeing(
       String title, bool isBrodcater, String channelId) async {
@@ -44,10 +40,14 @@ class MeetingRepo extends ChangeNotifier {
             .doc(channelId)
             .set(meeting.toMap());
       } else {
-        print('fill all fields');
+        if (kDebugMode) {
+          print('fill all fields');
+        }
       }
     } catch (e) {
-      print('error $e');
+      if (kDebugMode) {
+        print('error $e');
+      }
     }
   }
 
@@ -80,7 +80,4 @@ class MeetingRepo extends ChangeNotifier {
     await firestore.collection('meeting').doc(channelId).delete();
   }
 }
-
-final meetingRepoProvider = Provider((ref) =>
-    MeetingRepo(ref, FirebaseAuth.instance, FirebaseFirestore.instance));
 

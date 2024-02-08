@@ -1,12 +1,16 @@
-// ignore_for_file: deprecated_member_use, unused_import
+// ignore_for_file: deprecated_member_use, unused_import, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uuid/uuid.dart';
+
+import '../utils/providers/app_providers.dart';
 
 class AuthRepo extends ChangeNotifier {
   final FirebaseAuth auth;
@@ -48,7 +52,10 @@ class AuthRepo extends ChangeNotifier {
           name: ref.read(displayName),
           uid: auth.currentUser!.uid,
           photoUrl: ref.read(displayPhotoUrl),
-          email: ref.read(displayEmail));
+          email: ref.read(displayEmail),
+          isAdmin: false,
+          isPremium: false,
+          notificationToken: (await FirebaseMessaging.instance.getToken())!);
       await firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
@@ -62,33 +69,31 @@ class AuthRepo extends ChangeNotifier {
   }
 
   //get user data
-  Future<UserModel?> get getUserData async {
-    UserModel? user;
-    var userData =
-        await firestore.collection('users').doc(auth.currentUser!.uid).get();
-    if (userData.data() != null) {
-      user = UserModel.fromMap(userData.data()!);
-    }
-    return user;
-  }
+  
+  Stream<UserModel?> get getUserData => firestore
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .snapshots()
+          .map((query) {
+        UserModel? user;
+        if (query.exists) {
+          user = UserModel.fromMap(query.data()!);
+        }
+        return user;
+      });
 
-  Future<User?> user() async {
-    return auth.currentUser;
-  }
+  Future<User?> user() async => auth.currentUser;
 
   //get photo url
-  Future<String> get getPhotoUrl async {
-    String photoUrl = '';
-    await getUserData.then((value) => photoUrl = value!.photoUrl);
-    return photoUrl;
-  }
+  String get getPhotoUrl => ref.watch(userDataProvider).value!.photoUrl;
 
   //name
-  String get getName {
-    String name = '';
-    getUserData.then((value) => name = value!.name);
-    return name;
-  }
+  String get getName => ref.watch(userDataProvider).value!.name;
+
+  //check role
+  bool get isAdmin => ref.watch(userDataProvider).value!.isAdmin;
+
+  bool get isPremium => ref.watch(userDataProvider).value!.isPremium;
 
   Future<void> signout() async {
     try {
@@ -111,16 +116,10 @@ class AuthRepo extends ChangeNotifier {
       auth.currentUser!.updateProfile(displayName: ref.read(displayName));
       await auth.currentUser!.reload();
       notifyListeners();
-      UserModel user = UserModel(
-          name: ref.read(displayName),
-          uid: auth.currentUser!.uid,
-          photoUrl: ref.read(displayPhotoUrl),
-          email: ref.read(displayEmail));
-      await firestore
-          .collection('users')
-          .doc(auth.currentUser!.uid)
-          .set(user.toMap());
-    } catch (e) {}
+      _saveCredentials();
+    } catch (e) {
+      print('error');
+    }
   }
 
   Future login(String email, String password) async {
@@ -131,14 +130,13 @@ class AuthRepo extends ChangeNotifier {
       } else if (e.code == 'wrong-password') {
         print('e.code is ${e.code}');
       }
+    } catch (e) {
+      print(e.toString());
     }
   }
+
+  
 }
 
-//provider
-final authRepoProvider = Provider<AuthRepo>(
-    (ref) => AuthRepo(FirebaseAuth.instance, FirebaseFirestore.instance, ref));
-//state providers
-final displayName = StateProvider<String>((ref) => '');
-final displayEmail = StateProvider<String>((ref) => '');
-final displayPhotoUrl = StateProvider<String>((ref) => '');
+
+

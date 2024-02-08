@@ -1,15 +1,14 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:faenonibeqwa/models/book_trip_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:faenonibeqwa/models/trip_model.dart';
 
-import '../utils/providers/storage_provider.dart';
+import '../utils/providers/app_providers.dart';
 
 class TripRepository extends ChangeNotifier {
   final FirebaseFirestore firestore;
@@ -24,7 +23,7 @@ class TripRepository extends ChangeNotifier {
     try {
       String image = await ref
           .read(firebaseStorageRepoProvider)
-          .storeFileToFirebaseStorage('tripImages', imagePath, name);
+          .storeFileToFirebaseStorage('tripImages',name, imagePath);
       TripModel trip = TripModel(
         id: firestore.collection('trips').id,
         nameTrip: name,
@@ -69,7 +68,24 @@ class TripRepository extends ChangeNotifier {
       log(e.toString());
     }
   }
+
+  Future<void> savePaymentData({
+    required num tripPrice,
+    required bool success,
+    required int numberOfPeople,
+    required String phoneNumber,
+  }) async {
+    final bookTripModel = BookTripModel(
+      tripPrice: tripPrice,
+      success: success,
+      totalPrice: tripPrice * numberOfPeople,
+      numberOfPeople: numberOfPeople,
+      email: ref.read(authControllerProvider).userInfo.email!,
+      phoneNumber: phoneNumber,
+      userName: ref.read(authControllerProvider).userInfo.displayName!,
+      createdAt: DateTime.now(),
+    );
+    await firestore.collection('BookTrips').doc().set(bookTripModel.toMap());
+  }
 }
 
-final tripRepoProvider = Provider(
-    (ref) => TripRepository(firestore: FirebaseFirestore.instance, ref: ref));

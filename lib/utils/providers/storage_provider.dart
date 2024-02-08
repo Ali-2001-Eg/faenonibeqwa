@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore: unused_import
+import 'package:uuid/uuid.dart';
 
 class FirebaseStorageRepo {
   final FirebaseStorage storage;
@@ -10,8 +10,11 @@ class FirebaseStorageRepo {
   FirebaseStorageRepo(this.storage);
 
   Future<String> storeFileToFirebaseStorage(
-      String childName, File file, String uid) async {
-    Reference ref = storage.ref().child(childName).child(uid);
+    String childName,
+    String fileName,
+    File file,
+  ) async {
+    Reference ref = storage.ref().child('$childName/$fileName');
     UploadTask uploadTask = ref.putFile(
       file,
     );
@@ -20,7 +23,3 @@ class FirebaseStorageRepo {
     return downloadUrl;
   }
 }
-
-final firebaseStorageRepoProvider = Provider(
-  (ref) => FirebaseStorageRepo(FirebaseStorage.instance),
-);

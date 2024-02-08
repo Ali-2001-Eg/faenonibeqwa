@@ -1,4 +1,3 @@
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -59,13 +58,19 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       validator: validator,
       inputFormatters: inputFormatters,
-      style: const TextStyle(fontSize: 18, decorationThickness: 0),
+      style: const TextStyle(
+        fontSize: 18,
+        decorationThickness: 0,
+        color: Colors.black,
+      ),
       decoration: InputDecoration(
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          suffixIcon: Icon(suffixIcon),
           hintText: hintText,
           hintStyle: const TextStyle(
             decorationThickness: 0,
+            color: Colors.grey,
             fontSize: 18,
           ),
           border: outlineInputBorder(),

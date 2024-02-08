@@ -1,17 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeProvider extends ChangeNotifier {
-  final ProviderRef ref;
-  HomeProvider(this.ref);
-
+class HomeProvider extends StateNotifier<int> {
+  // super state like cubit
+  HomeProvider(super.state) {
+    //to make initial method as soon as it is loaded
+    changeIndex(0);
+  }
+//method to update UI and if it was for a model should use copyWith method
   void changeIndex(int newIndex) {
-    // ignore: deprecated_member_use
-    ref.read(homeIndexState.state).update((state) => newIndex);
-
-    notifyListeners();
+    state = newIndex;
   }
 }
 
-final homeProvider = Provider((ref) => HomeProvider(ref));
-final homeIndexState = StateProvider<int>((ref) => 0);

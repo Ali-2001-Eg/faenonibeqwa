@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:faenonibeqwa/repositories/trip_repo.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/trip_model.dart';
 
@@ -20,9 +19,17 @@ class TripController {
     required String description,
   }) =>
       tripRepository.addTrip(tripName, image, price, description);
-}
 
-final tripControllerProvider = Provider((ref) {
-  final tripRepo = ref.read(tripRepoProvider);
-  return TripController(tripRepo);
-});
+  Future<void> saveTripPayment({
+    required num tripPrice,
+    required bool success,
+    required int numberOfPeople,
+    required String phoneNumber,
+  }) =>
+      tripRepository.savePaymentData(
+        tripPrice: tripPrice,
+        success: success,
+        numberOfPeople: numberOfPeople,
+        phoneNumber: phoneNumber,
+      );
+}
