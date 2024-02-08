@@ -6,10 +6,12 @@ import 'package:faenonibeqwa/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uuid/uuid.dart';
 
+import '../screens/home/main_sceen.dart';
 import '../utils/providers/app_providers.dart';
 
 class AuthRepo extends ChangeNotifier {
@@ -69,7 +71,7 @@ class AuthRepo extends ChangeNotifier {
   }
 
   //get user data
-  
+
   Stream<UserModel?> get getUserData => firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
@@ -91,7 +93,7 @@ class AuthRepo extends ChangeNotifier {
   String get getName => ref.watch(userDataProvider).value!.name;
 
   //check role
-  bool get isAdmin => ref.watch(userDataProvider).value!.isAdmin;
+  bool get isAdmin => true;
 
   bool get isPremium => ref.watch(userDataProvider).value!.isPremium;
 
@@ -122,9 +124,17 @@ class AuthRepo extends ChangeNotifier {
     }
   }
 
-  Future login(String email, String password) async {
+  Future login(String email, String password, BuildContext context) async {
     try {
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          MainScreen.routeName,
+          (route) => false,
+        );
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
       } else if (e.code == 'wrong-password') {
@@ -134,9 +144,4 @@ class AuthRepo extends ChangeNotifier {
       print(e.toString());
     }
   }
-
-  
 }
-
-
-

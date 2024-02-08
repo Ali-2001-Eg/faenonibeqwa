@@ -92,7 +92,7 @@ class SoluteExamScreen extends ConsumerWidget {
                       .watch(questionsProvider(
                           QuestionParameters(exam.id, exam.timeMinutes)))
                       .when(data: (data) {
-                    _storeExamData(ref, data, exam.id);
+                    // _storeExamData(ref, data, exam.id);
                     //initial
                     late Question question;
                     question = data[ref.watch(currentIndex)];
@@ -121,7 +121,14 @@ class SoluteExamScreen extends ConsumerWidget {
                             // 30.hSpace,
                             Expanded(
                               child: DisplayAnswersWidget(
-                                  examId: exam.id, question: question),
+                                examId: exam.id,
+                                examDesc: exam.examDescription,
+                                examImageUrl: exam.examImageUrl,
+                                examTitle: exam.examTitle,
+                                question: question,
+                                questions: data,
+
+                              ),
                             ),
                             // 30.hSpace,
 
@@ -168,20 +175,5 @@ class SoluteExamScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _storeExamData(
-      WidgetRef ref, List<Question> snap, String examId) async {
-    if (!await ref
-        .read(examControllerProvider)
-        .checkUserHasTakenExam(examId: examId)) {
-      ref.read(examControllerProvider).storeExamHistory(
-            examId: exam.id,
-            title: exam.examTitle,
-            description: exam.examDescription,
-            imageUrl: exam.examImageUrl,
-            questions: snap,
-          );
-    }
   }
 }

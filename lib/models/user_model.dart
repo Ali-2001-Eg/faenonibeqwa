@@ -55,7 +55,7 @@ class UserModel extends Equatable {
       'notificationToken': notificationToken,
       'premium': isPremium,
       'planEnum': planEnum!.type,
-      'freePlanEnded': freePlanEnded??false,
+      'freePlanEnded': freePlanEnded ?? false,
     };
   }
 
@@ -65,8 +65,8 @@ class UserModel extends Equatable {
       uid: map['uid'] as String,
       photoUrl: map['photoUrl'] as String,
       email: map['email'] as String,
-      isAdmin: map['isAdmin'] as bool,
-      freePlanEnded: map['freePlanEnded'] as bool? ??false,
+      isAdmin: map['isAdmin'] ?? false,
+      freePlanEnded: map['freePlanEnded'] as bool? ?? false,
       notificationToken: map['notificationToken'] as String,
       isPremium: map['premium'] as bool,
       timeToFinishSubscribtion: map['timeToFinishSubscribtion'] != null

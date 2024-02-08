@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
 import 'package:faenonibeqwa/models/user_model.dart';
 
 import '../repositories/auth_repo.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthController {
   final AuthRepo authRepo;
@@ -22,9 +24,6 @@ class AuthController {
   Future<void> signup(
           String email, String password, String username, String image) =>
       authRepo.signUp(email, password, username, image);
-  Future<void> login(String email, String password) =>
-      authRepo.login(email, password);
+  Future<void> login(String email, String password,BuildContext context) =>
+      authRepo.login(email, password, context);
 }
-
-
-

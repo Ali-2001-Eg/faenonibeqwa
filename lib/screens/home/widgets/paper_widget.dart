@@ -42,15 +42,17 @@ class PapersWidget extends ConsumerWidget {
                                 )));
                   } else {
                     ref.watch(isCached.notifier).update((state) => true);
-                    DefaultCacheManager()
-                        .getFileFromCache(paper.filePath)
-                        .then((value) => Navigator.push(
+                    DefaultCacheManager().getFileFromCache(paper.filePath).then(
+                          (value) => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PdfViewerWidget(
-                                      pdfPath: paper.filePath,
-                                      networkSource: false,
-                                    ))));
+                              builder: (context) => PdfViewerWidget(
+                                pdfPath: paper.filePath,
+                                networkSource: false,
+                              ),
+                            ),
+                          ),
+                        );
                   }
                 },
                 trailing: PopupMenuButton(itemBuilder: (context) {
