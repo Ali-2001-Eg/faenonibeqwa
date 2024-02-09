@@ -37,7 +37,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       print('===========');
       print(" ===========  ${token}");
       print('==============');
-      NotificationRepo().updateTokenFcm(token);
     });
     super.initState();
   }

@@ -43,10 +43,10 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-  print('message from background message: ${message.data}');
-  AwesomeNotifications().createNotificationFromJsonData(message.data);
-}
+// Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+//   print('message from background message: ${message.data}');
+//   AwesomeNotifications().createNotificationFromJsonData(message.data);
+// }
 
 void _initAwesomeLocalNotifications() {
   AwesomeNotifications().initialize(
