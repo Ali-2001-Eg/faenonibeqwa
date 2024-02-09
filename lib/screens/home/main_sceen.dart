@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use, unused_import
 
 import 'package:faenonibeqwa/screens/lectures/lectures_list_screen.dart';
-import 'package:faenonibeqwa/screens/settings/settings_screen.dart';
+import 'package:faenonibeqwa/screens/profile/profile_screen.dart';
 import 'package:faenonibeqwa/screens/trip/trips_screen.dart';
 
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
@@ -54,7 +54,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           HomeScreen(),
           LecturesListScreen(),
           ExamsListScreen(),
-          SettingsScreen(),
+          ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
