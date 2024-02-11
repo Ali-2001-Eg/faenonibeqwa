@@ -131,6 +131,11 @@ final totalGradeProvider =
   final controller = ref.read(examRepoProvider);
   return controller.examTotalGrade();
 });
+final streamJoinedProvider =
+    StreamProvider((ref) {
+  final controller = ref.read(meetingRepoProvider);
+  return controller.userPresence;
+});
 
 //stream providers
 

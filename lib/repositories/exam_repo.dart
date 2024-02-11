@@ -263,7 +263,7 @@ class ExamRepo {
         List<String> parts = grade.split('/');
         double numerator = double.parse(parts[0]);
         double denominator = double.parse(parts[1]);
-        totalGrade += numerator / denominator;
+        totalGrade += (numerator / denominator)*100;
 
         if (kDebugMode) {
           print('summed');

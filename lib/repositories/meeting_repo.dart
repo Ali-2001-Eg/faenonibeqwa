@@ -100,4 +100,18 @@ class MeetingRepo extends ChangeNotifier {
       }
     }
   }
+
+  Stream<num> get userPresence async* {
+    num userPresence = 0;
+    var meetingDocs = await firestore.collection('meeting').get();
+    for (var element in meetingDocs.docs) {
+      if (element.exists) {
+        if (element.data()['viewers'].contains(auth.currentUser!.uid)) {
+          userPresence++;
+        }
+      }
+      print('length ${meetingDocs.docs.length}');
+    }
+    yield (userPresence / meetingDocs.docs.length)*100;
+  }
 }

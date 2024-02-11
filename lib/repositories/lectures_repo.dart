@@ -106,7 +106,7 @@ class LecturesRepo {
     });
   }
 
-  Stream<int> lecturesWatched() async* {
+  Stream<num> lecturesWatched() async* {
     int lecturesNo = 0;
     var lectureDocs = await firestore.collection('lectures').get();
     for (var element in lectureDocs.docs) {
@@ -119,7 +119,7 @@ class LecturesRepo {
         }
       }
     }
-    yield lecturesNo;
+    yield (lecturesNo/lectureDocs.docs.length)*100;
   }
 }
 

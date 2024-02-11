@@ -142,10 +142,18 @@ class ProfileScreen extends ConsumerWidget {
         yValueMapper: (ProfileCartModel value, _) => value.data);
   }
 
-  int streamsJoined(WidgetRef ref) =>
-      ref.watch(userDataProvider).value!.streamJoined ?? 0;
+  num streamsJoined(WidgetRef ref) {
+    return ref.watch(streamJoinedProvider).when(data: (data) {
+      print('data is  $data');
+      return data;
+    }, error: (error, s) {
+      return 0;
+    }, loading: () {
+      return 0;
+    });
+  }
 
-  int lecturesWatched(WidgetRef ref) {
+  num lecturesWatched(WidgetRef ref) {
     return ref.watch(lecturesWatchedProvider).when(data: (data) {
       return data;
     }, error: (error, s) {
