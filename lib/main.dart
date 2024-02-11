@@ -8,6 +8,7 @@ import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_constants.dart';
 import 'package:faenonibeqwa/utils/base/dark_theme.dart';
 import 'package:faenonibeqwa/utils/base/light_theme.dart';
+import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/routes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

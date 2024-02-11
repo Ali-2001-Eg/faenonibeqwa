@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use, unused_import, avoid_print
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/user_model.dart';
@@ -94,6 +96,7 @@ class AuthRepo extends ChangeNotifier {
   bool get isAdmin => ref.watch(userDataProvider).value!.isAdmin;
 
   bool get isPremium => ref.watch(userDataProvider).value!.isPremium;
+  int get streamsJoined => ref.watch(userDataProvider).value!.streamJoined??0;
 
   Future<void> signout() async {
     try {
@@ -133,6 +136,12 @@ class AuthRepo extends ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
+  }
+  Future<void> editPhoto(String filePath)async{
+    String imageUrl = await ref.read(firebaseStorageRepoProvider).storeFileToFirebaseStorage('users', auth.currentUser!.uid, File(filePath));
+    await firestore.collection('users').doc(auth.currentUser!.uid).update({
+      'photoUrl':imageUrl
+    });
   }
 
   

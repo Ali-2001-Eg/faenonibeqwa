@@ -55,7 +55,7 @@ class HomeScreen extends ConsumerWidget {
                 const LinearProgressIndicator(),
               ],
               const FeedWidget(),
-              const PapersWidget(),
+              // const PapersWidget(),
               const BannerWidget(),
             ],
           ),

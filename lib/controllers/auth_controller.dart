@@ -26,5 +26,5 @@ class AuthController {
           String email, String password, String username, String image) =>
       authRepo.signUp(email, password, username, image);
   Future<void> login(String email, String password,BuildContext context) =>
-      authRepo.login(email, password, context);
+      authRepo.login(email, password);
 }

@@ -16,6 +16,7 @@ class UserModel extends Equatable {
   final bool? freePlanEnded;
   final PlanEnum? planEnum;
   final DateTime? timeToFinishSubscribtion;
+  final int? streamJoined;
   const UserModel({
     required this.name,
     required this.uid,
@@ -27,6 +28,7 @@ class UserModel extends Equatable {
     this.planEnum = PlanEnum.notSubscribed,
     this.timeToFinishSubscribtion,
     this.freePlanEnded,
+    this.streamJoined = 0,
   });
 
   @override
@@ -42,6 +44,7 @@ class UserModel extends Equatable {
       planEnum,
       freePlanEnded,
       timeToFinishSubscribtion,
+      streamJoined,
     ];
   }
 
@@ -55,7 +58,8 @@ class UserModel extends Equatable {
       'notificationToken': notificationToken,
       'premium': isPremium,
       'planEnum': planEnum!.type,
-      'freePlanEnded': freePlanEnded??false,
+      'freePlanEnded': freePlanEnded ?? false,
+      'streamsJoined': streamJoined,
     };
   }
 
@@ -66,7 +70,7 @@ class UserModel extends Equatable {
       photoUrl: map['photoUrl'] as String,
       email: map['email'] as String,
       isAdmin: map['isAdmin'] as bool,
-      freePlanEnded: map['freePlanEnded'] as bool? ??false,
+      freePlanEnded: map['freePlanEnded'] as bool? ?? false,
       notificationToken: map['notificationToken'] as String,
       isPremium: map['premium'] as bool,
       timeToFinishSubscribtion: map['timeToFinishSubscribtion'] != null
@@ -75,6 +79,9 @@ class UserModel extends Equatable {
       planEnum: map['planEnum'] != null
           ? (map['planEnum'] as String).toEnum()
           : PlanEnum.notSubscribed,
+      streamJoined: map['streamJoined'] != null
+          ? (map['streamJoined'] as int)
+          : 0,
     );
   }
 }

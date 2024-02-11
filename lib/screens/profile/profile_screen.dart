@@ -143,7 +143,7 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   int streamsJoined(WidgetRef ref) =>
-      ref.watch(userDataProvider).value!.streamsJoined ?? 0;
+      ref.watch(userDataProvider).value!.streamJoined ?? 0;
 
   int lecturesWatched(WidgetRef ref) {
     return ref.watch(lecturesWatchedProvider).when(data: (data) {

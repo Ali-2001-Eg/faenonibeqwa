@@ -67,7 +67,7 @@ dependencies:
   webview_flutter: ^4.4.2
   zego_uikit_prebuilt_video_conference: ^2.6.3
   # zego_uikit_signaling_plugin:  
-
+  syncfusion_flutter_charts: ^24.2.4+3
   
   
 dev_dependencies:
