@@ -1,9 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-
+import 'package:faenonibeqwa/utils/extensions/string_extension.dart';
 
 import '../utils/enums/plan_enum.dart';
 
@@ -18,7 +16,6 @@ class UserModel extends Equatable {
   final bool? freePlanEnded;
   final PlanEnum? planEnum;
   final DateTime? timeToFinishSubscribtion;
-  final int? streamsJoined;
   const UserModel({
     required this.name,
     required this.uid,
@@ -27,10 +24,9 @@ class UserModel extends Equatable {
     required this.isAdmin,
     required this.notificationToken,
     required this.isPremium,
-    this.freePlanEnded = false,
     this.planEnum = PlanEnum.notSubscribed,
     this.timeToFinishSubscribtion,
-    this.streamsJoined = 0,
+    this.freePlanEnded,
   });
 
   @override
@@ -43,10 +39,9 @@ class UserModel extends Equatable {
       isAdmin,
       notificationToken,
       isPremium,
-      freePlanEnded,
       planEnum,
+      freePlanEnded,
       timeToFinishSubscribtion,
-      streamsJoined,
     ];
   }
 
@@ -59,11 +54,8 @@ class UserModel extends Equatable {
       'isAdmin': isAdmin,
       'notificationToken': notificationToken,
       'premium': isPremium,
-      'freePlanEnded': freePlanEnded,
-      'planEnum': planEnum?.type,
-      'timeToFinishSubscribtion':
-          timeToFinishSubscribtion?.millisecondsSinceEpoch,
-      'streamsJoined': streamsJoined,
+      'planEnum': planEnum!.type,
+      'freePlanEnded': freePlanEnded??false,
     };
   }
 
@@ -74,56 +66,15 @@ class UserModel extends Equatable {
       photoUrl: map['photoUrl'] as String,
       email: map['email'] as String,
       isAdmin: map['isAdmin'] as bool,
+      freePlanEnded: map['freePlanEnded'] as bool? ??false,
       notificationToken: map['notificationToken'] as String,
       isPremium: map['premium'] as bool,
-      freePlanEnded:
-          map['freePlanEnded'] != null ? map['freePlanEnded'] as bool : null,
-      planEnum: map['planEnum'] != null
-          ? (map['planEnum'] as PlanEnum)
-          : PlanEnum.notSubscribed,
       timeToFinishSubscribtion: map['timeToFinishSubscribtion'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-              map['timeToFinishSubscribtion'] as int)
+          ? DateTime.fromMillisecondsSinceEpoch(map['timeToFinishSubscribtion'])
           : null,
-      streamsJoined:
-          map['streamsJoined'] != null ? map['streamsJoined'] as int : 0,
+      planEnum: map['planEnum'] != null
+          ? (map['planEnum'] as String).toEnum()
+          : PlanEnum.notSubscribed,
     );
   }
-
-  UserModel copyWith({
-    String? name,
-    String? uid,
-    String? photoUrl,
-    String? email,
-    bool? isAdmin,
-    String? notificationToken,
-    bool? isPremium,
-    bool? freePlanEnded,
-    PlanEnum? planEnum,
-    DateTime? timeToFinishSubscribtion,
-    int? streamsJoined,
-  }) {
-    return UserModel(
-      name: name ?? this.name,
-      uid: uid ?? this.uid,
-      photoUrl: photoUrl ?? this.photoUrl,
-      email: email ?? this.email,
-      isAdmin: isAdmin ?? this.isAdmin,
-      notificationToken: notificationToken ?? this.notificationToken,
-      isPremium: isPremium ?? this.isPremium,
-      freePlanEnded: freePlanEnded ?? this.freePlanEnded,
-      planEnum: planEnum ?? this.planEnum,
-      timeToFinishSubscribtion:
-          timeToFinishSubscribtion ?? this.timeToFinishSubscribtion,
-      streamsJoined: streamsJoined ?? this.streamsJoined,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  bool get stringify => true;
 }

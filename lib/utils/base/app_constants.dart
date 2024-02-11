@@ -12,3 +12,6 @@ class AppConstants {
   static int integrationId = 4196410;
   static String fcmKey = 'AAAAnMizr3c:APA91bFI9oFR3Us3AA29zSIEJNVC9UENYtf595Ir__7qpAxGciKvKIH95Inx7kwPLmkJyaR997DA7TWjomZDiVHTCtoD92c8bYCYud_a1yPmNGvFbMRL-hjlVLxtp_yORbXTNv-J5x4K';
 }
+
+const String firebaseMassgingServerKey =
+    'AAAAnMizr3c:APA91bFI9oFR3Us3AA29zSIEJNVC9UENYtf595Ir__7qpAxGciKvKIH95Inx7kwPLmkJyaR997DA7TWjomZDiVHTCtoD92c8bYCYud_a1yPmNGvFbMRL-hjlVLxtp_yORbXTNv-J5x4K';

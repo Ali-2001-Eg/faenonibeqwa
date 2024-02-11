@@ -9,8 +9,9 @@ import 'package:faenonibeqwa/utils/base/app_constants.dart';
 import 'package:faenonibeqwa/utils/base/dark_theme.dart';
 import 'package:faenonibeqwa/utils/base/light_theme.dart';
 import 'package:faenonibeqwa/utils/routes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,84 +27,61 @@ Future<void> _handleBackgroundMessage(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   PaymobPayment.instance.initialize(
     apiKey: AppConstants.apiKey,
     integrationID: AppConstants.integrationId,
     iFrameID: 787143,
   );
   _initAwesomeLocalNotifications();
+  FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // String? token = await FirebaseMessaging.instance.getToken();
+  // print('token is $token');
 
   runApp(const ProviderScope(child: MyApp()));
 }
 
-void _initAwesomeLocalNotifications() async {
-  await AwesomeNotifications().initialize(
+// Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+//   print('message from background message: ${message.data}');
+//   AwesomeNotifications().createNotificationFromJsonData(message.data);
+// }
+
+void _initAwesomeLocalNotifications() {
+  AwesomeNotifications().initialize(
     null,
     [
       NotificationChannel(
-        channelKey: 'firebase key',
-        channelName: 'firebase channel',
-        channelDescription: 'firebase for test',
-        playSound: true,
-        channelShowBadge: true,
-      )
+        channelKey: 'basic_channel',
+        channelName: 'Basic notifications',
+        channelDescription: 'Notification channel for basic tests',
+      ),
     ],
+    debug: true,
   );
-  FirebaseMessaging.onBackgroundMessage((message) async {
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: Random().nextInt(10000),
-        channelKey: 'firebase key',
-        title: message.notification!.title,
-        body: message.notification!.body,
-      ),
-    );
-    print(message.data);
-
-    if (message.notification != null) {
-      print("body onBackgroundMessage ===========");
-      print(message.notification!.body);
-      print("body onBackgroundMessage ===========");
-    }
-  });
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: Random().nextInt(10000),
-        channelKey: 'firebase key',
-        title: message.notification!.title,
-        body: message.notification!.body,
-      ),
-    );
-    print(message.data);
-
-    if (message.notification != null) {
-      print("body onMessage===========");
-      print(message.notification!.body);
-      print("body onMessage ===========");
-    }
-  });
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
-  // @override
-  // void initState() {
-  //   AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
-  //     if (!isAllowed) {
-  //       AwesomeNotifications().requestPermissionToSendNotifications();
-  //     } else {
-  //       print('notification permission is granted');
-  //     }
-  //   });
-  //   super.initState();
-  // }
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      } else {
+        print('notification permission is granted');
+      }
+    });
+    super.initState();
+  }
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: const Size(360, 690),
         minTextAdapt: true,
@@ -122,9 +100,34 @@ class MyApp extends ConsumerWidget {
               themeMode: ThemeMode.light,
               debugShowCheckedModeBanner: false,
               onGenerateRoute: (settings) => generateRoute(settings),
-              home: FirebaseAuth.instance.currentUser == null
-                  ? LoginScreen()
-                  : const MainScreen());
+              home: Scaffold(
+                body: ref.watch(userDataProvider).when(
+                  data: (user) {
+                    // print('premium is ${ref.read(premiumAccount).value}');
+                    // print('displayname is ${user?.name}');
+                    // print('is admin ${user?.isAdmin}');
+                    if (user == null) {
+                      return LoginScreen();
+                    }
+
+                    return const MainScreen();
+                  },
+                  error: (error, stackTrace) {
+                    if (kDebugMode) {
+                      print('error is ${error.toString()}');
+                      print('error is ${stackTrace.toString()}');
+                    }
+                    return Scaffold(
+                      body: Center(
+                          child: Text(
+                              'This page doesn\'t exist because ${error.toString()}')),
+                    );
+                  },
+                  loading: () {
+                    return Scaffold(body: Container());
+                  },
+                ),
+              ));
         });
   }
 }

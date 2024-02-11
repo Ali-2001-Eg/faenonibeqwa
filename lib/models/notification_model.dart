@@ -1,16 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 class NotifcationModel extends Equatable {
-  
   final String time;
   final String? status;
   final String? role;
   // final String? from;
   // final String? to;
 
-  final String? id;
-  const NotifcationModel({
-  
+  String? id;
+
+  NotifcationModel({
     required this.time,
     this.status,
     this.role,
@@ -21,7 +23,6 @@ class NotifcationModel extends Equatable {
 
   factory NotifcationModel.fromMap(Map<String, dynamic> map) {
     return NotifcationModel(
-  
       time: map['time'] as String,
       status: map['status'] != null ? map['status'] as String : null,
       role: map['role'] != null ? map['role'] as String : null,
@@ -33,7 +34,6 @@ class NotifcationModel extends Equatable {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-    
       'time': time,
       'status': status,
       'role': role,
@@ -43,10 +43,8 @@ class NotifcationModel extends Equatable {
     };
   }
 
-  @override
   List<Object?> get props {
     return [
-    
       time,
       status,
       role,

@@ -5,6 +5,7 @@ import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,21 +13,40 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../utils/base/app_helper.dart';
 import '../../utils/providers/app_providers.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   static const String routeName = '/login';
   LoginScreen({super.key});
-  final TextEditingController _passwordController = TextEditingController(),
-      _emailController = TextEditingController();
-  final _formkey = GlobalKey<FormState>();
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final _formkey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  @override
+  void initState() {
+   
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: _formkey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
+        child: Form(
+          key: _formkey,
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 Icons.book,
@@ -85,14 +105,13 @@ class LoginScreen extends ConsumerWidget {
   }
 
   void _login(WidgetRef ref, BuildContext context) {
-    if (_formkey.currentState!.validate() &&
-        _emailController.text.isNotEmpty &&
-        _emailController.text.isNotEmpty) {
-      ref
-          .read(authControllerProvider)
-          .login(_emailController.text.trim(), _passwordController.text.trim())
-          .then((value) => Navigator.pushNamedAndRemoveUntil(
-              context, MainScreen.routeName, (route) => false));
+    if (_formkey.currentState!.validate()) {
+      ref.read(authControllerProvider).login(
+            _emailController.text.trim(),
+            _passwordController.text.trim(),
+            context,
+          );
+      // .then((value) => );
     } else {
       AppHelper.customSnackbar(
           context: context,

@@ -46,7 +46,9 @@ class SignUpScreen extends ConsumerWidget {
                 ),
                 20.hSpace,
                 CustomButton(
-                  onTap: () => _signup(ref, context),
+                  onTap: () {
+                    _signup(ref, context);
+                  },
                   text: 'إنشاء حساب',
                   fontSize: 18,
                 ),
