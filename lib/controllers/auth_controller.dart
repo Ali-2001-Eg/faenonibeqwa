@@ -17,6 +17,7 @@ class AuthController {
   String get getName => authRepo.getName;
   bool get isAdmin => authRepo.isAdmin;
   bool get isPremium => authRepo.isPremium;
+  int get streamsJoined => authRepo.streamsJoined;
   User get userInfo => authRepo.auth.currentUser!;
   Future<void> get signout => authRepo.signout();
   Future<void> signup(
@@ -25,6 +26,3 @@ class AuthController {
   Future<void> login(String email, String password) =>
       authRepo.login(email, password);
 }
-
-
-

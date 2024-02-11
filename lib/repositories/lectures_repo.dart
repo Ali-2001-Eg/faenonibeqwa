@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use, avoid_print
 import 'dart:developer';
 import 'dart:io';
 
@@ -44,7 +44,7 @@ class LecturesRepo {
       String downloadURL = '';
       Reference lectureRef = FirebaseStorage.instance
           .ref()
-          .child('videos/${DateTime.now().millisecondsSinceEpoch}.mp4');
+          .child('lectures/${DateTime.now().millisecondsSinceEpoch}.mp4');
       Reference thumbnailRef = FirebaseStorage.instance.ref().child(
           'videos/${DateTime.now().millisecondsSinceEpoch}/thumbnail.png');
 
@@ -105,6 +105,22 @@ class LecturesRepo {
       'audienceUid': FieldValue.arrayUnion([auth.currentUser!.uid])
     });
   }
+
+  Stream<int> lecturesWatched() async* {
+    int lecturesNo = 0;
+    var lectureDocs = await firestore.collection('lectures').get();
+    for (var element in lectureDocs.docs) {
+      if (element.data().isNotEmpty) {
+        print('not empty');
+        if (element.data()['audienceUid'].contains(auth.currentUser!.uid)) {
+          print('added');
+
+          lecturesNo++;
+        }
+      }
+    }
+    yield lecturesNo;
+  }
 }
 
 final uploadVideoRepoProvider = Provider((ref) => LecturesRepo(
@@ -116,8 +132,12 @@ final videoProvider = StateProvider<File?>((ref) => null);
 
 class LectureVideoNotifier extends StateNotifier<File?> {
   LectureVideoNotifier(super.state);
-  Future<void> pickVideo(BuildContext context) async {
+  Future<void> pickFile(BuildContext context) async {
     state = await AppHelper.pickVideo(context);
+  }
+
+  Future<void> pickImage(BuildContext context) async {
+    state = await AppHelper.pickImage(context);
   }
 }
 

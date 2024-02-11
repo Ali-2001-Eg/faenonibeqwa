@@ -3,6 +3,7 @@ import 'package:faenonibeqwa/repositories/admob_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/base/subscription_dialoge.dart';
+import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,7 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
     // print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
     if (kDebugMode) {
       print(
-        'time to be changed in firestore ${DateTime.now().add(const Duration(seconds: 30)).millisecondsSinceEpoch}');
+          'time to be changed in firestore ${DateTime.now().add(const Duration(seconds: 30)).millisecondsSinceEpoch}');
     }
     return GestureDetector(
       onTap: () {
@@ -109,31 +110,28 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
               ),
             ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: SmallText(
-                      text: 'اسم الاختبار / ${widget.examModel.examTitle}',
-                      color: Colors.black,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Expanded(
                   child: SmallText(
-                    text:
-                        'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
+                    text: 'اسم الاختبار / ${widget.examModel.examTitle}',
                     color: Colors.black,
+                    // overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-              ],
+              ),
+            ),
+            10.hSpace,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: SmallText(
+                text: 'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
             ),
             const SizedBox(height: 10),
             Padding(
@@ -182,12 +180,12 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
       }));
     } else {
       await FirebaseMessaging.instance.unsubscribeFromTopic('premium');
-if(context.mounted) {
-  AppHelper.customSnackbar(
-        context: context,
-        title: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
-      );
-}
+      if (context.mounted) {
+        AppHelper.customSnackbar(
+          context: context,
+          title: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
+        );
+      }
       Future.delayed(
           const Duration(seconds: 1),
           () => showModalBottomSheet(

@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
+import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+
 
 class VideoPlayerWidget extends StatefulWidget {
   final String videoPath;
@@ -57,15 +59,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         child: Chewie(controller: _chewieController),
       );
     } else {
-      return const SizedBox.shrink();
-      // Shimmer.fromColors(
-      //   baseColor: Colors.grey[300]!,
-      //   highlightColor: Colors.grey[100]!,
-      //   child: const AspectRatio(
-      //     aspectRatio: 16 / 19,
-      //     child: SizedBox(),
-      //   ),
-      // );
+      return Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const ShimmerWidget(cardsNumber: 1, heigth: 150),
+      );
     }
   }
 }

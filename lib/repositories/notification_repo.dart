@@ -1,9 +1,13 @@
+// ignore_for_file: empty_catches
+
 import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 import '../models/notification_model.dart';
@@ -11,8 +15,6 @@ import '../utils/base/app_constants.dart';
 
 class NotificationRepo {
   final _dbFireStoreUsers = FirebaseFirestore.instance.collection('users');
-  final _dbFireStoreNotification =
-      FirebaseFirestore.instance.collection('notification');
 
   Future<void> updateTokenFcm(String tokenFcm) async {
     try {
@@ -32,7 +34,9 @@ class NotificationRepo {
     await FirebaseMessaging.instance.getToken().then((token) {
       tokenFCM = token!;
 
-      print(tokenFCM);
+      if (kDebugMode) {
+        print(tokenFCM);
+      }
       // emit(GetTokeFcmSuccess());
     });
   }
@@ -64,9 +68,13 @@ class NotificationRepo {
       );
       // emit(NotificationSendedSuccess());
       if (response.statusCode == 200) {
-        print("Yeh notificatin is sended");
+        if (kDebugMode) {
+          print("Yeh notificatin is sended");
+        }
       } else {
-        print("Error");
+        if (kDebugMode) {
+          print("Error");
+        }
       }
     } catch (e) {}
   }
@@ -97,9 +105,13 @@ class NotificationRepo {
       );
       // emit(NotificationSendedSuccess());
       if (response.statusCode == 200) {
-        print("Yeh notificatin is sended");
+        if (kDebugMode) {
+          print("Yeh notificatin is sended");
+        }
       } else {
-        print("Error");
+        if (kDebugMode) {
+          print("Error");
+        }
       }
     } catch (e) {}
   }

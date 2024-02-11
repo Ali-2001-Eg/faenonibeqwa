@@ -1,4 +1,3 @@
-import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
@@ -12,8 +11,8 @@ import '../../utils/shared/widgets/custom_text_field.dart';
 
 class AddDocumentScreen extends StatefulWidget {
   static const String routeName = '/add-doc';
-  const AddDocumentScreen({super.key});
-
+  const AddDocumentScreen({super.key, required this.lectureId});
+  final String lectureId;
   @override
   State<AddDocumentScreen> createState() => _AddDocumentScreenState();
 }
@@ -21,38 +20,63 @@ class AddDocumentScreen extends StatefulWidget {
 class _AddDocumentScreenState extends State<AddDocumentScreen> {
   final TextEditingController _titleController = TextEditingController();
   @override
+  void dispose() {
+    _titleController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: const CustomAppBar(title: 'إضافه ملف'),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const BigText(text: 'اسم الملف'),
-              20.hSpace,
-              CustomTextField(
-                controller: _titleController,
+      body: Consumer(
+        builder: (context, ref, child) {
+          if (!ref.watch(isLoading)) {
+            const BigText(
+              text: 'loading',
+            );
+          }
+          return Center(
+              child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const BigText(text: 'لإضافه الملف'),
+                  20.hSpace,
+                  CustomTextField(
+                    controller: _titleController,
+                    hintText: 'اسم الملف',
+                    keyBoardType: TextInputType.multiline,
+                    maxLines: null,
+                    minLines: 1,
+                  ),
+                  30.hSpace,
+                  Align(
+                    alignment: Alignment.center,
+                    child: Consumer(builder: (context, ref, child) {
+                      if (ref.watch(pdfPathNotifier) != null) {
+                        return const BigText(text: 'تم اختيار الملف بنجاح');
+                      } else {
+                        return CustomButton(
+                          text: 'لإضافه ملف جديد',
+                          onTap: () {
+                            ref
+                                .watch(pdfPathNotifier.notifier)
+                                .pickFile(context);
+                          },
+                        );
+                      }
+                    }),
+                  ),
+                ],
               ),
-              30.hSpace,
-              Consumer(builder: (context, ref, child) {
-                if (ref.watch(pdfPathNotifier) != null) {
-                  return const BigText(text: 'تم اختيار الملف بنجاح');
-                } else {
-                  return CustomButton(
-                    text: 'لإضافه ملف جديد',
-                    onTap: () {
-                      ref.watch(pdfPathNotifier.notifier).pickFile(context);
-                    },
-                  );
-                }
-              }),
-            ],
-          ),
-        ),
+            ),
+          ));
+        },
       ),
       floatingActionButton: Consumer(builder: (context, ref, child) {
         return FloatingActionButton(
@@ -61,7 +85,8 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
           onPressed: () {
             if (ref.watch(pdfPathNotifier) != null) {
               _uploadFile(ref, _titleController.text.trim(),
-                  ref.watch(pdfPathNotifier)!);
+                      ref.watch(pdfPathNotifier)!, widget.lectureId)
+                  .then((value) => Navigator.of(context).pop((route) => false));
             } else {
               AppHelper.customSnackbar(
                   context: context, title: 'اضف كافه البيانات');
@@ -73,9 +98,11 @@ class _AddDocumentScreenState extends State<AddDocumentScreen> {
     );
   }
 
-  void _uploadFile(WidgetRef ref, String title, String filePath) {
-    ref.read(paperRepoProvider).uploadPaper(title, filePath).then((value) =>
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(MainScreen.routeName, (route) => false));
+  Future<void> _uploadFile(
+      WidgetRef ref, String title, String filePath, String lectureId) async {
+    ref
+        .read(paperControllerProvider)
+        .uploadPaper(title: title, filePath: filePath, lectureId: lectureId)
+        .then((value) => Navigator.of(context).popUntil((route) => false));
   }
 }

@@ -6,8 +6,11 @@ import 'package:shimmer/shimmer.dart';
 class ShimmerWidget extends StatelessWidget {
   const ShimmerWidget({
     super.key,
+    this.cardsNumber = 4,
+    this.heigth = 60,
   });
-
+  final int cardsNumber;
+  final double heigth;
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
@@ -16,15 +19,14 @@ class ShimmerWidget extends StatelessWidget {
       child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(
-            4,
+            cardsNumber,
             (index) => Container(
               padding: const EdgeInsets.all(5),
               margin: const EdgeInsets.all(15),
               width: context.screenWidth,
-              height: 50.0.h,
+              height: heigth.h,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15)),
+                  color: Colors.white, borderRadius: BorderRadius.circular(15)),
             ),
           )),
     );

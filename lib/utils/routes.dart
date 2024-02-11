@@ -25,7 +25,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case AddLectureScreen.routeName:
       return _buildNewRoute(const AddLectureScreen());
     case AddDocumentScreen.routeName:
-      return _buildNewRoute(const AddDocumentScreen());
+      final args = settings.arguments as String;
+      final lectureId = args;
+      return _buildNewRoute(AddDocumentScreen(
+        lectureId: lectureId,
+      ));
     case MeetingScreen.routeName:
       final args = settings.arguments as Map<String, dynamic>;
       final channelId = args['channelId'] as String;

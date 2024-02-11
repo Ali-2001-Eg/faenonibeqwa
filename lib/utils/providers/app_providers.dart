@@ -101,7 +101,7 @@ final isLoading = StateProvider<bool>((ref) => false);
 final homeNotifierProvider =
     StateNotifierProvider<HomeProvider, int>((ref) => HomeProvider(0));
 
-final videoNotifier =
+final fileNotifier =
     StateNotifierProvider.autoDispose<LectureVideoNotifier, File?>(
         (ref) => LectureVideoNotifier(null));
 final pdfPathNotifier =
@@ -119,6 +119,17 @@ final answersProvider =
     FutureProvider.family((ref, AnswersParameters parameters) {
   final examConrtoller = ref.read(examControllerProvider);
   return examConrtoller.answers(parameters);
+});
+
+final lecturesWatchedProvider =
+    StreamProvider((ref) {
+  final controller = ref.read(lecturesRepoProvider);
+  return controller.lecturesWatched();
+});
+final totalGradeProvider =
+    StreamProvider((ref) {
+  final controller = ref.read(examRepoProvider);
+  return controller.examTotalGrade();
 });
 
 //stream providers
@@ -155,8 +166,8 @@ final feedsStream = StreamProvider((ref) {
   return stream;
 });
 
-final papersStream = StreamProvider((ref) {
-  final stream = ref.watch(paperControllerProvider).papers;
+final papersStream = StreamProvider.family((ref,lectureId) {
+  final stream = ref.watch(paperControllerProvider).papers(lectureId);
   return stream;
 });
 

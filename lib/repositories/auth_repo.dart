@@ -1,5 +1,7 @@
 // ignore_for_file: deprecated_member_use, unused_import, avoid_print
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/user_model.dart';
@@ -69,7 +71,7 @@ class AuthRepo extends ChangeNotifier {
   }
 
   //get user data
-  
+
   Stream<UserModel?> get getUserData => firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
@@ -85,15 +87,40 @@ class AuthRepo extends ChangeNotifier {
   Future<User?> user() async => auth.currentUser;
 
   //get photo url
-  String get getPhotoUrl => ref.watch(userDataProvider).value!.photoUrl;
+  String get getPhotoUrl => ref.read(userDataProvider).when(data: (data) {
+        return data!.photoUrl;
+      }, error: (error, stack) {
+        return '';
+      }, loading: () {
+        return '';
+      });
 
   //name
-  String get getName => ref.watch(userDataProvider).value!.name;
+  String get getName => ref.read(userDataProvider).when(data: (data) {
+        return data!.name;
+      }, error: (error, stack) {
+        return '';
+      }, loading: () {
+        return '';
+      });
 
   //check role
-  bool get isAdmin => ref.watch(userDataProvider).value!.isAdmin;
+  bool get isAdmin => ref.read(userDataProvider).when(data: (data) {
+        return data!.isAdmin;
+      }, error: (error, stack) {
+        return false;
+      }, loading: () {
+        return false;
+      });
+  int get streamsJoined => ref.read(userDataProvider).when(data: (data) {
+        return data!.streamsJoined??0;
+      }, error: (error, stack) {
+        return 0;
+      }, loading: () {
+        return 0;
+      });
 
-  bool get isPremium => ref.watch(userDataProvider).value!.isPremium;
+  bool get isPremium => ref.read(userDataProvider).value!.isPremium;
 
   Future<void> signout() async {
     try {
@@ -102,6 +129,22 @@ class AuthRepo extends ChangeNotifier {
       print('sign out $e');
     }
   }
+
+  Future<void> editPhoto(String path) async {
+    ref.read(isLoading.state).update((state) => true);
+    String photo =
+        await ref.read(firebaseStorageRepoProvider).storeFileToFirebaseStorage(
+              'users',
+              auth.currentUser!.uid,
+              File(path),
+            );
+    firestore.collection('users').doc(auth.currentUser!.uid).update({
+      'photoUrl': photo,
+    });
+    ref.read(isLoading.state).update((state) => false);
+  }
+
+  
 
   Future signUp(
       String email, String password, String username, String image) async {
@@ -134,9 +177,4 @@ class AuthRepo extends ChangeNotifier {
       print(e.toString());
     }
   }
-
-  
 }
-
-
-

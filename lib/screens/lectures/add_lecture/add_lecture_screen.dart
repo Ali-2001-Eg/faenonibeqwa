@@ -1,10 +1,12 @@
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+
 import 'package:faenonibeqwa/screens/lectures/widgets/video_player_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,13 +36,15 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
               CustomTextField(controller: titleController),
               Consumer(
                 builder: (context, ref, child) {
-                  print('path ${ref.watch(videoNotifier)?.path}');
+                  if (kDebugMode) {
+                    print('path ${ref.watch(fileNotifier)?.path}');
+                  }
                   return Stack(
                     alignment: Alignment.bottomRight,
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ref.watch(videoNotifier) == null
+                        child: ref.watch(fileNotifier) == null
                             ? Container(
                                 height: context.screenHeight / 4,
                                 width: double.infinity,
@@ -54,8 +58,8 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
                                     CustomButton(
                                       onTap: () {
                                         ref
-                                            .watch(videoNotifier.notifier)
-                                            .pickVideo(context);
+                                            .watch(fileNotifier.notifier)
+                                            .pickFile(context);
                                       },
                                       text: 'اضف فيديو المحاضره',
                                     ),
@@ -68,7 +72,7 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
                                   minWidth: context.screenWidth,
                                 ),
                                 child: VideoPlayerWidget(
-                                    videoPath: ref.watch(videoNotifier)!.path,
+                                    videoPath: ref.watch(fileNotifier)!.path,
                                     fromNetwotk: false),
                               ),
                       ),
@@ -82,8 +86,8 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
                         child: IconButton(
                             onPressed: () {
                               ref
-                                  .watch(videoNotifier.notifier)
-                                  .pickVideo(context);
+                                  .watch(fileNotifier.notifier)
+                                  .pickFile(context);
                             },
                             icon: Icon(
                               Icons.video_call_outlined,
@@ -104,7 +108,7 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
                               .watch(lecturesRepoProvider)
                               .uploadVideo(
                                 name: titleController.text.trim(),
-                                video: ref.watch(videoNotifier.notifier).state!,
+                                video: ref.watch(fileNotifier.notifier).state!,
                               )
                               .then((value) => Navigator.pop(_));
                         },

@@ -2,18 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../providers/app_providers.dart';
 
 class AdminFloatingActionButton extends ConsumerWidget {
   final IconData icon;
   final String routeName;
   final String heroTag;
-  const AdminFloatingActionButton({
-    super.key,
+  final Object? arguments;
+  const AdminFloatingActionButton({super.key, 
     required this.icon,
     required this.routeName,
     required this.heroTag,
+    this.arguments,
   });
 
   @override
@@ -21,7 +21,7 @@ class AdminFloatingActionButton extends ConsumerWidget {
     return ref.watch(authControllerProvider).isAdmin
         ? FloatingActionButton(
             heroTag: heroTag,
-            onPressed: () => Navigator.pushNamed(context, routeName),
+            onPressed: () => Navigator.pushNamed(context, routeName,arguments:arguments ),
             child: Icon(
               icon,
               color: Colors.white,

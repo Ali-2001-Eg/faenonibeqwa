@@ -8,8 +8,9 @@ class PaperController {
   Future<void> uploadPaper({
     required String title,
     required String filePath,
+    required String lectureId,
   }) =>
-      paperRepo.uploadPaper(title, filePath);
+      paperRepo.uploadPaper(title, filePath,lectureId);
 
-  Stream<List<PaperModel>> get papers => paperRepo.papers;
+  Stream<List<PaperModel>>  papers(lectureId) => paperRepo.papers(lectureId);
 }

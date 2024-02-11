@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:faenonibeqwa/models/notification_model.dart';
-import 'package:faenonibeqwa/screens/home/add_document_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,12 +9,9 @@ import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 
 import '../../ads/banner_widget.dart';
 import '../../utils/providers/app_providers.dart';
-import '../../utils/shared/widgets/admin_floating_action_button.dart';
 import '../../utils/shared/widgets/big_text.dart';
-import '../../utils/shared/widgets/small_text.dart';
 import '../meeting/create_meeting_screen.dart';
 import 'widgets/feed_widget.dart';
-import 'widgets/paper_widget.dart';
 
 class HomeScreen extends ConsumerWidget {
   static const String routeName = '/home';
@@ -24,16 +19,18 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (kDebugMode) {
+      print(ref.watch(userDataProvider).value?.isAdmin);
+    }
     return Scaffold(
       appBar: CustomAppBar(
         title: 'فَأَعِينُونِي بِقُوَّةٍ',
         actions: [
-          if (ref.watch(userDataProvider).value!.isAdmin)
+          if (ref.watch(authControllerProvider).isAdmin)
             Padding(
               padding: const EdgeInsets.only(left: 10).w,
               child: IconButton(
                 onPressed: () {
-                  
                   Navigator.pushNamed(context, CreateMeetingScreen.routeName);
                 },
                 tooltip: 'قم بإنشاء محادثه بينك و بين أصدقائك',
@@ -54,19 +51,21 @@ class HomeScreen extends ConsumerWidget {
               if (ref.watch(isDownloading)) ...[
                 const LinearProgressIndicator(),
               ],
-              const FeedWidget(),
-              const PapersWidget(),
+              const BigText(text: 'للانضمام للبث المباشر'),
+              20.hSpace,
+              const Expanded(child: FeedWidget()),
+              // const PapersWidget(),
               const BannerWidget(),
             ],
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: const AdminFloatingActionButton(
-        heroTag: 'add document',
-        icon: Icons.picture_as_pdf,
-        routeName: AddDocumentScreen.routeName,
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: const AdminFloatingActionButton(
+      //   heroTag: 'add document',
+      //   icon: Icons.picture_as_pdf,
+      //   routeName: AddDocumentScreen.routeName,
+      // ),
     );
   }
 }

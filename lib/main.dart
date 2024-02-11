@@ -9,7 +9,7 @@ import 'package:faenonibeqwa/utils/base/app_constants.dart';
 import 'package:faenonibeqwa/utils/base/dark_theme.dart';
 import 'package:faenonibeqwa/utils/base/light_theme.dart';
 import 'package:faenonibeqwa/utils/routes.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,7 +18,6 @@ import 'firebase_options.dart';
 import 'package:paymob_payment/paymob_payment.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'utils/providers/app_providers.dart';
 
 Future<void> _handleBackgroundMessage(RemoteMessage message) async {
   print('message from background message: ${message.data}');
@@ -123,34 +122,9 @@ class MyApp extends ConsumerWidget {
               themeMode: ThemeMode.light,
               debugShowCheckedModeBanner: false,
               onGenerateRoute: (settings) => generateRoute(settings),
-              home: Scaffold(
-                body: ref.watch(userDataProvider).when(
-                  data: (user) {
-                    // print('premium is ${ref.read(premiumAccount).value}');
-                    // print('displayname is ${user?.name}');
-                    // print('is admin ${user?.isAdmin}');
-                    if (user == null) {
-                      return LoginScreen();
-                    }
-
-                    return const MainScreen();
-                  },
-                  error: (error, stackTrace) {
-                    if (kDebugMode) {
-                      print('error is ${error.toString()}');
-                      print('error is ${stackTrace.toString()}');
-                    }
-                    return Scaffold(
-                      body: Center(
-                          child: Text(
-                              'This page doesn\'t exist because ${error.toString()}')),
-                    );
-                  },
-                  loading: () {
-                    return Scaffold(body: Container());
-                  },
-                ),
-              ));
+              home: FirebaseAuth.instance.currentUser == null
+                  ? LoginScreen()
+                  : const MainScreen());
         });
   }
 }

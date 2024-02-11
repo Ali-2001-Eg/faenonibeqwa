@@ -1,12 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:faenonibeqwa/models/lectures_model.dart';
-import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/display_image_widget.dart';
 import 'package:faenonibeqwa/screens/lectures/view_lecture_screen.dart';
-import 'package:faenonibeqwa/screens/lectures/widgets/video_player_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +48,9 @@ class LectureWidget extends StatelessWidget {
                     child: Consumer(builder: (context, ref, child) {
                       return InkWell(
                         onTap: () {
-                          print('ali');
+                          if (kDebugMode) {
+                            print('ali');
+                          }
                           if (!lecture.audienceUid.contains(
                               ref.watch(userDataProvider).value!.uid)) {
                             ref
@@ -60,6 +61,7 @@ class LectureWidget extends StatelessWidget {
                               return ViewLectureScreen(
                                   title: lecture.name,
                                   videoPath: lecture.lectureUrl,
+                                  id: lecture.id,
                                   audienceNo:
                                       lecture.audienceUid.length.toString());
                             }));
@@ -68,6 +70,7 @@ class LectureWidget extends StatelessWidget {
                                 MaterialPageRoute(builder: (ctx) {
                               return ViewLectureScreen(
                                   title: lecture.name,
+                                  id: lecture.id,
                                   videoPath: lecture.lectureUrl,
                                   audienceNo:
                                       lecture.audienceUid.length.toString());

@@ -1,9 +1,9 @@
-
 import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -13,7 +13,7 @@ import 'package:faenonibeqwa/models/exam_model.dart';
 import '../utils/providers/app_providers.dart';
 import '../utils/typedefs/app_typedefs.dart';
 
-class ExamRepo{
+class ExamRepo {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
   final ProviderRef ref;
@@ -49,7 +49,6 @@ class ExamRepo{
       examDescription: examDescription,
       questions: const [],
     );
-    
 
     await firestore.collection('exams').doc(examId).set(model.toMap());
     for (var element in question) {
@@ -102,7 +101,7 @@ class ExamRepo{
     return questionList;
   }
 
- Answer answers(String examId, String questionId) async {
+  Answer answers(String examId, String questionId) async {
     var quesionData = await firestore
         .collection('exams')
         .doc(examId)
@@ -248,7 +247,29 @@ class ExamRepo{
     });
   }
 
-  
+  Stream<num> examTotalGrade() async* {
+    num totalGrade = 0;
+    var examDocs = await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .get();
+    for (var element in examDocs.docs) {
+      if (element.data().isNotEmpty) {
+        if (kDebugMode) {
+          print('not empty');
+        }
+        String grade = element.data()['studentGrade'];
+        List<String> parts = grade.split('/');
+        double numerator = double.parse(parts[0]);
+        double denominator = double.parse(parts[1]);
+        totalGrade += numerator / denominator;
+
+        if (kDebugMode) {
+          print('summed');
+        }
+      }
+    }
+    yield totalGrade;
+  }
 }
-
-
