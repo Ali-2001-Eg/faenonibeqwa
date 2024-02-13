@@ -110,7 +110,6 @@ class MeetingRepo extends ChangeNotifier {
           userPresence++;
         }
       }
-      print('length ${meetingDocs.docs.length}');
     }
     yield (userPresence / meetingDocs.docs.length)*100;
   }

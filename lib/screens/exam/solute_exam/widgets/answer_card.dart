@@ -60,7 +60,12 @@ class AnswerCard extends ConsumerWidget {
         ),
       );
     }, error: (error, _) {
-      return BigText(text: error.toString());
+      print(_.toString());
+      return BigText(
+        text: error.toString(),
+        color: Colors.red,
+        textAlign: TextAlign.center,
+      );
     }, loading: () {
       return Container();
     });

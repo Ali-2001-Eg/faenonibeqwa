@@ -13,7 +13,6 @@ import '../../../../utils/shared/widgets/custom_button.dart';
 import '../../../../utils/shared/widgets/custom_text_field.dart';
 import '../../../../utils/shared/widgets/small_text.dart';
 
-
 class QuestionContentWidget extends StatefulWidget {
   final List<QuestionZ> questions;
   final int questionIndex;
@@ -29,9 +28,18 @@ class QuestionContentWidget extends StatefulWidget {
   State<QuestionContentWidget> createState() => _QuestionContentWidgetState();
 }
 
-int _selectedOption = 0;
-
 class _QuestionContentWidgetState extends State<QuestionContentWidget> {
+  int _selectedOption = 0;
+  @override
+  void initState() {
+    if (mounted) {
+      setState(() {
+        _selectedOption = 0;
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -75,6 +83,7 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
               ? CustomTextField(
                   controller: widget
                       .questions[widget.questionIndex].questionBodyController,
+                  keyBoardType: TextInputType.multiline,
                 )
               : widget.questions[widget.questionIndex].questionImage == null
                   ? Center(
@@ -121,10 +130,23 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                         value!;
                   });
                 },
+                elevation: 0,
+                dropdownColor: Colors.white,
+                focusColor: Colors.grey,
+                style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
                 items: [0, 1, 2, 3]
                     .map((index) => DropdownMenuItem<int>(
                           value: index,
-                          child: Text((index + 1).toString()),
+                          child: Text(index == 0
+                              ? 'أ'
+                              : index == 1
+                                  ? 'ب'
+                                  : index == 2
+                                      ? 'ج'
+                                      : "د"),
                         ))
                     .toList(),
               ),
@@ -144,6 +166,11 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                           height: 30, width: 30,
                           // padding: EdgeInsets.all(6.w),
                           decoration: BoxDecoration(
+                              color: widget.questions[widget.questionIndex]
+                                          .correctAnswerIndex ==
+                                      i
+                                  ? context.theme.appBarTheme.backgroundColor
+                                  : null,
                               shape: BoxShape.circle,
                               border:
                                   Border.all(color: Colors.black, width: 0.5)),
@@ -168,6 +195,11 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                                 minHeight: 50,
                               ),
                               child: CustomTextField(
+                                filled: widget.questions[widget.questionIndex]
+                                        .correctAnswerIndex ==
+                                    i,
+                                filledColor:
+                                    context.theme.appBarTheme.backgroundColor,
                                 controller: widget
                                     .questions[widget.questionIndex]
                                     .answerControllers[i],

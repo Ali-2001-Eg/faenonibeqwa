@@ -15,12 +15,12 @@ import 'widgets/sammary_exam_component_widget.dart';
 import 'widgets/summary_image_widget.dart';
 
 class ExamSammaryScreen extends StatelessWidget {
-  final VoidCallback onPreviousPressed;
+  final VoidCallback? onPreviousPressed;
   final VoidCallback onSubmitted;
   final ExamModel exam;
   const ExamSammaryScreen({
     Key? key,
-    required this.onPreviousPressed,
+   this.onPreviousPressed,
     required this.onSubmitted,
     required this.exam,
   }) : super(key: key);

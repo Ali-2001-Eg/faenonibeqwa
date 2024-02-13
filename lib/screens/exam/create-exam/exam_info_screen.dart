@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,18 +9,18 @@ import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import '../../../utils/shared/widgets/custom_text_field.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 import 'widgets/page_view_widget.dart';
+import 'package:timeago/timeago.dart' as timago;
 
-// ignore: must_be_immutable
 class ExamInfoScreen extends StatefulWidget {
   final void Function(int pageNo) onNextPressed;
   final VoidCallback pickExamImage;
+  final Function(BuildContext context) selectDeadline;
   final TextEditingController titleController,
       descriptionController,
       totalGradeController,
-      deadlineTimeController,
       timeMinutesController;
   File? examImage;
-
+  DateTime deadlineTime;
   ExamInfoScreen({
     Key? key,
     required this.onNextPressed,
@@ -30,8 +29,9 @@ class ExamInfoScreen extends StatefulWidget {
     required this.titleController,
     required this.descriptionController,
     required this.totalGradeController,
-    required this.deadlineTimeController,
+    required this.deadlineTime,
     required this.timeMinutesController,
+    required this.selectDeadline,
   }) : super(key: key);
 
   @override
@@ -41,6 +41,7 @@ class ExamInfoScreen extends StatefulWidget {
 class _ExamInfoScreenState extends State<ExamInfoScreen> {
   @override
   Widget build(BuildContext context) {
+    print('date is ${widget.deadlineTime.day}');
     return PageWidget(
       body: SingleChildScrollView(
         child: Padding(
@@ -102,6 +103,9 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
                   ),
                 ),
                 20.hSpace,
+                const SmallText(
+                  text: "الدرجه الكليه",
+                ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Row(
@@ -116,11 +120,33 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
                       ),
                       10.wSpace,
                       Expanded(
-                        child: CustomTextField(
-                            controller: widget.deadlineTimeController,
-                            hintText: 'موعد الامتحان',
-                            keyBoardType: TextInputType.datetime,
-                            suffixIcon: Icons.calendar_today),
+                        flex: 2,
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SmallText(
+                                  text: 'موعد الامتحان', maxLines: 2),
+                              SmallText(
+                                  maxLines: 2,
+                                  text: widget.deadlineTime.day.toString()),
+                              InkWell(
+                                onTap: () {
+                                  widget.selectDeadline(context);
+                                },
+                                child: const Icon(
+                                  Icons.calendar_month_outlined,
+                                  color: Colors.black,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       )
                     ],
                   ),

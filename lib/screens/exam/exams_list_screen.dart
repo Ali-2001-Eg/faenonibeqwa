@@ -41,11 +41,6 @@ class ExamsListScreen extends ConsumerWidget {
       }, loading: () {
         return const Center(child: CustomIndicator());
       }),
-      floatingActionButton: const AdminFloatingActionButton(
-        icon: Icons.add,
-        routeName: CreateExamScreen.routeName,
-        heroTag: 'createExam',
-      ),
     );
   }
 }

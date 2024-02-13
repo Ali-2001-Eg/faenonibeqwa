@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,10 @@ class FeedWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(feedsStream).when(data: (data) {
       if (data.isEmpty) {
-        return const Expanded(
-          child: Center(
-            child: BigText(
-              text: 'لايوجد مكالمات',
-              fontSize: 28,
-            ),
+        return Center(
+          child: BigText(
+            text: 'لايوجد مكالمات',
+            fontSize: 28,
           ),
         );
       }
@@ -40,9 +39,8 @@ class FeedWidget extends ConsumerWidget {
                     aspectRatio: 16 / 9,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'https://static.wixstatic.com/media/7335d9_2a55f7bb2970467984b8c5773e6723bb~mv2.jpg/v1/fill/w_640,h_426,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/7335d9_2a55f7bb2970467984b8c5773e6723bb~mv2.jpg',
+                      child: Image.asset(
+                        'assets/images/trip.jpg',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -69,7 +67,11 @@ class FeedWidget extends ConsumerWidget {
     }, error: (error, stackTrace) {
       return BigText(text: error.toString());
     }, loading: () {
-      return const Center(child: CustomIndicator());
+      return const SingleChildScrollView(
+          child: ShimmerWidget(
+        cardsNumber: 4,
+        heigth: 60,
+      ));
     });
   }
 

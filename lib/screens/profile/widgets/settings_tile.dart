@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -5,16 +6,18 @@ import '../../../utils/shared/widgets/big_text.dart';
 
 class SettingsTile extends StatelessWidget {
   const SettingsTile({
-    super.key,
+    Key? key,
     required this.text,
     required this.onTap,
     required this.icon,
     this.logout = false,
-  });
+    required this.leadingIconColor,
+  }) : super(key: key);
   final String text;
   final VoidCallback onTap;
   final IconData icon;
   final bool? logout;
+  final Color leadingIconColor;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -34,7 +37,7 @@ class SettingsTile extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: Colors.white,
+                color: leadingIconColor,
               ),
               BigText(
                 text: text,

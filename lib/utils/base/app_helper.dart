@@ -75,10 +75,10 @@ class AppHelper {
   static FutureOr<CroppedFile?> _cropImage(File imageFile) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: imageFile.path,
-        aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+        // aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
         compressQuality: 100,
         maxWidth: 800,
-        maxHeight: 800,
+        maxHeight: 800,compressFormat: ImageCompressFormat.png,
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Crop Image',

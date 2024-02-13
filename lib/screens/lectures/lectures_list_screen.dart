@@ -4,10 +4,10 @@ import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../utils/shared/widgets/admin_floating_action_button.dart';
 import 'widgets/lecture_widget.dart';
 
 class LecturesListScreen extends StatelessWidget {
@@ -16,11 +16,7 @@ class LecturesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: const AdminFloatingActionButton(
-        icon: Icons.add,
-        routeName: AddLectureScreen.routeName,
-        heroTag: 'addLecture',
-      ),
+      
       appBar: const CustomAppBar(title: 'المحاضرات'),
       body: Consumer(
         builder: (context, ref, child) {
@@ -51,7 +47,7 @@ class LecturesListScreen extends StatelessWidget {
               throw error;
             },
             loading: () {
-              return const CircularProgressIndicator();
+              return const CustomIndicator();
             },
           );
         },

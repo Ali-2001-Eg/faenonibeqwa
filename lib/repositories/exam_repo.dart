@@ -86,6 +86,7 @@ class ExamRepo {
     });
   }
 
+//Questions is typedef of List<Question>
   Questions questions(String examId, int timeMinutes) async {
     var quesionData = await firestore
         .collection('exams')
@@ -149,6 +150,7 @@ class ExamRepo {
         .set(
             {'title': title, 'description': description, 'imageUrl': imageUrl});
     for (var element in questions) {
+      print('body to store ${element.body}');
       await firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
@@ -256,14 +258,11 @@ class ExamRepo {
         .get();
     for (var element in examDocs.docs) {
       if (element.data().isNotEmpty) {
-        if (kDebugMode) {
-          print('not empty');
-        }
         String grade = element.data()['studentGrade'];
         List<String> parts = grade.split('/');
         double numerator = double.parse(parts[0]);
         double denominator = double.parse(parts[1]);
-        totalGrade += (numerator / denominator)*100;
+        totalGrade += (numerator / denominator) * 100;
 
         if (kDebugMode) {
           print('summed');

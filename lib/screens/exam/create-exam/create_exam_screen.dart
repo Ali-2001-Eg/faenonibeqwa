@@ -28,26 +28,27 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _totalGradeController = TextEditingController();
-  final TextEditingController _deadlineTimeController = TextEditingController();
+  DateTime selectedDateTime = DateTime.now();
+
   final TextEditingController _timeMinutesController = TextEditingController();
   //second page
   List<QuestionZ> questions = [QuestionZ()];
   File? examImage;
-
+  DateTime _deadlineTime = DateTime.now();
   @override
   void dispose() {
     _pageController.dispose();
     _titleController.dispose();
     _descriptionController.dispose();
     _totalGradeController.dispose();
-    _deadlineTimeController.dispose();
+
     _timeMinutesController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(questions.map((e) => e.correctAnswerIndex));
+    print('day is ${_deadlineTime.day}');
     return Scaffold(
       appBar: const CustomAppBar(title: 'إضافه اختبار'),
       resizeToAvoidBottomInset: true,
@@ -64,9 +65,12 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
             examImage: examImage,
             descriptionController: _descriptionController,
             totalGradeController: _totalGradeController,
-            deadlineTimeController: _deadlineTimeController,
+            deadlineTime: _deadlineTime,
             pickExamImage: pickExamImage,
             timeMinutesController: _timeMinutesController,
+            selectDeadline: (BuildContext context) {
+              _selectDateTime(context);
+            },
           ),
           //second page
           AddQuestionScreen(
@@ -78,7 +82,8 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
 
           if (_totalGradeController.text.trim().isNotEmpty &&
               _timeMinutesController.text.trim().isNotEmpty &&
-              examImage != null)
+              examImage != null &&
+              _deadlineTime != DateTime.now())
 
             //third page
             ExamSammaryScreen(
@@ -87,20 +92,14 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
                 examTitle: _titleController.text.trim(),
                 examDescription: _descriptionController.text.trim(),
                 totalGrade: int.parse(_totalGradeController.text.trim()),
-                deadlineTime: DateTime.now(),
+                deadlineTime: _deadlineTime,
                 timeMinutes: int.parse(_timeMinutesController.text.trim()),
                 examImageUrl: examImage!.path,
                 questions: questions.map((e) => e.convertToQuestion()).toList(),
               ),
-              onPreviousPressed: () => _onNextPressed(1),
               onSubmitted: () {
-                _storeExamData(context)
-                    .then((value) => Navigator.pushNamedAndRemoveUntil(
-                        context, MainScreen.routeName, (route) => false))
-                    .catchError(((err) {
-                  AppHelper.customSnackbar(
-                      context: context, title: 'أكمل البيانات من فضلك');
-                }));
+                Navigator.pushNamedAndRemoveUntil(
+                    context, MainScreen.routeName, (route) => false);
               },
             ),
         ],
@@ -108,7 +107,36 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
     );
   }
 
+  Future<void> _selectDateTime(BuildContext context) async {
+    final DateTime? pickedDateTime = await showDatePicker(
+      context: context,
+      initialDate: _deadlineTime,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDateTime != null && context.mounted) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(_deadlineTime),
+      );
+
+      if (pickedTime != null) {
+        setState(() {
+          _deadlineTime = DateTime(
+            pickedDateTime.year,
+            pickedDateTime.month,
+            pickedDateTime.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+        });
+      }
+    }
+  }
+
   Future<void> _storeQuestioImages() async {
+    ref.read(isLoading.notifier).update((state) => true);
     for (var i = 0; i < questions.length; i++) {
       var element = questions[i];
       if (element.questionImage != null) {
@@ -123,6 +151,10 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
         });
       }
     }
+    if (context.mounted) {
+      _storeExamData(context).then(
+          (value) => ref.read(isLoading.notifier).update((state) => false));
+    }
   }
 
   Future<void> _storeExamData(BuildContext context) async {
@@ -136,7 +168,7 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
           examDescription: _descriptionController.text.trim(),
           examTitle: _titleController.text.trim(),
           totalGrade: num.parse(_totalGradeController.text),
-          deadlineTime: DateTime.now(),
+          deadlineTime: _deadlineTime,
           timeMinutes: int.parse(_timeMinutesController.text),
           image: examImage!,
           context: context,

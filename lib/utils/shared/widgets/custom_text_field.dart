@@ -17,6 +17,8 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final int? minLines;
   final int? maxLength;
+  final bool? filled;
+  final Color? filledColor;
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
   final bool? obscureText;
@@ -45,7 +47,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText,
     this.readOnly,
     this.onChange,
-    this.inputFormatters,
+    this.inputFormatters, this.filled, this.filledColor,
   }) : super(key: key);
 
   @override
@@ -73,6 +75,8 @@ class CustomTextField extends StatelessWidget {
             color: Colors.grey,
             fontSize: 18,
           ),
+          filled: filled,
+          fillColor: filledColor,
           border: outlineInputBorder(),
           focusedBorder: outlineInputBorder(),
           enabledBorder: outlineInputBorder()),

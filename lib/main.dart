@@ -10,6 +10,7 @@ import 'package:faenonibeqwa/utils/base/dark_theme.dart';
 import 'package:faenonibeqwa/utils/base/light_theme.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -20,6 +21,7 @@ import 'firebase_options.dart';
 import 'package:paymob_payment/paymob_payment.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'utils/shared/widgets/big_text.dart';
 
 Future<void> _handleBackgroundMessage(RemoteMessage message) async {
   print('message from background message: ${message.data}');
@@ -89,46 +91,22 @@ class _MyAppState extends ConsumerState<MyApp> {
         splitScreenMode: true,
         builder: (_, child) {
           return MaterialApp(
-              title: 'Faenonibeqwa',
-              theme: lightMode,
-              darkTheme: darkMode,
-              builder: (context, child) {
-                return Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: child!,
-                );
-              },
-              themeMode: ThemeMode.light,
-              debugShowCheckedModeBanner: false,
-              onGenerateRoute: (settings) => generateRoute(settings),
-              home: Scaffold(
-                body: ref.watch(userDataProvider).when(
-                  data: (user) {
-                    // print('premium is ${ref.read(premiumAccount).value}');
-                    // print('displayname is ${user?.name}');
-                    // print('is admin ${user?.isAdmin}');
-                    if (user == null) {
-                      return LoginScreen();
-                    }
-
-                    return const MainScreen();
-                  },
-                  error: (error, stackTrace) {
-                    if (kDebugMode) {
-                      print('error is ${error.toString()}');
-                      print('error is ${stackTrace.toString()}');
-                    }
-                    return Scaffold(
-                      body: Center(
-                          child: Text(
-                              'This page doesn\'t exist because ${error.toString()}')),
-                    );
-                  },
-                  loading: () {
-                    return Scaffold(body: Container());
-                  },
-                ),
-              ));
+            title: 'Faenonibeqwa',
+            theme: lightMode,
+            darkTheme: darkMode,
+            builder: (context, child) {
+              return Directionality(
+                textDirection: TextDirection.rtl,
+                child: child!,
+              );
+            },
+            themeMode: ThemeMode.light,
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: (settings) => generateRoute(settings),
+            home: FirebaseAuth.instance.currentUser == null
+                ? const LoginScreen()
+                : const MainScreen(),
+          );
         });
   }
 }

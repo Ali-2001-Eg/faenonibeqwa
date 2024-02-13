@@ -25,24 +25,23 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'فَأَعِينُونِي بِقُوَّةٍ',
-        actions: [
-          if (ref.watch(userDataProvider).value!.isAdmin)
-            Padding(
-              padding: const EdgeInsets.only(left: 10).w,
-              child: IconButton(
-                onPressed: () {
-                  
-                  Navigator.pushNamed(context, CreateMeetingScreen.routeName);
-                },
-                tooltip: 'قم بإنشاء محادثه بينك و بين أصدقائك',
-                icon: const Icon(
-                  Icons.call,
-                ),
-              ),
-            )
-        ],
+      //   actions: [
+      //     if (ref.watch(authControllerProvider).isAdmin)
+      //       Padding(
+      //         padding: const EdgeInsets.only(left: 10).w,
+      //         child: IconButton(
+      //           onPressed: () {
+      //             Navigator.pushNamed(context, CreateMeetingScreen.routeName);
+      //           },
+      //           tooltip: 'قم بإنشاء محادثه بينك و بين أصدقائك',
+      //           icon: const Icon(
+      //             Icons.call,
+      //           ),
+      //         ),
+      //       )
+      //   ],
       ),
       body: SafeArea(
         child: Padding(
@@ -51,21 +50,13 @@ class HomeScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               10.hSpace,
-              if (ref.watch(isDownloading)) ...[
-                const LinearProgressIndicator(),
-              ],
+             
               const FeedWidget(),
               // const PapersWidget(),
               const BannerWidget(),
             ],
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: const AdminFloatingActionButton(
-        heroTag: 'add document',
-        icon: Icons.picture_as_pdf,
-        routeName: AddDocumentScreen.routeName,
       ),
     );
   }

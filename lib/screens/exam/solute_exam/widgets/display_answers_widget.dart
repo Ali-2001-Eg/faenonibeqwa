@@ -48,27 +48,26 @@ class DisplayAnswersWidget extends ConsumerWidget {
       return ref
           .watch(answersProvider(
               AnswersParameters(examId, data[ref.watch(currentIndex)])))
-          .when(data: (data) {
+          .when(data: (answer) {
+        print('index is ${ref.watch(currentIndex)}');
         return ListView.separated(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
-          itemCount: data.length,
+          itemCount: answer.length,
           separatorBuilder: (_, i) => Padding(padding: EdgeInsets.all(5.w)),
           itemBuilder: (_, i) {
-            var answer = data[i];
-            print(answer.answer);
+            var answers = answer[i];
+            print(answers.answer);
             return Consumer(builder: (context, ref, child) {
               return InkWell(
                 onTap: () {
-                  _storeExamData(ref, questions, examId).then((value) {
-                    ref.watch(examControllerProvider).selectAnswer(
-                        examId: examId,
-                        questionId: question.body,
-                        selectedAnswer: answer.identifier);
-                  });
+                  ref.watch(examControllerProvider).selectAnswer(
+                      examId: examId,
+                      questionId: question.body,
+                      selectedAnswer: answers.identifier);
                 },
                 child: AnswerCard(
-                  answer: answer,
+                  answer: answers,
                   examId: examId,
                   questionBody: question.body,
                 ),
@@ -82,7 +81,9 @@ class DisplayAnswersWidget extends ConsumerWidget {
       }, loading: () {
         return const ShimmerWidget();
       });
-    }, error: (error, _) {
+    }, error: (error, stacktrace) {
+      print('stacktrace is ${stacktrace.toString()}');
+      AppHelper.customSnackbar(context: context, title: error.toString());
       return Center(
           child: BigText(
         text: error.toString(),
@@ -92,20 +93,5 @@ class DisplayAnswersWidget extends ConsumerWidget {
     }, loading: () {
       return const ShimmerWidget();
     });
-  }
-
-  Future<void> _storeExamData(
-      WidgetRef ref, List<Question> snap, String examId) async {
-    if (!await ref
-        .read(examControllerProvider)
-        .checkUserHasTakenExam(examId: examId)) {
-      ref.read(examControllerProvider).storeExamHistory(
-            examId: examId,
-            title: examTitle,
-            description: examDesc,
-            imageUrl: examImageUrl,
-            questions: snap,
-          );
-    }
   }
 }

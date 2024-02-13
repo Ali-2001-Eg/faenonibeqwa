@@ -40,7 +40,7 @@ class ExamController {
             ));
   }
 
-  Stream<List<String>> questionIds(String examId) async*{
+  Stream<List<String>> questionIds(String examId) async* {
     yield* examRepo.questionIds(examId);
   }
 
@@ -50,8 +50,8 @@ class ExamController {
       examRepo.questions(questionParameters.item1, questionParameters.item2);
 
   Future<List<Answers>> answers(AnswersParameters answersParameters) =>
-      examRepo.answers(answersParameters.item1,answersParameters.item2);
-  Future<void> storeExamHistory({
+      examRepo.answers(answersParameters.item1, answersParameters.item2);
+  Future<void> storeExamDataToUser({
     required String examId,
     required String title,
     required String description,
@@ -75,8 +75,7 @@ class ExamController {
         questionId,
         selectedAnswer,
       );
-  Stream<String> getAnswerIdentifier(
-          AnswersIdentiferParameters parameters) =>
+  Stream<String> getAnswerIdentifier(AnswersIdentiferParameters parameters) =>
       examRepo.getAnswerIdentifier(parameters.item1, parameters.item2);
 
   Future<bool> checkUserHasTakenExam({required String examId}) =>
@@ -91,4 +90,3 @@ class ExamController {
         examGrade: totalGrade,
       );
 }
-

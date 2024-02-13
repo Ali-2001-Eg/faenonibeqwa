@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,32 +38,44 @@ class _PageWidgetState extends State<PageWidget>
         children: [
           Expanded(child: widget.body),
           // 20.hSpace,
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                if (widget.onPreviousPressed != null)
-                  CustomButton(
-                      onTap: widget.onPreviousPressed!,
-                      text: 'الرجوع',
-                      width: context.screenWidth * 0.3,
-                      backgroundColor: const Color.fromARGB(255, 201, 73, 64)),
-                CustomButton(
-                  onTap: widget.onSubmitted,
-                  text: 'تأكيد',
-                  width: context.screenWidth * 0.3,
-                  backgroundColor: Colors.blueAccent,
-                ),
-                if (widget.onNextPressed != null)
-                  CustomButton(
-                    onTap: widget.onNextPressed!,
-                    text: 'التالي',
-                    width: context.screenWidth * 0.3,
+          Consumer(
+            builder: (context, ref, child) {
+              if (ref.watch(isLoading)) {
+                return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CustomIndicator(),
+                );
+              } else {
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      if (widget.onPreviousPressed != null)
+                        CustomButton(
+                            onTap: widget.onPreviousPressed!,
+                            text: 'الرجوع',
+                            width: context.screenWidth * 0.3,
+                            backgroundColor:
+                                const Color.fromARGB(255, 201, 73, 64)),
+                      CustomButton(
+                        onTap: widget.onSubmitted,
+                        text: 'تأكيد',
+                        width: context.screenWidth * 0.3,
+                        backgroundColor: Colors.blueAccent,
+                      ),
+                      if (widget.onNextPressed != null)
+                        CustomButton(
+                          onTap: widget.onNextPressed!,
+                          text: 'التالي',
+                          width: context.screenWidth * 0.3,
+                        ),
+                    ],
                   ),
-              ],
-            ),
-          ),
+                );
+              }
+            },
+          )
         ],
       ),
     );

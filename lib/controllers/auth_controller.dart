@@ -18,13 +18,14 @@ class AuthController {
   String get getPhotoUrl => authRepo.getPhotoUrl;
   String get getName => authRepo.getName;
   bool get isAdmin => authRepo.isAdmin;
+  String get email => authRepo.getEmail;
   bool get isPremium => authRepo.isPremium;
-  int get streamsJoined => authRepo.streamsJoined;
+  
   User get userInfo => authRepo.auth.currentUser!;
   Future<void> get signout => authRepo.signout();
   Future<void> signup(
-          String email, String password, String username, String image) =>
-      authRepo.signUp(email, password, username, image);
+          String email, String password, String username) =>
+      authRepo.signUp(email, password, username);
   Future<void> login(String email, String password,BuildContext context) =>
-      authRepo.login(email, password);
+      authRepo.login(email, password,context);
 }

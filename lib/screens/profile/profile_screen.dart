@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
+import 'package:faenonibeqwa/screens/exam/create-exam/create_exam_screen.dart';
+import 'package:faenonibeqwa/screens/meeting/create_meeting_screen.dart';
 import 'package:faenonibeqwa/utils/base/subscription_dialoge.dart';
 import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +18,7 @@ import '../../utils/base/app_helper.dart';
 import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/big_text.dart';
 import '../../utils/shared/widgets/custom_button.dart';
+import '../lectures/add_lecture/add_lecture_screen.dart';
 import 'widgets/settings_tile.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -77,52 +81,124 @@ class ProfileScreen extends ConsumerWidget {
                         )))
               ],
             ),
-            30.hSpace,
+            20.hSpace,
             BigText(text: ref.watch(authControllerProvider).getName),
+            10.hSpace,
+            SmallText(text: ref.watch(authControllerProvider).email),
             15.hSpace,
-            CustomButton(
-                onTap: () {
-                  if (ref.watch(authControllerProvider).isPremium) {
-                    AppHelper.customSnackbar(
-                      context: context,
-                      title: 'تم الاشتراك بالفعل',
-                      status: ToastStatus.success,
-                    );
-                  } else {
-                    showModalBottomSheet(
+            if (!ref.watch(authControllerProvider).isAdmin)
+              CustomButton(
+                  onTap: () {
+                    if (ref.watch(authControllerProvider).isPremium) {
+                      AppHelper.customSnackbar(
                         context: context,
-                        builder: (context) {
-                          return const SubscriptionDialog();
-                        });
-                  }
-                },
-                text: 'الاشتراك في الخطه'),
-            Expanded(
-                child: SfCartesianChart(
-                    primaryXAxis: const CategoryAxis(),
-                    series: <LineSeries<ProfileCartModel, String>>[
-                  lineSeries(ref)
-                ])),
-            15.hSpace,
-            ListView(
-              shrinkWrap: true,
-              children: [
-                SettingsTile(
-                  text: 'نشاطك',
-                  icon: Icons.history_outlined,
-                  onTap: () {},
+                        title: 'تم الاشتراك بالفعل',
+                        status: ToastStatus.success,
+                      );
+                    } else {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return const SubscriptionDialog();
+                          });
+                    }
+                  },
+                  text: 'الاشتراك في الخطه'),
+            (ref.watch(authControllerProvider).isAdmin)
+                ? Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SettingsTile(
+                            onTap: () => Navigator.pushNamed(
+                                context, CreateMeetingScreen.routeName),
+                            text: "مكالمه جماعيه",
+                            icon: Icons.call,
+                            leadingIconColor: Colors.green),
+                        SettingsTile(
+                            onTap: () => Navigator.pushNamed(
+                                context, CreateExamScreen.routeName),
+                            text: 'إضافه اختبار',
+                            icon: Icons.book,
+                            leadingIconColor: Colors.yellow),
+                        SettingsTile(
+                            onTap: () => Navigator.pushNamed(
+                                context, AddLectureScreen.routeName),
+                            text: 'إضافه حلقه',
+                            icon: Icons.ondemand_video_rounded,
+                            leadingIconColor: Colors.redAccent),
+                        SettingsTile(
+                            onTap: () {},
+                            text: 'إضافه خطه دفع',
+                            icon: Icons.monetization_on,
+                            leadingIconColor: Colors.green),
+                        SettingsTile(
+                            onTap: () {},
+                            text: 'بيانات الطلاب',
+                            icon: Icons.history_outlined,
+                            leadingIconColor: Colors.white),
+                        SettingsTile(
+                          leadingIconColor: Colors.redAccent,
+                          text: 'تسجيل خروج',
+                          icon: Icons.logout_sharp,
+                          onTap: () => _signout(ref, context),
+                        ),
+                      ],
+                    ),
+                  )
+                : Expanded(
+                    child: SfCartesianChart(
+                        primaryXAxis: const CategoryAxis(),
+                        series: <LineSeries<ProfileCartModel, String>>[
+                        lineSeries(ref)
+                      ])),
+            // 15.hSpace,
+            if (!ref.watch(authControllerProvider).isAdmin)
+              MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    SettingsTile(
+                      text: 'نشاطك',
+                      icon: Icons.history_outlined,
+                      leadingIconColor: Colors.white,
+                      onTap: () {},
+                    ),
+                    SettingsTile(
+                      leadingIconColor: Colors.redAccent,
+                      text: 'تسجيل خروج',
+                      icon: Icons.logout_sharp,
+                      onTap: () => _signout(ref, context),
+                    ),
+                  ],
                 ),
-                SettingsTile(
-                  text: 'تسجيل خروج',
-                  icon: Icons.logout_sharp,
-                  onTap: () => ref.watch(authControllerProvider).signout.then(
-                      (value) => Navigator.pushNamedAndRemoveUntil(
-                          context, LoginScreen.routeName, (route) => false)),
-                ),
-              ],
-            ),
+              ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<Object?> _signout(WidgetRef ref, BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (conetxt) => AlertDialog(
+        actions: [
+          CustomButton(
+            onTap: () => ref.watch(authControllerProvider).signout.then(
+                (value) => Navigator.pushNamedAndRemoveUntil(
+                    context, LoginScreen.routeName, (route) => false)),
+            text: 'تأكيد',
+            backgroundColor: Colors.redAccent,
+          ),
+          CustomButton(
+            onTap: () => Navigator.of(context).pop(),
+            text: 'الرجوع',
+          )
+        ],
+        title: const BigText(text: 'تأكيد تسجيل الخروج'),
       ),
     );
   }
@@ -144,7 +220,6 @@ class ProfileScreen extends ConsumerWidget {
 
   num streamsJoined(WidgetRef ref) {
     return ref.watch(streamJoinedProvider).when(data: (data) {
-      print('data is  $data');
       return data;
     }, error: (error, s) {
       return 0;

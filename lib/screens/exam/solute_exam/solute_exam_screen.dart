@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, deprecated_member_use
-import 'package:faenonibeqwa/ads/banner_widget.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/question_details.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
@@ -92,7 +91,7 @@ class SoluteExamScreen extends ConsumerWidget {
                       .watch(questionsProvider(
                           QuestionParameters(exam.id, exam.timeMinutes)))
                       .when(data: (data) {
-                    // _storeExamData(ref, data, exam.id);
+                    _storeExamData(ref, data, exam.id);
                     //initial
                     late Question question;
                     question = data[ref.watch(currentIndex)];
@@ -118,7 +117,7 @@ class SoluteExamScreen extends ConsumerWidget {
                               questionImage: question.questionImage,
                               ref: ref,
                             ),
-                            // 30.hSpace,
+                            30.hSpace,
                             Expanded(
                               child: DisplayAnswersWidget(
                                 examId: exam.id,
@@ -127,7 +126,6 @@ class SoluteExamScreen extends ConsumerWidget {
                                 examTitle: exam.examTitle,
                                 question: question,
                                 questions: data,
-
                               ),
                             ),
                             // 30.hSpace,
@@ -139,7 +137,7 @@ class SoluteExamScreen extends ConsumerWidget {
                               examId: exam.id,
                               totalGrade: exam.totalGrade,
                             ),
-                            const BannerWidget(),
+                            // const BannerWidget(),
                           ],
                         ),
                       ),
@@ -175,5 +173,23 @@ class SoluteExamScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _storeExamData(
+      WidgetRef ref, List<Question> snap, String examId) async {
+    if (await ref
+        .read(examControllerProvider)
+        .checkUserHasTakenExam(examId: examId)) print('user has taken it ');
+    if (!await ref
+        .read(examControllerProvider)
+        .checkUserHasTakenExam(examId: examId)) {
+      ref.read(examControllerProvider).storeExamDataToUser(
+            examId: examId,
+            title: exam.examTitle,
+            description: exam.examDescription,
+            imageUrl: exam.examImageUrl,
+            questions: snap,
+          );
+    }
   }
 }

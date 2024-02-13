@@ -29,50 +29,7 @@ class ExamTileWidget extends ConsumerStatefulWidget {
   ConsumerState<ExamTileWidget> createState() => _ExamTileWidgetState();
 }
 
-InterstitialAd? _interstitial;
-
 class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
-  void _createInterstitialAd() {
-    InterstitialAd.load(
-        adUnitId: ref.read(admobRepoProvider).interstitialAdUnitId!,
-        request: const AdRequest(),
-        adLoadCallback:
-            InterstitialAdLoadCallback(onAdLoaded: (InterstitialAd ad) {
-          setState(() {
-            _interstitial = ad;
-          });
-        }, onAdFailedToLoad: (LoadAdError error) {
-          setState(() {
-            _interstitial = null;
-          });
-        }));
-  }
-
-  // ignore: unused_element
-  Future<void> _showInterstitialAd() async {
-    if (_interstitial != null) {
-      _interstitial!.fullScreenContentCallback = FullScreenContentCallback(
-          onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        ad.dispose();
-        if (kDebugMode) {
-          print('ad is  ${ad.adUnitId}');
-        }
-
-        _createInterstitialAd();
-      }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-        if (kDebugMode) {
-          print('failed to show $error');
-        }
-        ad.dispose();
-        _createInterstitialAd();
-      });
-      setState(() {
-        _interstitial!.show();
-        _interstitial = null;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
@@ -148,16 +105,7 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
             Center(
               child: CustomButton(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return SoluteExamScreen(
-                            exam: widget.examModel,
-                          );
-                        },
-                      ),
-                    );
+                    _checkSubscribtionAndEnterExam(context);
                   },
                   text: 'ادخل الآن',
                   textColor: Colors.white),

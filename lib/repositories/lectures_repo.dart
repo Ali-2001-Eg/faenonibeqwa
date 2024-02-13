@@ -38,7 +38,7 @@ class LecturesRepo {
     required String name,
     required File video,
   }) async {
-    ref.read(isLoading.state).update((state) => true);
+    ref.read(isLoading.notifier).update((state) => true);
     try {
       String thumbnailURL = '';
       String downloadURL = '';
@@ -69,11 +69,16 @@ class LecturesRepo {
       );
       firestore.collection('lectures').doc(lectureId).set(lecture.toMap());
       log(downloadURL);
-      ref.read(isLoading.state).update((state) => false);
     } catch (e) {
       log('Error uploading video: $e');
-      ref.read(isLoading.state).update((state) => false);
     }
+    // await Future.delayed(
+    //     const Duration(
+    //       seconds: 5,
+    //     ), () {
+    //   print('loading');
+    // });
+    ref.read(isLoading.notifier).update((state) => false);
   }
 
   Future _compressVideoFile(String path) async {
@@ -111,15 +116,12 @@ class LecturesRepo {
     var lectureDocs = await firestore.collection('lectures').get();
     for (var element in lectureDocs.docs) {
       if (element.data().isNotEmpty) {
-        print('not empty');
         if (element.data()['audienceUid'].contains(auth.currentUser!.uid)) {
-          print('added');
-
           lecturesNo++;
         }
       }
     }
-    yield (lecturesNo/lectureDocs.docs.length)*100;
+    yield (lecturesNo / lectureDocs.docs.length) * 100;
   }
 }
 
