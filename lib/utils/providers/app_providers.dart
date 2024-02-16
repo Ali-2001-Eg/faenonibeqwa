@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faenonibeqwa/controllers/paper_controller.dart';
 import 'package:faenonibeqwa/repositories/lectures_repo.dart';
+import 'package:faenonibeqwa/utils/enums/plan_enum.dart';
 import 'package:faenonibeqwa/utils/typedefs/app_typedefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -89,13 +90,12 @@ final notificationRepoProvider = Provider((ref) {
 });
 //state providers
 final currentIndex = StateProvider<int>((ref) => 0);
-final displayName = StateProvider<String>((ref) => '');
-final displayEmail = StateProvider<String>((ref) => '');
-final displayPhotoUrl = StateProvider<String>((ref) => '');
+
 final isAdmin = StateProvider<bool>((ref) => false);
 final isCached = StateProvider<bool>((ref) => false);
 final isDownloading = StateProvider<bool>((ref) => false);
 final isLoading = StateProvider<bool>((ref) => false);
+final planType = StateProvider<PlanEnum>((ref) => PlanEnum.notSubscribed);
 
 //state notifiers providers
 final homeNotifierProvider =

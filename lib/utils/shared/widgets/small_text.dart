@@ -37,6 +37,7 @@ class SmallText extends StatelessWidget {
         fontSize: fontSize,
         height: height,
       ),
+      
       textAlign: textAlign,
     );
   }

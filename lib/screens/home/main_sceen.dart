@@ -3,6 +3,7 @@
 import 'package:faenonibeqwa/screens/lectures/lectures_list_screen.dart';
 import 'package:faenonibeqwa/screens/profile/profile_screen.dart';
 import 'package:faenonibeqwa/screens/trip/trips_screen.dart';
+import 'package:faenonibeqwa/utils/base/colors.dart';
 
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,7 +46,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget build(BuildContext context) {
     //to rebuild the screen
     final selectedTabIndex = ref.watch(homeNotifierProvider);
-    print(FirebaseAuth.instance.currentUser?.email);
+    // print(FirebaseAuth.instance.currentUser?.email);
 
     return Scaffold(
       body: IndexedStack(
@@ -72,10 +73,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               Icons.home,
             ),
             label: 'الرئيسيه',
-            // activeIcon: Icon(
-            //   Icons.home_filled,
-            //   color: context.theme.hoverColor,
-            // ),
+            activeIcon: Icon(
+              Icons.home_filled,
+              color: indicatorColor,
+            ),
           ),
           BottomNavigationBarItem(
             icon: Icon(

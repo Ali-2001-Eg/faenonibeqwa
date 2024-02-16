@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
+import 'package:faenonibeqwa/utils/base/app_images.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../models/meeting_model.dart';
+import '../../../utils/base/app_helper.dart';
+import '../../../utils/base/subscription_screen.dart';
 import '../../../utils/providers/app_providers.dart';
 import '../../../utils/shared/widgets/big_text.dart';
 import '../../../utils/shared/widgets/custom_indicator.dart';
@@ -17,10 +21,12 @@ class FeedWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(feedsStream).when(data: (data) {
       if (data.isEmpty) {
-        return Center(
-          child: BigText(
-            text: 'لايوجد مكالمات',
-            fontSize: 28,
+        return const Expanded(
+          child: Center(
+            child: BigText(
+              text: 'لايوجد مكالمات',
+              fontSize: 28,
+            ),
           ),
         );
       }
@@ -40,7 +46,7 @@ class FeedWidget extends ConsumerWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        'assets/images/trip.jpg',
+                        AppImages.logo,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -55,7 +61,9 @@ class FeedWidget extends ConsumerWidget {
                     color: Colors.black,
                   ),
                   style: ListTileStyle.drawer,
-                  trailing: SmallText(text: timeago.format(feed.startedAt)),
+                  trailing: SmallText(
+                      text:
+                          ' عدد الحضور بالداخل: ${feed.viewers.length.toString()}'),
                 ),
                 // Divider(
                 //   thickness: 2.h,
@@ -75,20 +83,43 @@ class FeedWidget extends ConsumerWidget {
     });
   }
 
-  Future<Object?> _joinMeeting(
-      WidgetRef ref, MeetingModel feed, BuildContext context) {
-    return ref
-        .read(meetingControllerProvider)
-        .joinMeeting(feed.channelId)
-        .then((value) => Navigator.pushNamed(
-              context,
-              MeetingScreen.routeName,
-              arguments: {
-                'channelId': feed.channelId,
-                'userID': ref.watch(authControllerProvider).userInfo.uid,
-                'isBroadcaster': false,
-                'title': feed.title,
-              },
-            ));
+  Future<void> _joinMeeting(
+      WidgetRef ref, MeetingModel feed, BuildContext context) async {
+    if (await _checkSubscribtionState(context, ref)) {
+      ref
+          .read(meetingControllerProvider)
+          .joinMeeting(feed.channelId)
+          .then((value) => Navigator.pushNamed(
+                context,
+                MeetingScreen.routeName,
+                arguments: {
+                  'channelId': feed.channelId,
+                  'userID': ref.watch(authControllerProvider).userInfo.uid,
+                  'isBroadcaster': false,
+                  'title': feed.title,
+                },
+              ));
+    }
+  }
+
+  Future<bool> _checkSubscribtionState(
+      BuildContext context, WidgetRef ref) async {
+    if (ref.read(paymentControllerProvider).subscriptionEnded) {
+      ref.read(paymentControllerProvider).changePlanAfterEndDate;
+    }
+    if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+      return true;
+    } else {
+      await FirebaseMessaging.instance.unsubscribeFromTopic('premium');
+      if (context.mounted) {
+        AppHelper.customSnackbar(
+          context: context,
+          title: 'يجب تفعيل الاشتراك لتتمكن من دخول البث المباشر',
+        );
+            Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
+      }
+
+      return false;
+    }
   }
 }

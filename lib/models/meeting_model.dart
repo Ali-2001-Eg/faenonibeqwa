@@ -7,7 +7,7 @@ class MeetingModel extends Equatable {
   final bool isBrodcater;
   final String uid;
   final String username;
-  final DateTime startedAt;
+  final DateTime endsAt;
   final List<String> viewers;
   final String channelId;
   const MeetingModel({
@@ -15,7 +15,7 @@ class MeetingModel extends Equatable {
     required this.isBrodcater,
     required this.uid,
     required this.username,
-    required this.startedAt,
+    required this.endsAt,
     required this.viewers,
     required this.channelId,
   });
@@ -26,7 +26,7 @@ class MeetingModel extends Equatable {
       'isBrodcater': isBrodcater,
       'uid': uid,
       'username': username,
-      'startedAt': startedAt.millisecondsSinceEpoch,
+      'startedAt': endsAt.millisecondsSinceEpoch,
       'viewers': viewers,
       'channelId': channelId,
     };
@@ -38,7 +38,7 @@ class MeetingModel extends Equatable {
       isBrodcater: map['isBrodcater'] as bool,
       uid: map['uid'] as String,
       username: map['username'] as String,
-      startedAt: DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int),
+      endsAt: DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int),
       viewers: List<String>.from((map['viewers'])),
       channelId: map['channelId'] as String,
     );
@@ -51,7 +51,7 @@ class MeetingModel extends Equatable {
       isBrodcater,
       uid,
       username,
-      startedAt,
+      endsAt,
       viewers,
       channelId,
     ];

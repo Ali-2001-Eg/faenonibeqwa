@@ -95,7 +95,7 @@ class SoluteExamScreen extends ConsumerWidget {
                     //initial
                     late Question question;
                     question = data[ref.watch(currentIndex)];
-
+                  
                     return SingleChildScrollView(
                       child: Container(
                         height: context.screenHeight * 0.84,

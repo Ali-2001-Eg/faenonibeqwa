@@ -2,6 +2,7 @@
 
 import 'package:faenonibeqwa/screens/lectures/widgets/video_player_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../models/notification_model.dart';
 import '../../../utils/shared/widgets/custom_appbar.dart';
 
 class AddLectureScreen extends StatefulWidget {
@@ -35,11 +37,15 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                CustomTextField(
-                  controller: titleController,
-                  hintText: 'عنوان المحاضره',
-                  labelText: 'عنوان المحاضره ',
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CustomTextField(
+                    controller: titleController,
+                    hintText: 'عنوان المحاضره',
+                    labelText: 'عنوان المحاضره ',
+                  ),
                 ),
+                10.hSpace,
                 Consumer(
                   builder: (context, ref, child) {
                     if (kDebugMode) {
@@ -77,9 +83,13 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
                                     maxHeight: context.screenHeight / 4,
                                     minWidth: context.screenWidth,
                                   ),
-                                  child: VideoPlayerWidget(
-                                      videoPath: ref.watch(fileNotifier)!.path,
-                                      fromNetwotk: false),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: VideoPlayerWidget(
+                                        videoPath:
+                                            ref.watch(fileNotifier)!.path,
+                                        fromNetwotk: false),
+                                  ),
                                 ),
                         ),
                         Container(
@@ -113,12 +123,24 @@ class _AddLectureScreenState extends State<AddLectureScreen> {
                     } else {
                       return CustomButton(
                           onTap: () {
-                            ref.watch(lecturesRepoProvider).uploadVideo(
+                            ref
+                                .watch(lecturesRepoProvider)
+                                .uploadVideo(
                                   name: titleController.text.trim(),
                                   video:
                                       ref.watch(fileNotifier.notifier).state!,
-                                )
-                            .then((value) => Navigator.pop(_));
+                                ).then((value) {
+                        ref
+                            .watch(notificationRepoProvider)
+                            .sendPremiumNotification(
+                              'محاضره جديده',
+                              '${titleController.text.trim()} 📽📸📽',
+                              notifcationData: NotifcationModel(
+                                time: DateTime.now().toString(),
+                              ),
+                            );
+                      })
+                                .then((value) => Navigator.pop(_));
                           },
                           text: 'إضافه الحلقه');
                     }

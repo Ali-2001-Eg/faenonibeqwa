@@ -75,7 +75,7 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
                             .watch(notificationRepoProvider)
                             .sendPremiumNotification(
                               'استعدوا للبث المباشر',
-                              _titleController.text.trim(),
+                              '${_titleController.text.trim()} 🎧📺⏳',
                               notifcationData: NotifcationModel(
                                 time: DateTime.now().toString(),
                               ),

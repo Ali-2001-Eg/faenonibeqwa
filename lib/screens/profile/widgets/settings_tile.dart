@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:faenonibeqwa/utils/base/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -29,7 +30,7 @@ class SettingsTile extends StatelessWidget {
           padding: EdgeInsets.all(10.w),
           margin: EdgeInsets.all(10.w),
           decoration: BoxDecoration(
-            color: Colors.grey.shade400,
+            color: indicatorColor,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
@@ -37,11 +38,12 @@ class SettingsTile extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: leadingIconColor,
+                color: Colors.white,
               ),
               BigText(
                 text: text,
                 textAlign: TextAlign.center,
+                color: Colors.white,
               ),
               if (!logout!)
                 const Icon(

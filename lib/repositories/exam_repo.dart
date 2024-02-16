@@ -181,23 +181,30 @@ class ExamRepo {
   }
 
 //to make check on the answer
-  Stream<String> getAnswerIdentifier(String examId, String questionId) =>
-      firestore
-          .collection('users')
-          .doc(auth.currentUser!.uid)
-          .collection('examsHistory')
-          .doc(examId)
-          .collection('questions')
-          .doc(questionId)
-          .snapshots()
-          .map((query) {
-        String selectedAnswer = '';
-        if (query.data()!.isNotEmpty) {
-          selectedAnswer = query.data()!['selectedAnswer'];
-        }
-        // print('selectedAnswer');
-        return selectedAnswer;
-      });
+  Stream<String> getAnswerIdentifier(String examId, String questionId) async*{
+    if(!await checkUserHasTakenExam(examId)) {
+      await Future.delayed(const Duration(seconds: 2), () {
+
+    });
+    }
+    yield* firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .doc(examId)
+        .collection('questions')
+        .doc(questionId)
+        .snapshots()
+        .map((query) {
+      String selectedAnswer = '';
+      if (query.data()!.isNotEmpty) {
+        selectedAnswer = query.data()!['selectedAnswer'];
+      }
+      // print('selectedAnswer');
+      return selectedAnswer;
+    });
+  }
+
   Future<bool> checkUserHasTakenExam(String examId) async {
     var documentData = await firestore
         .collection('users')

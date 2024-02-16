@@ -1,34 +1,32 @@
 import 'package:faenonibeqwa/screens/auth/signup_screen.dart';
-import 'package:faenonibeqwa/screens/home/main_sceen.dart';
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:faenonibeqwa/utils/base/app_images.dart';
+import 'package:faenonibeqwa/utils/base/colors.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../utils/base/app_helper.dart';
 import '../../utils/providers/app_providers.dart';
+import '../../utils/shared/widgets/big_text.dart';
+import '../../utils/shared/widgets/custom_button.dart';
+import '../../utils/shared/widgets/custom_text_field.dart';
+import '../home/main_sceen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
   static const String routeName = '/login';
-  const LoginScreen({super.key});
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final _formkey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-  }
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool isEmailCorrect = false;
 
   @override
   void dispose() {
@@ -39,81 +37,99 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print(ref.watch(isLoading));
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: Form(
-          key: _formkey,
-          child: SingleChildScrollView(
-            child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.book,
-                  size: 250.h,
-                  color: context.theme.cardColor,
-                ),
-                16.hSpace,
-                const BigText(
-                  text:
-                      'قم بتسجيل الدخول لتمنح لأبنائك فرصه للتنشئه الدينيه الصحيحه',
-                  textAlign: TextAlign.center,
-                ),
-                16.hSpace,
-                CustomTextField(
-                  controller: _emailController,
-                  hintText: 'البريد الألكتروني',
-                ),
-                15.hSpace,
-                CustomTextField(
-                  controller: _passwordController,
-                  hintText: 'الرقم السرى',
-                ),
-                15.hSpace,
-                if (ref.watch(isLoading))
-                  const CustomIndicator()
-                else
-                  CustomButton(
-                    onTap: () => _login(ref, context),
-                    text: 'تسجيل الدخول',
-                    width: context.screenWidth * 0.7,
-                  ),
-                30.hSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const BigText(text: 'ليس لديك حساب ؟'),
-                    6.wSpace,
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => SignUpScreen()),
-                          ),
-                        );
-                      },
-                      child: const BigText(
-                        text: 'إنشاء حساب',
-                        color: Colors.blue,
-                      ),
-                    )
-                  ],
-                )
-              ],
+      body: Stack(
+        children: [
+          Opacity(
+            opacity: 0.05,
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Image.asset(
+                AppImages.backGround,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  40.hSpace,
+                  Image.asset(
+                    AppImages.logo,
+                    fit: BoxFit.cover,
+                    height: 220.h,
+                    color: indicatorColor,
+                  ),
+                  CustomTextField(
+                    controller: _emailController,
+                    textInputAction: TextInputAction.next,
+                    hintText: 'البريد الالكتروني',
+                    validator: (value) {
+                      if (!validateEmail(value!)) {
+                        return 'Please enter a valid email address';
+                      }
+                      return null;
+                    },
+                  ),
+                  20.hSpace,
+                  CustomTextField(
+                    hintText: 'الرقم السرى',
+                    controller: _passwordController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                  ),
+                  30.hSpace,
+                  ref.watch(isLoading)
+                      ? const CustomIndicator()
+                      : CustomButton(
+                          onTap: () {
+                            _login(ref, context);
+                          },
+                          text: 'تسجيل الدخول',
+                          backgroundColor: indicatorColor,
+                        ),
+                  15.hSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const BigText(
+                        text: 'ليس لديك حساب ؟',
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => const SignUpScreen()),
+                            ),
+                          );
+                        },
+                        child: const BigText(
+                          text: 'إنشاء حساب',
+                          color: indicatorColor,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   void _login(WidgetRef ref, BuildContext context) {
-    if (_formkey.currentState!.validate() &&
-        _emailController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty) {
+    if (_formKey.currentState!.validate()) {
       ref
           .read(authControllerProvider)
           .login(
@@ -130,22 +146,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  // ignore: unused_element
-  void _googleSignIn(WidgetRef ref, BuildContext context) {
-    ref
-        .read(authControllerProvider)
-        .signInWithGoggleAccount()
-        .then((value) => Navigator.pushNamedAndRemoveUntil(
-              context,
-              MainScreen.routeName,
-              (route) => false,
-            ))
-        .catchError((e) {
-      AppHelper.customSnackbar(
-        context: context,
-        title: e.toString(),
+  bool validateEmail(String value) {
+    if (value.isEmpty) {
+      return false;
+    } else {
+      final emailRegex = RegExp(
+        r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
       );
-      return e;
-    });
+      return emailRegex.hasMatch(value);
+    }
   }
 }

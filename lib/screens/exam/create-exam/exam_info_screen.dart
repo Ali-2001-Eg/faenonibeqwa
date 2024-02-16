@@ -58,11 +58,15 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
                     alignment: Alignment.bottomRight,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         child: Container(
                           width: context.screenWidth * 0.5,
                           height: context.screenHeight * 0.2,
-                          color: Colors.grey,
+                          decoration: BoxDecoration(
+                            color: context.theme.scaffoldBackgroundColor,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey, width: 0.5),
+                          ),
                           child: widget.examImage == null
                               ? Icon(
                                   Icons.image_outlined,
@@ -108,19 +112,19 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.w),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Expanded(
-                        child: CustomTextField(
-                          controller: widget.totalGradeController,
-                          hintText: 'الدرجه الكليه',
-                          keyBoardType: TextInputType.number,
-                          suffixIcon: Icons.grade_outlined,
-                        ),
+                      CustomTextField(
+                        controller: widget.totalGradeController,
+                        hintText: 'الدرجه الكليه',
+                        keyBoardType: TextInputType.number,
+                        suffixIcon: Icons.grade_outlined,
                       ),
-                      10.wSpace,
-                      Expanded(
-                        flex: 2,
+                      10.hSpace,
+                      InkWell(
+                        onTap: () {
+                          widget.selectDeadline(context);
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
@@ -134,7 +138,7 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
                                   text: 'موعد الامتحان', maxLines: 2),
                               SmallText(
                                   maxLines: 2,
-                                  text: widget.deadlineTime.day.toString()),
+                                  text: (widget.deadlineTime).toString()),
                               InkWell(
                                 onTap: () {
                                   widget.selectDeadline(context);

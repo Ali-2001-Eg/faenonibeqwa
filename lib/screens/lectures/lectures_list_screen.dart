@@ -16,7 +16,6 @@ class LecturesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: const CustomAppBar(title: 'المحاضرات'),
       body: Consumer(
         builder: (context, ref, child) {
@@ -28,11 +27,9 @@ class LecturesListScreen extends StatelessWidget {
               }
               return ListView.separated(
                 itemCount: data.length,
-                separatorBuilder: (context, index) => Divider(
-                  color: context.theme.dividerColor,
-                  thickness: 2,
-                  indent: 30,
-                ),
+                shrinkWrap: true,
+                separatorBuilder: (context, index) =>
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                 itemBuilder: (ctx, index) {
                   final lecture = data[index];
                   return LectureWidget(

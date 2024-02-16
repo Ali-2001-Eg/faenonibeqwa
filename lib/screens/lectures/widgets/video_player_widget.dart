@@ -6,7 +6,6 @@ import 'package:faenonibeqwa/utils/extensions/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-
 class VideoPlayerWidget extends StatefulWidget {
   final String videoPath;
   final bool fromNetwotk;
@@ -35,7 +34,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         .initialize()
         .then((_) => setState(() => _chewieController = ChewieController(
               videoPlayerController: _videoPlayerController,
-              aspectRatio: 16 / 9,
+              aspectRatio: 1 / 1,
               autoInitialize: true,
               autoPlay: widget.fromNetwotk ? false : true,
               // placeholder: const CircularProgressIndicator(color: Colors.amber),
@@ -55,7 +54,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     if (_videoPlayerController.value.isInitialized) {
       // _videoPlayerController.value.
       return AspectRatio(
-        aspectRatio: _videoPlayerController.value.aspectRatio,
+        aspectRatio: 16 / 9,
         child: Chewie(controller: _chewieController),
       );
     } else {

@@ -10,6 +10,7 @@ import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/exam_model.dart';
+import '../../../models/notification_model.dart';
 import '../../../utils/base/question_z.dart';
 import '../../../utils/providers/app_providers.dart';
 import 'exam_sammary_screen.dart';
@@ -152,8 +153,15 @@ class _CreateExamScreenState extends ConsumerState<CreateExamScreen> {
       }
     }
     if (context.mounted) {
-      _storeExamData(context).then(
-          (value) => ref.read(isLoading.notifier).update((state) => false));
+      _storeExamData(context).then((value) {
+        ref.watch(notificationRepoProvider).sendPremiumNotification(
+              'استعدوا للإختبار الجديد',
+              '${_titleController.text.trim()} 📜🖨📃',
+              notifcationData: NotifcationModel(
+                time: DateTime.now().toString(),
+              ),
+            );
+      }).then((value) => ref.read(isLoading.notifier).update((state) => false));
     }
   }
 

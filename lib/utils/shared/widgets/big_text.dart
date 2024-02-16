@@ -5,6 +5,8 @@ class BigText extends StatelessWidget {
   final String text;
   final double fontSize;
   final Color? color;
+  final int? maxlines;
+  final TextOverflow? overflow;
   final TextAlign? textAlign;
   final FontWeight fontWeight;
   const BigText({
@@ -14,6 +16,7 @@ class BigText extends StatelessWidget {
     this.color,
     this.textAlign,
     this.fontWeight = FontWeight.w800,
+    this.maxlines, this.overflow,
   });
 
   @override
@@ -26,6 +29,8 @@ class BigText extends StatelessWidget {
         fontSize: fontSize,
       ),
       textAlign: textAlign,
+      maxLines: maxlines,
+      overflow: overflow,
     );
   }
 }

@@ -19,10 +19,10 @@ ThemeData get lightMode => ThemeData.light().copyWith(
       hoverColor: lightScaffold,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
           backgroundColor: Colors.white,
-          selectedItemColor: lightButton,
+          selectedItemColor: indicatorColor,
           unselectedItemColor: Colors.grey[400],
           selectedIconTheme: const IconThemeData(
-            color: lightButton,
+            color: indicatorColor,
           )),
       iconButtonTheme: IconButtonThemeData(
         style: ButtonStyle(
@@ -39,7 +39,7 @@ ThemeData get lightMode => ThemeData.light().copyWith(
       elevatedButtonTheme: const ElevatedButtonThemeData(
         style: ButtonStyle(
             elevation: MaterialStatePropertyAll<double>(0),
-            backgroundColor: MaterialStatePropertyAll<Color>(lightButton),
+            backgroundColor: MaterialStatePropertyAll<Color>(indicatorColor),
             padding: MaterialStatePropertyAll<EdgeInsets>(EdgeInsets.all(10)),
             shape: MaterialStatePropertyAll(RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(8))))),
@@ -50,11 +50,11 @@ ThemeData get lightMode => ThemeData.light().copyWith(
       appBarTheme: AppBarTheme(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(40),
-            bottomRight: Radius.circular(40),
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
           ),
         ),
-        color: lightAppBar,
+        color: indicatorColor,
         toolbarHeight: 50.h,
         titleTextStyle: TextStyle(color: Colors.white, fontSize: 10.h),
         actionsIconTheme: const IconThemeData(
@@ -64,7 +64,7 @@ ThemeData get lightMode => ThemeData.light().copyWith(
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         elevation: 0,
-        backgroundColor: lightAppBar,
+        backgroundColor: indicatorColor,
       ),
       inputDecorationTheme: const InputDecorationTheme(
         fillColor: lightChatBox,

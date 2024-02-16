@@ -2,8 +2,9 @@ import 'package:faenonibeqwa/models/exam_model.dart';
 import 'package:faenonibeqwa/repositories/admob_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
-import 'package:faenonibeqwa/utils/base/subscription_dialoge.dart';
+import 'package:faenonibeqwa/utils/base/subscription_screen.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -45,73 +46,112 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
         padding: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.withOpacity(0.5)),
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              blurRadius: 1,
-              spreadRadius: 1,
-            )
+              blurRadius: 50,
+              spreadRadius: 10,
+              color: Colors.white,
+              offset: Offset(0, -3),
+            ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                imageUrl: widget.examModel.examImageUrl,
-                height: 120.h,
-                fit: BoxFit.cover,
-                width: double.infinity,
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Expanded(
-                  child: SmallText(
-                    text: 'اسم الاختبار / ${widget.examModel.examTitle}',
-                    color: Colors.black,
-                    // overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    fontWeight: FontWeight.w500,
-                  ),
+        child: ListTile(
+          title: SmallText(
+            text: 'اسم الاختبار / ${widget.examModel.examTitle}',
+            color: Colors.black,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            fontWeight: FontWeight.bold,
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SmallText(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  text: 'الوصف / ${widget.examModel.examDescription}',
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
                 ),
-              ),
+                5.hSpace,
+                SmallText(
+                  fontSize: 10.sp,
+                  text: 'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ],
             ),
-            10.hSpace,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: SmallText(
-                text: 'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: SmallText(
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                text: 'الوصف / ${widget.examModel.examDescription}',
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: CustomButton(
-                  onTap: () {
-                    _checkSubscribtionAndEnterExam(context);
-                  },
-                  text: 'ادخل الآن',
-                  textColor: Colors.white),
-            )
-          ],
+          ),
+          trailing: const Icon(
+            Icons.text_snippet_outlined,
+          ),
+          leading: CircleAvatar(
+              backgroundImage: CachedNetworkImageProvider(
+            widget.examModel.examImageUrl,
+          )),
         ),
+
+        //  Column(
+        //   crossAxisAlignment: CrossAxisAlignment.start,
+        //   children: [
+        //     ClipRRect(
+        //       borderRadius: BorderRadius.circular(12),
+        //       child: CachedNetworkImage(
+        //         imageUrl: widget.examModel.examImageUrl,
+        //         height: 120.h,
+        //         fit: BoxFit.cover,
+        //         width: double.infinity,
+        //       ),
+        //     ),
+        //     const SizedBox(height: 10),
+        //     SizedBox(
+        //       child: Padding(
+        //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        //         child: SmallText(
+        //           text: 'اسم الاختبار / ${widget.examModel.examTitle}',
+        //           color: Colors.black,
+        //           // overflow: TextOverflow.ellipsis,
+        //           maxLines: 1,
+        //           fontWeight: FontWeight.w500,
+        //         ),
+        //       ),
+        //     ),
+        //     10.hSpace,
+        //     Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        //       child: SmallText(
+        //         text: 'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
+        //         color: Colors.black,
+        //         fontWeight: FontWeight.w500,
+        //       ),
+        //     ),
+        //     const SizedBox(height: 10),
+        //     Padding(
+        //       padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        //       child: SmallText(
+        //         maxLines: 3,
+        //         overflow: TextOverflow.ellipsis,
+        //         text: 'الوصف / ${widget.examModel.examDescription}',
+        //         color: Colors.black,
+        //         fontWeight: FontWeight.w500,
+        //       ),
+        //     ),
+        //     const SizedBox(height: 10),
+        //     Center(
+        //       child: CustomButton(
+        //           onTap: () {
+        //             _checkSubscribtionAndEnterExam(context);
+        //           },
+        //           text: 'ادخل الآن',
+        //           textColor: Colors.white),
+        //     )
+        //   ],
+        // ),
       ),
     );
   }
@@ -134,13 +174,7 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
           title: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
         );
       }
-      Future.delayed(
-          const Duration(seconds: 1),
-          () => showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return const SubscriptionDialog();
-              }));
+      Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
     }
   }
 }

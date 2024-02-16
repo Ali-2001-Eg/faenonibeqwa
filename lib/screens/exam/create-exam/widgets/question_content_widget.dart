@@ -29,12 +29,12 @@ class QuestionContentWidget extends StatefulWidget {
 }
 
 class _QuestionContentWidgetState extends State<QuestionContentWidget> {
-  int _selectedOption = 0;
+  int? _selectedOption;
   @override
   void initState() {
     if (mounted) {
       setState(() {
-        _selectedOption = 0;
+        _selectedOption = null;
       });
     }
     super.initState();
@@ -119,105 +119,97 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
           const BigText(text: "الاجابات"),
           10.hSpace,
           //answers
-          Row(
-            children: [
-              DropdownButton<int>(
-                value:
-                    widget.questions[widget.questionIndex].correctAnswerIndex,
-                onChanged: (value) {
-                  setState(() {
-                    widget.questions[widget.questionIndex].correctAnswerIndex =
-                        value!;
-                  });
-                },
-                elevation: 0,
-                dropdownColor: Colors.white,
-                focusColor: Colors.grey,
-                style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-                items: [0, 1, 2, 3]
-                    .map((index) => DropdownMenuItem<int>(
-                          value: index,
-                          child: Text(index == 0
+          DropdownButton<int>(
+            value: null,
+            hint: const SmallText(text: 'يرجي اختيار رمز الاجابه الصحيحه'),
+            onChanged: (value) {
+              setState(() {
+                widget.questions[widget.questionIndex].correctAnswerIndex =
+                    value!;
+              });
+            },
+            elevation: 0,
+            dropdownColor: Colors.white,
+            focusColor: Colors.grey,
+            style: TextStyle(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.black),
+            items: [0, 1, 2, 3]
+                .map((index) => DropdownMenuItem<int>(
+                      value: index,
+                      child: Text(index == 0
+                          ? 'أ'
+                          : index == 1
+                              ? 'ب'
+                              : index == 2
+                                  ? 'ج'
+                                  : "د"),
+                    ))
+                .toList(),
+          ),
+          ListView.separated(
+            itemCount: 4,
+            shrinkWrap: true,
+            // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            physics: const BouncingScrollPhysics(),
+            separatorBuilder: (_, i) =>
+                Padding(padding: EdgeInsets.all(10.w), child: Container()),
+            itemBuilder: (context, i) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 30, width: 30,
+                    // padding: EdgeInsets.all(6.w),
+                    decoration: BoxDecoration(
+                        color: widget.questions[widget.questionIndex]
+                                    .correctAnswerIndex ==
+                                i
+                            ? context.theme.appBarTheme.backgroundColor
+                            : null,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.black, width: 0.5)),
+                    child: Center(
+                      child: SmallText(
+                          text: i == 0
                               ? 'أ'
-                              : index == 1
+                              : i == 1
                                   ? 'ب'
-                                  : index == 2
+                                  : i == 2
                                       ? 'ج'
                                       : "د"),
-                        ))
-                    .toList(),
-              ),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: 4,
-                  shrinkWrap: true,
-                  // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                  physics: const BouncingScrollPhysics(),
-                  separatorBuilder: (_, i) => Padding(
-                      padding: EdgeInsets.all(10.w), child: Container()),
-                  itemBuilder: (context, i) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          height: 30, width: 30,
-                          // padding: EdgeInsets.all(6.w),
-                          decoration: BoxDecoration(
-                              color: widget.questions[widget.questionIndex]
-                                          .correctAnswerIndex ==
-                                      i
-                                  ? context.theme.appBarTheme.backgroundColor
-                                  : null,
-                              shape: BoxShape.circle,
-                              border:
-                                  Border.all(color: Colors.black, width: 0.5)),
-                          child: Center(
-                            child: SmallText(
-                                text: i == 0
-                                    ? 'أ'
-                                    : i == 1
-                                        ? 'ب'
-                                        : i == 2
-                                            ? 'ج'
-                                            : "د"),
-                          ),
+                    ),
+                  ),
+                  5.wSpace,
+                  Expanded(
+                    child: Container(
+                        constraints: BoxConstraints(
+                          minWidth: 30,
+                          maxWidth: context.screenWidth * 0.7,
+                          maxHeight: 200,
+                          minHeight: 50,
                         ),
-                        5.wSpace,
-                        Expanded(
-                          child: Container(
-                              constraints: BoxConstraints(
-                                minWidth: 30,
-                                maxWidth: context.screenWidth * 0.7,
-                                maxHeight: 200,
-                                minHeight: 50,
-                              ),
-                              child: CustomTextField(
-                                filled: widget.questions[widget.questionIndex]
-                                        .correctAnswerIndex ==
-                                    i,
-                                filledColor:
-                                    context.theme.appBarTheme.backgroundColor,
-                                controller: widget
-                                    .questions[widget.questionIndex]
-                                    .answerControllers[i],
-                                hintText: i == 0
-                                    ? 'أ'
-                                    : i == 1
-                                        ? 'ب'
-                                        : i == 2
-                                            ? 'ج'
-                                            : 'د',
-                              )),
-                        )
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ],
+                        child: CustomTextField(
+                          filled: widget.questions[widget.questionIndex]
+                                  .correctAnswerIndex ==
+                              i,
+                          filledColor:
+                              context.theme.appBarTheme.backgroundColor,
+                          controller: widget.questions[widget.questionIndex]
+                              .answerControllers[i],
+                          hintText: i == 0
+                              ? 'أ ادخل إجابه السؤال'
+                              : i == 1
+                                  ? ' ادخل إجابه السؤال ب'
+                                  : i == 2
+                                      ? 'ادخل إجابه السؤال ج'
+                                      : 'ادخل إجابه السؤال د',
+                        )),
+                  )
+                ],
+              );
+            },
           ),
         ],
       ),

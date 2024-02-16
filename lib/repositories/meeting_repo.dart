@@ -31,7 +31,7 @@ class MeetingRepo extends ChangeNotifier {
           isBrodcater: isBrodcater,
           uid: auth.currentUser!.uid,
           username: auth.currentUser!.displayName!,
-          startedAt: DateTime.now(),
+          endsAt: DateTime.now(),
           viewers: <String>[auth.currentUser!.uid],
           channelId: channelId,
         );
@@ -61,15 +61,13 @@ class MeetingRepo extends ChangeNotifier {
       });
 
   Future<void> joinMeeting(String channelId) async {
-    _addStreamToUser(channelId).then((value) async {
-      var meetingData =
-          await firestore.collection('meeting').doc(channelId).get();
-      if (meetingData.data() != null) {
-        await firestore.collection('meeting').doc(channelId).update({
-          'viewers': FieldValue.arrayUnion([auth.currentUser!.uid]),
-        });
-      }
-    });
+    var meetingData =
+        await firestore.collection('meeting').doc(channelId).get();
+    if (meetingData.data() != null) {
+      await firestore.collection('meeting').doc(channelId).update({
+        'viewers': FieldValue.arrayUnion([auth.currentUser!.uid]),
+      });
+    }
   }
 
   Future<void> leaveMeeting(String channelId) async {
@@ -83,23 +81,24 @@ class MeetingRepo extends ChangeNotifier {
   }
 
   Future<void> endMeeting(String channelId) async {
-    // await _addStreamToUser(channelId).then(
-    //     (value) => firestore.collection('meeting').doc(channelId).delete());
+    firestore.collection('meeting').doc(channelId).update({
+      'startedAt': DateTime.now().millisecondsSinceEpoch,
+    });
   }
 
-  Future<void> _addStreamToUser(String channelId) async {
-    final meetingData =
-        await firestore.collection('meeting').doc(channelId).get();
-    if (meetingData.exists) {
-      final bool userJoined =
-          meetingData.data()!['viewers'].contains(auth.currentUser!.uid);
-      if (!userJoined) {
-        await firestore.collection('users').doc(auth.currentUser!.uid).update({
-          'streamsJoined': FieldValue.increment(1),
-        });
-      }
-    }
-  }
+  // Future<void> _addStreamToUser(String channelId) async {
+  //   final meetingData =
+  //       await firestore.collection('meeting').doc(channelId).get();
+  //   if (meetingData.exists) {
+  //     final bool userJoined =
+  //         meetingData.data()!['viewers'].contains(auth.currentUser!.uid);
+  //     if (!userJoined) {
+  //       await firestore.collection('users').doc(auth.currentUser!.uid).update({
+  //         'streamsJoined': FieldValue.increment(1),
+  //       });
+  //     }
+  //   }
+  // }
 
   Stream<num> get userPresence async* {
     num userPresence = 0;
@@ -111,6 +110,10 @@ class MeetingRepo extends ChangeNotifier {
         }
       }
     }
-    yield (userPresence / meetingDocs.docs.length)*100;
+    if(meetingDocs.docs.length.isNaN){
+
+    yield 0;
+    }
+    yield (userPresence / meetingDocs.docs.length) * 100;
   }
 }

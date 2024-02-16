@@ -5,6 +5,7 @@ import 'package:faenonibeqwa/screens/lectures/add_lecture/add_lecture_screen.dar
 import 'package:faenonibeqwa/screens/meeting/create_meeting_screen.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/screens/trip/create_trip_screen.dart';
+import 'package:faenonibeqwa/utils/base/subscription_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/home/main_sceen.dart';
@@ -13,11 +14,13 @@ import 'base/error_screen.dart';
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case LoginScreen.routeName:
-      return _buildNewRoute(LoginScreen());
+      return _buildNewRoute(const LoginScreen());
     case MainScreen.routeName:
       return _buildNewRoute(const MainScreen());
     case CreateMeetingScreen.routeName:
       return _buildNewRoute(const CreateMeetingScreen());
+    case SubscriptionScreen.routeName:
+      return _buildNewRoute(const SubscriptionScreen());
     case CreateTripScreen.routeName:
       return _buildNewRoute(const CreateTripScreen());
     case CreateExamScreen.routeName:
@@ -25,10 +28,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case AddLectureScreen.routeName:
       return _buildNewRoute(const AddLectureScreen());
     case AddDocumentScreen.routeName:
-      final args = settings.arguments as String;
-      final lectureId = args;
+      final args = settings.arguments as Map<String, dynamic>;
+      final lectureId = args['lectureId'];
+      final lectureName = args['lectureName'];
       return _buildNewRoute(AddDocumentScreen(
-        lectureId: lectureId,
+        lectureId: lectureId, lectureName: lectureName,
       ));
     case MeetingScreen.routeName:
       final args = settings.arguments as Map<String, dynamic>;

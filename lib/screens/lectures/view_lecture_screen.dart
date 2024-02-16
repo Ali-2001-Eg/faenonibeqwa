@@ -57,7 +57,10 @@ class ViewLectureScreen extends StatelessWidget {
         icon: Icons.picture_as_pdf_rounded,
         routeName: AddDocumentScreen.routeName,
         heroTag: 'add-document',
-        arguments: id,
+        arguments: {
+          'lectureName': title,
+          'lectureId': id,
+        },
       ),
     );
   }

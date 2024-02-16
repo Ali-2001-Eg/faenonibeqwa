@@ -1,5 +1,7 @@
 import 'package:faenonibeqwa/ads/banner_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -46,12 +48,13 @@ class MeetingScreen extends ConsumerWidget {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return AlertDialog(
-              backgroundColor: context.theme.cardColor,
-              title: const Text("الخروج من المكالمه",
-                  style: TextStyle(color: Colors.white70)),
-              content: const Text(
-                  "يمكنك الخروج من المكالمه و الرجوع في اي وقت لاحق",
-                  style: TextStyle(color: Colors.white70)),
+              // backgroundColor: context.theme.cardColor,
+              title: const BigText(
+                text: "الخروج من المكالمه",
+              ),
+              content: const SmallText(
+                text: "يمكنك الخروج من المكالمه و الرجوع في اي وقت لاحق",
+              ),
               actions: [
                 ElevatedButton(
                   child: const Text("الاكمال",
@@ -95,7 +98,6 @@ class MeetingScreen extends ConsumerWidget {
               conferenceID: channelId,
               config: config,
             ),
-            const BannerWidget(),
           ],
         ),
       ),

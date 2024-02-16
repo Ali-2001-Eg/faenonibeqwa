@@ -26,7 +26,7 @@ class CountdownWidget extends StatefulWidget {
 }
 
 class _CountdownWidgetState extends State<CountdownWidget>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late AnimationController controller;
   bool isPlaying = false;
 
@@ -50,10 +50,9 @@ class _CountdownWidgetState extends State<CountdownWidget>
           .then((value) => Navigator.pushNamedAndRemoveUntil(
               context, MainScreen.routeName, (route) => false))
           .catchError((err) {
-            AppHelper.customSnackbar(
-              context: context, title: err.toString());
-          return err;
-          });
+        AppHelper.customSnackbar(context: context, title: err.toString());
+        return err;
+      });
     }
   }
 

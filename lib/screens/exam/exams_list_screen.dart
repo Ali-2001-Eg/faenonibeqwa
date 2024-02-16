@@ -28,6 +28,7 @@ class ExamsListScreen extends ConsumerWidget {
         }
         return ListView.builder(
           itemCount: data.length,
+          shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
             return ExamTileWidget(

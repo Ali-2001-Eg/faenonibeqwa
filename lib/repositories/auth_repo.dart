@@ -27,13 +27,8 @@ class AuthRepo {
   Future<void> signInWithGoogleAccount() async {
     final GoogleSignInAccount? googleSignInAccount =
         await _googleSignIn.signIn();
-    ref
-        .read(displayName.state)
-        .update((state) => googleSignInAccount!.displayName!);
-    ref.read(displayEmail.state).update((state) => googleSignInAccount!.email);
-    ref.read(displayPhotoUrl.state).update((state) =>
-        googleSignInAccount!.photoUrl ??
-        'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg');
+    
+        'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg';
     GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount!.authentication;
     final AuthCredential credentials = GoogleAuthProvider.credential(
@@ -52,10 +47,10 @@ class AuthRepo {
     try {
       // String userId = const Uuid().v1();
       UserModel user = UserModel(
-          name: ref.read(displayName),
+          name: auth.currentUser!.displayName!,
           uid: auth.currentUser!.uid,
-          photoUrl: ref.read(displayPhotoUrl),
-          email: ref.read(displayEmail),
+          photoUrl: '',
+          email: auth.currentUser!.email!,
           isAdmin: false,
           isPremium: false,
           notificationToken: (await FirebaseMessaging.instance.getToken())!);
@@ -136,16 +131,19 @@ class AuthRepo {
     try {
       ref.read(isLoading.notifier).update((state) => true);
 
-      await Future.delayed(const Duration(seconds: 5), () {
-        print('loading');
-      });
-      // await auth.createUserWithEmailAndPassword(
-      //   email: email,
-      //   password: password,
-      // );
+      // await Future.delayed(const Duration(seconds: 5), () {
+      //   print('loading');
+      // });
+      await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-      // auth.currentUser!.updateProfile(displayName: ref.read(displayName));
-      // await auth.currentUser!.reload();
+      auth.currentUser!.updateProfile(displayName: username);
+      auth.currentUser!.updateProfile(displayName: email);
+      
+      await auth.currentUser!.reload();
+      
 
       // _saveCredentials();
     } catch (e) {
