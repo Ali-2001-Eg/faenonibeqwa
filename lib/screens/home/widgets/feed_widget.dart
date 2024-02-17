@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../models/meeting_model.dart';
 import '../../../utils/base/app_helper.dart';
-import '../../../utils/base/subscription_screen.dart';
+import '../payment/subscription_screen.dart';
 import '../../../utils/providers/app_providers.dart';
 import '../../../utils/shared/widgets/big_text.dart';
 import '../../../utils/shared/widgets/custom_indicator.dart';

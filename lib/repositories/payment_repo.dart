@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,10 +55,48 @@ class PaymentRepo {
   PlanEnum get subscriptionPlan =>
       ref.read(userDataProvider).value!.planEnum ?? PlanEnum.notSubscribed;
 
-  Future<void> get changePlanAfterEndDate async => await firestore.collection('users').doc(auth.currentUser!.uid).update({
-      'plan': PlanEnum.notSubscribed.type,
-      'premium': false,
-      'freePlanEnded':true
+  Future<void> get changePlanAfterEndDate async =>
+      await firestore.collection('users').doc(auth.currentUser!.uid).update({
+        'plan': PlanEnum.notSubscribed.type,
+        'premium': false,
+        'freePlanEnded': true
+      });
+  Future<void> changePlansAmount(
+      String monthPlan, String semiAnnuallPlan, String annuallPlan) async {
+    ref.read(isLoading.notifier).update((state) => true);
+    await firestore.collection('plans').doc('plans').set({
+      'monthPlan': monthPlan,
+      'semiAnnuallPlan': semiAnnuallPlan,
+      'annuallPlan': annuallPlan,
     });
-}
+    ref.read(isLoading.notifier).update((state) => false);
+  }
 
+  Stream<String> planPrice(PlanEnum plan) {
+    // ref.read(isLoading.notifier).update((state) => true);
+    return firestore.collection('plans').doc('plans').snapshots().map((event) {
+      String price = '';
+      if (event.exists) {
+        switch (plan) {
+          case PlanEnum.notSubscribed:
+            price = '0';
+            break;
+          case PlanEnum.freeTrail:
+            price = '0';
+            break;
+          case PlanEnum.monthly:
+            price = '${event.data()!['monthPlan']}00';
+            break;
+          case PlanEnum.semiAnnually:
+            price = '${event.data()!['semiAnnuallPlan']}00';
+            break;
+          case PlanEnum.annually:
+            price = '${event.data()!['annuallPlan']}00';
+            break;
+        }
+      }
+      // ref.read(isLoading.notifier).update((state) => false);
+      return price;
+    });
+  }
+}

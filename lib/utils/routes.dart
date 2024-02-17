@@ -5,7 +5,7 @@ import 'package:faenonibeqwa/screens/lectures/add_lecture/add_lecture_screen.dar
 import 'package:faenonibeqwa/screens/meeting/create_meeting_screen.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/screens/trip/create_trip_screen.dart';
-import 'package:faenonibeqwa/utils/base/subscription_screen.dart';
+import 'package:faenonibeqwa/screens/home/payment/subscription_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/home/main_sceen.dart';

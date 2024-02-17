@@ -1,3 +1,4 @@
+import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/base/app_images.dart';
 import 'package:faenonibeqwa/utils/base/colors.dart';
@@ -13,9 +14,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:paymob_payment/paymob_payment.dart';
-import '../providers/app_providers.dart';
-import '../shared/widgets/big_text.dart';
-import '../shared/widgets/plan_widget.dart';
+import '../../../utils/providers/app_providers.dart';
+import '../../../utils/shared/widgets/big_text.dart';
+import 'widgets/payment_body.dart';
 
 class SubscriptionScreen extends ConsumerWidget {
   const SubscriptionScreen({super.key});
@@ -69,6 +70,7 @@ class SubscriptionScreen extends ConsumerWidget {
                     textAlign: TextAlign.center,
                     fontWeight: FontWeight.normal,
                   ),
+                  if (ref.watch(isLoading)) const ShimmerWidget(),
                   const PaymentBody(),
                 ],
               ),
@@ -79,31 +81,33 @@ class SubscriptionScreen extends ConsumerWidget {
       bottomNavigationBar: Container(
         height: context.screenHeight / 7,
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-        decoration: const BoxDecoration(
-          // color: Colors.transparent,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25),
-            topRight: Radius.circular(25),
-          ),
-        ),
+        // color: Colors.transparent,
+
         child: CustomButton(
             onTap: () {
-              switch (ref.watch(planType)) {
-                case PlanEnum.notSubscribed:
-                  // print('not subscribed');
-                  break;
-                case PlanEnum.freeTrail:
-                  _freeTrailSubscribe(ref, context);
-                  break;
-                case PlanEnum.monthly:
-                  _monthlyPlanSubscribe(context, ref);
-                  break;
-                case PlanEnum.semiAnnually:
-                  _semiAnnuallyPlanSubscribe(context, ref);
-                  break;
-                case PlanEnum.annually:
-                  _annuallyPlanSubscribe(context, ref);
-                  break;
+              if (ref.watch(isLoading)) {
+                return;
+              } else {
+                // ref.watch(isLoading.notifier).update((state) => true);
+                switch (ref.watch(planType)) {
+                  case PlanEnum.notSubscribed:
+                    // print('not subscribed');
+                    break;
+                  case PlanEnum.freeTrail:
+                    _freeTrailSubscribe(ref, context);
+                    break;
+                  case PlanEnum.monthly:
+                    _monthlyPlanSubscribe(context, ref);
+                    // print(ref.watch(isLoading));
+                    break;
+                  case PlanEnum.semiAnnually:
+                    _semiAnnuallyPlanSubscribe(context, ref);
+                    break;
+                  case PlanEnum.annually:
+                    _annuallyPlanSubscribe(context, ref);
+                    break;
+                }
+                ref.watch(isLoading.notifier).update((state) => false);
               }
             },
             text: 'اشتراك',
@@ -138,7 +142,7 @@ class SubscriptionScreen extends ConsumerWidget {
           .pay(
             context: context,
             currency: "EGP",
-            amountInCents: "15000",
+            amountInCents: getPrices(PlanEnum.annually, ref),
             billingData: PaymobBillingData(),
             onPayment: (responsedata) async {
               if (responsedata.success == true) {
@@ -199,7 +203,7 @@ class SubscriptionScreen extends ConsumerWidget {
           .pay(
         context: context,
         currency: "EGP",
-        amountInCents: "8000",
+        amountInCents: getPrices(PlanEnum.semiAnnually, ref),
         billingData: PaymobBillingData(),
         onPayment: (responsedata) async {
           if (responsedata.success == true) {
@@ -233,6 +237,7 @@ class SubscriptionScreen extends ConsumerWidget {
 
   Future<void> _monthlyPlanSubscribe(
       BuildContext context, WidgetRef ref) async {
+    ref.read(isLoading.notifier).update((state) => true);
     //check plan type
     if (ref.read(paymentControllerProvider).planType == PlanEnum.monthly) {
       AppHelper.customSnackbar(
@@ -253,7 +258,7 @@ class SubscriptionScreen extends ConsumerWidget {
         .pay(
       context: context,
       currency: "EGP",
-      amountInCents: "5000",
+      amountInCents: getPrices(PlanEnum.monthly, ref),
       billingData: PaymobBillingData(),
       onPayment: (responsedata) async {
         if (responsedata.success == true) {
@@ -267,6 +272,7 @@ class SubscriptionScreen extends ConsumerWidget {
             title: 'هناك خطأ في العمليه ${responsedata.message}',
           );
         }
+        ref.read(isLoading.notifier).update((state) => false);
       },
     )
         .then(
@@ -322,86 +328,14 @@ class SubscriptionScreen extends ConsumerWidget {
           );
     }
   }
-}
 
-class PaymentBody extends ConsumerStatefulWidget {
-  const PaymentBody({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _PaymentBodyState();
-}
-
-class _PaymentBodyState extends ConsumerState<PaymentBody> {
-  int selectedContainerIndex =
-      -1; // Index of the selected container, -1 for none
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      children: [
-        //free trail
-        if (ref.watch(userDataProvider).value!.freePlanEnded == false)
-          PlanWidget(
-            index: 0,
-            selectedIndex: selectedContainerIndex,
-            title: 'تجربه مجانيه لمده 15 يوم',
-            price: 'مجانا',
-            onTap: _handleTap,
-            unit: 'نصف شهر',
-          ),
-        //monthly
-        PlanWidget(
-          title: 'للاشتراك الشهري',
-          price: '50',
-          index: 1,
-          selectedIndex: selectedContainerIndex,
-          onTap: _handleTap,
-          unit: 'شهر',
-        ),
-        //semi-anually
-        PlanWidget(
-          index: 2,
-          selectedIndex: selectedContainerIndex,
-          title: 'للاشتراك لمده ترم دراسي كامل',
-          price: '80',
-          onTap: _handleTap,
-          unit: 'ترم',
-        ),
-        //anually
-        PlanWidget(
-          index: 3,
-          selectedIndex: selectedContainerIndex,
-          title: 'للاشتراك السنوي',
-          price: '150',
-          onTap: _handleTap,
-          unit: 'سنه',
-        ),
-      ],
-    );
-  }
-
-  void _handleTap(int containerIndex) {
-    setState(() {
-      selectedContainerIndex = containerIndex;
+  String getPrices(PlanEnum planType, WidgetRef ref) {
+    return ref.read(planPricesStreamProvider(planType)).when(data: (data) {
+      return data;
+    }, error: (error, sta) {
+      throw error;
+    }, loading: () {
+      return '';
     });
-    switch (selectedContainerIndex) {
-      case 0:
-        ref.read(planType.notifier).update((state) => PlanEnum.freeTrail);
-        return;
-      case 1:
-        ref.read(planType.notifier).update((state) => PlanEnum.monthly);
-        return;
-      case 2:
-        ref.read(planType.notifier).update((state) => PlanEnum.semiAnnually);
-        return;
-      case 3:
-        ref.read(planType.notifier).update((state) => PlanEnum.annually);
-        return;
-      default:
-        ref.read(planType.notifier).update((state) => PlanEnum.notSubscribed);
-        return;
-    }
   }
 }

@@ -12,4 +12,15 @@ class PaymenController {
   bool get subscriptionEnded => paymentRepo.subscriptionEnded;
   PlanEnum get planType => paymentRepo.subscriptionPlan;
   Future<void> get changePlanAfterEndDate => paymentRepo.changePlanAfterEndDate;
+  Future<void> changePlansAmount({
+    required String monthPlanPrice,
+    required String semiAnnuallPlanPrice,
+    required String annuallPlanPrice,
+  }) =>
+      paymentRepo.changePlansAmount(
+        monthPlanPrice,
+        semiAnnuallPlanPrice,
+        annuallPlanPrice,
+      );
+      
 }

@@ -3,7 +3,7 @@ import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/screens/exam/create-exam/create_exam_screen.dart';
 import 'package:faenonibeqwa/screens/meeting/create_meeting_screen.dart';
 import 'package:faenonibeqwa/screens/profile/change_plan/change_plan_screen.dart';
-import 'package:faenonibeqwa/utils/base/subscription_screen.dart';
+import 'package:faenonibeqwa/screens/home/payment/subscription_screen.dart';
 import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';

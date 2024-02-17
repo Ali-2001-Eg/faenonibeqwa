@@ -46,7 +46,7 @@ final meetingRepoProvider = Provider((ref) =>
     MeetingRepo(ref, FirebaseAuth.instance, FirebaseFirestore.instance));
 
 final meetingControllerProvider = Provider((ref) {
-  final meetingRepo = ref.watch(meetingRepoProvider);
+  final meetingRepo = ref.read(meetingRepoProvider);
   return MeetingController(ref, meetingRepo);
 });
 
@@ -121,18 +121,15 @@ final answersProvider =
   return examConrtoller.answers(parameters);
 });
 
-final lecturesWatchedProvider =
-    StreamProvider((ref) {
+final lecturesWatchedProvider = StreamProvider((ref) {
   final controller = ref.read(lecturesRepoProvider);
   return controller.lecturesWatched();
 });
-final totalGradeProvider =
-    StreamProvider((ref) {
+final totalGradeProvider = StreamProvider((ref) {
   final controller = ref.read(examRepoProvider);
   return controller.examTotalGrade();
 });
-final streamJoinedProvider =
-    StreamProvider((ref) {
+final streamJoinedProvider = StreamProvider((ref) {
   final controller = ref.read(meetingRepoProvider);
   return controller.userPresence;
 });
@@ -145,38 +142,43 @@ final userDataProvider = StreamProvider<UserModel?>((ref) {
 });
 
 final questionIdsStream = StreamProvider.family((ref, String examId) {
-  final provider = ref.watch(examControllerProvider);
+  final provider = ref.read(examControllerProvider);
   return provider.questionIds(examId);
 });
 
 final answerCardStream =
     StreamProvider.family((ref, AnswersIdentiferParameters parameters) {
   final stream =
-      ref.watch(examControllerProvider).getAnswerIdentifier(parameters);
+      ref.read(examControllerProvider).getAnswerIdentifier(parameters);
+  return stream;
+});
+final planPricesStreamProvider =
+    StreamProvider.family((ref, PlanEnum planType) {
+  final stream = ref.read(paymentRepoProvider).planPrice(planType);
   return stream;
 });
 
 final examListStream = StreamProvider((ref) {
-  final stream = ref.watch(examControllerProvider).exams;
+  final stream = ref.read(examControllerProvider).exams;
   return stream;
 });
 
 final tripStream = StreamProvider((ref) {
-  final stream = ref.watch(tripControllerProvider).getTrip();
+  final stream = ref.read(tripControllerProvider).getTrip();
   return stream;
 });
 
 final feedsStream = StreamProvider((ref) {
-  final stream = ref.watch(meetingControllerProvider).feeds;
+  final stream = ref.read(meetingControllerProvider).feeds;
   return stream;
 });
 
-final papersStream = StreamProvider.family((ref,lectureId) {
-  final stream = ref.watch(paperControllerProvider).papers(lectureId);
+final papersStream = StreamProvider.family((ref, lectureId) {
+  final stream = ref.read(paperControllerProvider).papers(lectureId);
   return stream;
 });
 
 final lecturesStream = StreamProvider((ref) {
-  final stream = ref.watch(lecturesControllerProvider).videos;
+  final stream = ref.read(lecturesControllerProvider).videos;
   return stream;
 });

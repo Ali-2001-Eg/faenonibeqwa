@@ -2,7 +2,7 @@ import 'package:faenonibeqwa/models/exam_model.dart';
 import 'package:faenonibeqwa/repositories/admob_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
-import 'package:faenonibeqwa/utils/base/subscription_screen.dart';
+import 'package:faenonibeqwa/screens/home/payment/subscription_screen.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

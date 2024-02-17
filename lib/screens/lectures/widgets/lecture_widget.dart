@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/lectures_model.dart';
 import '../../../utils/base/app_helper.dart';
-import '../../../utils/base/subscription_screen.dart';
+import '../../home/payment/subscription_screen.dart';
 import '../../../utils/providers/app_providers.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 import '../view_lecture_screen.dart';
