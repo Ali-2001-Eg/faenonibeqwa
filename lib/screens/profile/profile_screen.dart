@@ -20,6 +20,7 @@ import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/big_text.dart';
 import '../../utils/shared/widgets/custom_button.dart';
 import '../lectures/add_lecture/add_lecture_screen.dart';
+import '../student/student_screnn.dart';
 import 'widgets/settings_tile.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -29,7 +30,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 35.h),
+        padding: EdgeInsets.only(top: 35.h),
         child: ListView(
           // mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -48,20 +49,21 @@ class ProfileScreen extends ConsumerWidget {
                         Icons.person,
                         size: 50,
                       ),
-                    ),
-                  Container(
-                    width: context.screenWidth / 3,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                          ref.watch(authControllerProvider).getPhotoUrl,
+                    )
+                  else
+                    Container(
+                      width: context.screenWidth / 3,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                            ref.watch(authControllerProvider).getPhotoUrl,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   // margin: EdgeInsets.all(20.h),
 
                   InkWell(
@@ -101,20 +103,23 @@ class ProfileScreen extends ConsumerWidget {
             ),
             15.hSpace,
             if (!ref.watch(authControllerProvider).isAdmin)
-              CustomButton(
-                  onTap: () {
-                    if (ref.watch(authControllerProvider).isPremium) {
-                      AppHelper.customSnackbar(
-                        context: context,
-                        title: 'تم الاشتراك بالفعل',
-                        status: ToastStatus.success,
-                      );
-                    } else {
-                      Navigator.of(context)
-                          .pushNamed(SubscriptionScreen.routeName);
-                    }
-                  },
-                  text: 'الاشتراك في الخطه'),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 70.w),
+                child: CustomButton(
+                    onTap: () {
+                      if (ref.watch(authControllerProvider).isPremium) {
+                        AppHelper.customSnackbar(
+                          context: context,
+                          title: 'تم الاشتراك بالفعل',
+                          status: ToastStatus.success,
+                        );
+                      } else {
+                        Navigator.of(context)
+                            .pushNamed(SubscriptionScreen.routeName);
+                      }
+                    },
+                    text: 'الاشتراك في الخطه'),
+              ),
             (ref.watch(authControllerProvider).isAdmin)
                 ? Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0.w),
@@ -149,8 +154,13 @@ class ProfileScreen extends ConsumerWidget {
                             leadingIconColor: Colors.green),
                         SettingsTile(
                             onTap: () {
-                              // Navigator.of(context)
-                              //     .pushNamed(SubscriptionScreen.routeName);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const StudentScreen();
+                                  },
+                                ),
+                              );
                             },
                             text: 'بيانات الطلاب',
                             icon: Icons.history_outlined,
@@ -171,26 +181,11 @@ class ProfileScreen extends ConsumerWidget {
                       ]),
             // 15.hSpace,
             if (!ref.watch(authControllerProvider).isAdmin)
-              MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    SettingsTile(
-                      text: 'نشاطك',
-                      icon: Icons.history_outlined,
-                      leadingIconColor: Colors.white,
-                      onTap: () {},
-                    ),
-                    SettingsTile(
-                      leadingIconColor: Colors.redAccent,
-                      text: 'تسجيل خروج',
-                      icon: Icons.logout_sharp,
-                      onTap: () => _signout(ref, context),
-                    ),
-                  ],
-                ),
+              SettingsTile(
+                leadingIconColor: Colors.redAccent,
+                text: 'تسجيل خروج',
+                icon: Icons.logout_sharp,
+                onTap: () => _signout(ref, context),
               ),
           ],
         ),

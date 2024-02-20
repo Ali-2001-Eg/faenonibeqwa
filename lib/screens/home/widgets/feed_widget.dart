@@ -116,7 +116,7 @@ class FeedWidget extends ConsumerWidget {
           context: context,
           title: 'يجب تفعيل الاشتراك لتتمكن من دخول البث المباشر',
         );
-            Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
+        Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
       }
 
       return false;

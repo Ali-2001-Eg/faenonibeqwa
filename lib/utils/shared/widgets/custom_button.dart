@@ -24,21 +24,19 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width ?? context.screenWidth * 0.6,
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: context.theme.elevatedButtonTheme.style!.copyWith(
-          textStyle: MaterialStatePropertyAll<TextStyle>(
-            TextStyle(color: textColor, fontSize: 15.sp),
-          ),
-          backgroundColor: MaterialStatePropertyAll(backgroundColor),
+    return ElevatedButton(
+      onPressed: onTap,
+      style: context.theme.elevatedButtonTheme.style!.copyWith(
+        minimumSize: MaterialStatePropertyAll<Size?>(Size(width ?? 60.w, 40.h)),
+        textStyle: MaterialStatePropertyAll<TextStyle>(
+          TextStyle(color: textColor, fontSize: 15.sp),
         ),
-        child: SmallText(
-          text: text,
-          color: Colors.white,
-          fontSize: fontSize,
-        ),
+        backgroundColor: MaterialStatePropertyAll(backgroundColor),
+      ),
+      child: SmallText(
+        text: text,
+        color: Colors.white,
+        fontSize: fontSize,
       ),
     );
   }

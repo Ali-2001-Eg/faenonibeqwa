@@ -16,6 +16,7 @@ import '../../utils/providers/app_providers.dart';
 import '../../utils/providers/home_provider.dart';
 import '../exam/exams_list_screen.dart';
 import 'home_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 @immutable
 class MainScreen extends ConsumerStatefulWidget {
@@ -70,11 +71,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home,
+              FontAwesomeIcons.house,
             ),
             label: 'الرئيسيه',
             activeIcon: Icon(
-              Icons.home_filled,
+              FontAwesomeIcons.house,
               color: indicatorColor,
             ),
           ),
