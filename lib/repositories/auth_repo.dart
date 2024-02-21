@@ -27,8 +27,8 @@ class AuthRepo {
   Future<void> signInWithGoogleAccount() async {
     final GoogleSignInAccount? googleSignInAccount =
         await _googleSignIn.signIn();
-    
-        'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg';
+
+    'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg';
     GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount!.authentication;
     final AuthCredential credentials = GoogleAuthProvider.credential(
@@ -141,9 +141,8 @@ class AuthRepo {
 
       auth.currentUser!.updateProfile(displayName: username);
       auth.currentUser!.updateProfile(displayName: email);
-      
+
       await auth.currentUser!.reload();
-      
 
       // _saveCredentials();
     } catch (e) {
@@ -195,4 +194,15 @@ class AuthRepo {
         .doc(auth.currentUser!.uid)
         .update({'photoUrl': imageUrl});
   }
+
+  Stream<List<UserModel>> get users =>
+      firestore.collection('users').snapshots().map((query) {
+        List<UserModel> users = [];
+        for (var user in query.docs) {
+          if (user.exists) {
+            users.add(UserModel.fromMap(user.data()));
+          }
+        }
+          return users;
+      });
 }

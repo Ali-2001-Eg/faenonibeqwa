@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:faenonibeqwa/repositories/exam_repo.dart';
 
+import '../models/exam_history.dart';
 import '../models/exam_model.dart';
 import '../utils/providers/app_providers.dart';
 
@@ -16,6 +17,8 @@ class ExamController {
     required this.ref,
     required this.examRepo,
   });
+
+  get totalExams => null;
   Future<void> addExamInfoToFirebase({
     required num totalGrade,
     required DateTime deadlineTime,
@@ -89,4 +92,5 @@ class ExamController {
         examId: examId,
         examGrade: totalGrade,
       );
+  Stream<List<ExamHistoryModel>> get examsHistory => examRepo.examsHistory;
 }

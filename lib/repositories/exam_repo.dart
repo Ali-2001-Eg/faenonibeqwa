@@ -10,6 +10,7 @@ import 'package:uuid/uuid.dart';
 
 import 'package:faenonibeqwa/models/exam_model.dart';
 
+import '../models/exam_history.dart';
 import '../utils/providers/app_providers.dart';
 import '../utils/typedefs/app_typedefs.dart';
 
@@ -181,11 +182,9 @@ class ExamRepo {
   }
 
 //to make check on the answer
-  Stream<String> getAnswerIdentifier(String examId, String questionId) async*{
-    if(!await checkUserHasTakenExam(examId)) {
-      await Future.delayed(const Duration(seconds: 2), () {
-
-    });
+  Stream<String> getAnswerIdentifier(String examId, String questionId) async* {
+    if (!await checkUserHasTakenExam(examId)) {
+      await Future.delayed(const Duration(seconds: 2), () {});
     }
     yield* firestore
         .collection('users')
@@ -277,5 +276,47 @@ class ExamRepo {
       }
     }
     yield totalGrade;
+  }
+
+  Stream<int> get totalExamsNumber {
+    return firestore.collection('exams').snapshots().map((query) {
+      int number = 0;
+      if (query.docs.isNotEmpty) {
+        number = query.docs.length;
+      }
+      return number;
+    });
+  }
+
+  Stream<int> get studentExamsNumber {
+    return firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .snapshots()
+        .map((query) {
+      int number = 0;
+      if (query.docs.isNotEmpty) {
+        number = query.docs.length;
+      }
+      return number;
+    });
+  }
+
+  Stream<List<ExamHistoryModel>> get examsHistory {
+    return firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .snapshots()
+        .map((query) {
+      List<ExamHistoryModel> examsHistory = [];
+      for (var element in query.docs) {
+        if (element.exists) {
+          examsHistory.add(ExamHistoryModel.fromMap(element.data()));
+        }
+      }
+      return examsHistory;
+    });
   }
 }

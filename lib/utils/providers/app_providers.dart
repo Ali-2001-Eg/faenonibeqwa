@@ -121,6 +121,7 @@ final answersProvider =
   return examConrtoller.answers(parameters);
 });
 
+//stream providers
 final lecturesWatchedProvider = StreamProvider((ref) {
   final controller = ref.read(lecturesRepoProvider);
   return controller.lecturesWatched();
@@ -133,8 +134,6 @@ final streamJoinedProvider = StreamProvider((ref) {
   final controller = ref.read(meetingRepoProvider);
   return controller.userPresence;
 });
-
-//stream providers
 
 final userDataProvider = StreamProvider<UserModel?>((ref) {
   final stream = ref.read(authControllerProvider).getUserData;
@@ -181,4 +180,20 @@ final papersStream = StreamProvider.family((ref, lectureId) {
 final lecturesStream = StreamProvider((ref) {
   final stream = ref.read(lecturesControllerProvider).videos;
   return stream;
+});
+final usersStream = StreamProvider((ref) {
+  final stream = ref.read(authControllerProvider).users;
+  return stream;
+});
+final examsJoinedProvider = StreamProvider((ref) {
+  final examConrtoller = ref.read(examRepoProvider);
+  return examConrtoller.studentExamsNumber;
+});
+final totalExamsProvider = StreamProvider((ref) {
+  final examConrtoller = ref.read(examRepoProvider);
+  return examConrtoller.totalExamsNumber;
+});
+final examsHistoryProvider = StreamProvider((ref) {
+  final examConrtoller = ref.read(examRepoProvider);
+  return examConrtoller.examsHistory;
 });

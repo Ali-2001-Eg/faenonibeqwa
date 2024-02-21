@@ -20,7 +20,7 @@ import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/big_text.dart';
 import '../../utils/shared/widgets/custom_button.dart';
 import '../lectures/add_lecture/add_lecture_screen.dart';
-import '../student/student_screnn.dart';
+import '../student/student_screen.dart';
 import 'widgets/settings_tile.dart';
 
 class ProfileScreen extends ConsumerWidget {

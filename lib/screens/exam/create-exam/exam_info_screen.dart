@@ -9,8 +9,7 @@ import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import '../../../utils/shared/widgets/custom_text_field.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 import 'widgets/page_view_widget.dart';
-import 'package:timeago/timeago.dart' as timago;
-
+// ignore: must_be_immutable
 class ExamInfoScreen extends StatefulWidget {
   final void Function(int pageNo) onNextPressed;
   final VoidCallback pickExamImage;

@@ -7,8 +7,12 @@ import '../../../utils/shared/widgets/small_text.dart';
 import 'student_details.dart';
 
 class StudentItem extends StatelessWidget {
+  final String name;
+  final String id;
   const StudentItem({
     super.key,
+    required this.name,
+    required this.id,
   });
 
   @override
@@ -40,22 +44,26 @@ class StudentItem extends StatelessWidget {
               // width: 70.w,
             ),
             25.wSpace,
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SmallText(
-                  text: 'اسم الطالب / على محمد جاد',
-                  fontSize: 15,
-                  // fontWeight: FontWeight.w600,
-                ),
-                20.hSpace,
-                const SmallText(
-                  text: 'كود الطالب / 5896845',
-                  fontSize: 15,
-                  // fontWeight: FontWeight.w600,
-                ),
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SmallText(
+                    text: 'اسم الطالب : $name',
+                    fontSize: 15,
+                    //  fontWeight: FontWeight.w600,
+                  ),
+                  20.hSpace,
+                  SmallText(
+                    text: 'كود الطالب : $id',
+                    fontSize: 15,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    // fontWeight: FontWeight.w600,
+                  ),
+                ],
+              ),
             )
           ],
         ),

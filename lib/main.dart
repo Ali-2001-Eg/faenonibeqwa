@@ -16,10 +16,8 @@ import 'package:paymob_payment/paymob_payment.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'screens/auth/login_screen.dart';
-import 'utils/providers/app_providers.dart';
 
 Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-  print('message from background message: ${message.data}');
   AwesomeNotifications().createNotificationFromJsonData(message.data);
 }
 
@@ -59,12 +57,8 @@ void _initAwesomeLocalNotifications() async {
         body: message.notification!.body,
       ),
     );
-    print(message.data);
 
     if (message.notification != null) {
-      print("body onBackgroundMessage ===========");
-      print(message.notification!.body);
-      print("body onBackgroundMessage ===========");
     }
   });
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -76,12 +70,8 @@ void _initAwesomeLocalNotifications() async {
         body: message.notification!.body,
       ),
     );
-    print(message.data);
 
     if (message.notification != null) {
-      print("body onMessage===========");
-      print(message.notification!.body);
-      print("body onMessage ===========");
     }
   });
 }

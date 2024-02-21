@@ -22,6 +22,7 @@ class AuthController {
   bool get isPremium => authRepo.isPremium;
   
   User get userInfo => authRepo.auth.currentUser!;
+  Stream<List<UserModel>> get users => authRepo.users;
   Future<void> get signout => authRepo.signout();
   Future<void> signup(
           String email, String password, String username) =>
