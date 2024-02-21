@@ -35,7 +35,7 @@ class ExamSammaryScreen extends StatelessWidget {
             10.hSpace,
             const Center(child: BigText(text: 'ملخص الاختبار')),
             30.hSpace,
-            SammaryImageWidget(imageUrl: exam.examImageUrl, fromNetwork: false),
+            // SammaryImageWidget(imageUrl: exam.examImageUrl, fromNetwork: false),
             30.hSpace,
             SummaryExamComponentWidget(
               data: exam.examTitle,
@@ -51,11 +51,11 @@ class ExamSammaryScreen extends StatelessWidget {
               data: exam.totalGrade.toString(),
               headTitle: "الدرجه النهائيه",
             ),
-            30.hSpace,
-            SummaryExamComponentWidget(
-              data: timeago.format(exam.deadlineTime),
-              headTitle: "الموعد النهائي",
-            ),
+            // 30.hSpace,
+            // SummaryExamComponentWidget(
+            //   data: timeago.format(exam.deadlineTime),
+            //   headTitle: "الموعد النهائي",
+            // ),
             30.hSpace,
             SummaryExamComponentWidget(
               data: exam.timeMinutes.toString(),

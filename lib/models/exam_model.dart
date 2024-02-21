@@ -5,18 +5,18 @@ class ExamModel extends Equatable {
   final String examTitle;
   final String examDescription;
   final int totalGrade;
-  final DateTime deadlineTime;
+  // final DateTime deadlineTime;
   final int timeMinutes;
-  final String examImageUrl;
+  // final String examImageUrl;
   final List<Question> questions;
   const ExamModel({
     required this.id,
     required this.examTitle,
     required this.examDescription,
     required this.totalGrade,
-    required this.deadlineTime,
+    // required this.deadlineTime,
     required this.timeMinutes,
-    required this.examImageUrl,
+    // required this.examImageUrl,
     required this.questions,
   });
 
@@ -26,9 +26,9 @@ class ExamModel extends Equatable {
       'examTitle': examTitle,
       'examDescription': examDescription,
       'totalGrade': totalGrade,
-      'deadlineTime': deadlineTime.millisecondsSinceEpoch,
+      // 'deadlineTime': deadlineTime.millisecondsSinceEpoch,
       'timeMinutes': timeMinutes,
-      'examImageUrl': examImageUrl,
+      // 'examImageUrl': examImageUrl,
     };
   }
 
@@ -38,10 +38,10 @@ class ExamModel extends Equatable {
       examTitle: map['examTitle'] as String,
       examDescription: map['examDescription'] as String,
       totalGrade: map['totalGrade'] as int,
-      deadlineTime:
-          DateTime.fromMillisecondsSinceEpoch(map['deadlineTime'] as int),
+      // deadlineTime:
+      //     DateTime.fromMillisecondsSinceEpoch(map['deadlineTime'] as int),
       timeMinutes: map['timeMinutes'] as int,
-      examImageUrl: map['examImageUrl'] as String,
+      // examImageUrl: map['examImageUrl'] as String,
       questions: const [],
     );
   }
@@ -53,9 +53,9 @@ class ExamModel extends Equatable {
       examTitle,
       examDescription,
       totalGrade,
-      deadlineTime,
+      // deadlineTime,
       timeMinutes,
-      examImageUrl,
+      // examImageUrl,
       questions,
     ];
   }

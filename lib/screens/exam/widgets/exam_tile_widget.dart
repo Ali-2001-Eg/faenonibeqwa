@@ -13,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../../../utils/base/app_images.dart';
 import '../../../utils/providers/app_providers.dart';
 import '../../../utils/shared/widgets/custom_button.dart';
 import '../../../utils/shared/widgets/small_text.dart';
@@ -90,10 +91,8 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
           trailing: const Icon(
             Icons.text_snippet_outlined,
           ),
-          leading: CircleAvatar(
-              backgroundImage: CachedNetworkImageProvider(
-            widget.examModel.examImageUrl,
-          )),
+          leading: const CircleAvatar(
+              backgroundImage:  AssetImage(AppImages.logo)),
         ),
 
         //  Column(

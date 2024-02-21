@@ -122,7 +122,7 @@ class SoluteExamScreen extends ConsumerWidget {
                               child: DisplayAnswersWidget(
                                 examId: exam.id,
                                 examDesc: exam.examDescription,
-                                examImageUrl: exam.examImageUrl,
+                                // examImageUrl: exam.examImageUrl,
                                 examTitle: exam.examTitle,
                                 question: question,
                                 questions: data,
@@ -187,7 +187,7 @@ class SoluteExamScreen extends ConsumerWidget {
             examId: examId,
             title: exam.examTitle,
             description: exam.examDescription,
-            imageUrl: exam.examImageUrl,
+            // imageUrl: exam.examImageUrl,
             questions: snap,
           );
     }

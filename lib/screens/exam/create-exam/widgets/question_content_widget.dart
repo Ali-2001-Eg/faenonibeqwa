@@ -30,11 +30,13 @@ class QuestionContentWidget extends StatefulWidget {
 
 class _QuestionContentWidgetState extends State<QuestionContentWidget> {
   int? _selectedOption;
+  int _selectedAnswer = -1;
   @override
   void initState() {
     if (mounted) {
       setState(() {
         _selectedOption = null;
+        _selectedAnswer = -1;
       });
     }
     super.initState();
@@ -126,6 +128,11 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
               setState(() {
                 widget.questions[widget.questionIndex].correctAnswerIndex =
                     value!;
+                _selectedAnswer =
+                    widget.questions[widget.questionIndex].correctAnswerIndex;
+                print('selected answer $_selectedAnswer');
+                print(
+                    'correct answer ${widget.questions[widget.questionIndex].correctAnswerIndex}');
               });
             },
             elevation: 0,
@@ -163,9 +170,7 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                     height: 30, width: 30,
                     // padding: EdgeInsets.all(6.w),
                     decoration: BoxDecoration(
-                        color: widget.questions[widget.questionIndex]
-                                    .correctAnswerIndex ==
-                                i
+                        color: _selectedAnswer == i
                             ? context.theme.appBarTheme.backgroundColor
                             : null,
                         shape: BoxShape.circle,
@@ -191,9 +196,7 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                           minHeight: 50,
                         ),
                         child: CustomTextField(
-                          filled: widget.questions[widget.questionIndex]
-                                  .correctAnswerIndex ==
-                              i,
+                          filled: _selectedAnswer == i,
                           filledColor:
                               context.theme.appBarTheme.backgroundColor,
                           controller: widget.questions[widget.questionIndex]

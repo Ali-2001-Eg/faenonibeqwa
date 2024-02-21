@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
-import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';

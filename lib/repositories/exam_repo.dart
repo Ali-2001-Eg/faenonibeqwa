@@ -26,9 +26,9 @@ class ExamRepo {
 
   Future<void> addExamInfoToFirebase({
     required num totalGrade,
-    required DateTime deadlineTime,
+    // required DateTime deadlineTime,
     required int timeMinutes,
-    required File image,
+    // required File image,
     required BuildContext context,
     required String examTitle,
     required String examDescription,
@@ -37,15 +37,13 @@ class ExamRepo {
     var examId = const Uuid().v1();
     String? questionId;
     String? answerId;
-    String imageUrl = await ref
-        .read(firebaseStorageRepoProvider)
-        .storeFileToFirebaseStorage('examImageUrl', examId, image);
+
     ExamModel model = ExamModel(
       id: examId,
       totalGrade: totalGrade.toInt(),
-      deadlineTime: deadlineTime,
+      // deadlineTime: deadlineTime,
       timeMinutes: timeMinutes,
-      examImageUrl: imageUrl,
+      // examImageUrl: imageUrl,
       examTitle: examTitle,
       examDescription: examDescription,
       questions: const [],
@@ -140,7 +138,7 @@ class ExamRepo {
     String examId,
     String title,
     String description,
-    String imageUrl,
+    // String imageUrl,
     List<Question> questions,
   ) async {
     await firestore
@@ -148,8 +146,10 @@ class ExamRepo {
         .doc(auth.currentUser!.uid)
         .collection('examsHistory')
         .doc(examId)
-        .set(
-            {'title': title, 'description': description, 'imageUrl': imageUrl});
+        .set({
+      'title': title,
+      'description': description,
+    });
     for (var element in questions) {
       print('body to store ${element.body}');
       await firestore

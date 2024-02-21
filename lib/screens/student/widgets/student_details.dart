@@ -1,4 +1,4 @@
-import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';

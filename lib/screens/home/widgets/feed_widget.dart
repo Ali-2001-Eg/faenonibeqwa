@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_images.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';

@@ -21,9 +21,9 @@ class ExamController {
   get totalExams => null;
   Future<void> addExamInfoToFirebase({
     required num totalGrade,
-    required DateTime deadlineTime,
+    // required DateTime deadlineTime,
     required int timeMinutes,
-    required File image,
+    // required File image,
     required String examTitle,
     required String examDescription,
     required List<Question> question,
@@ -33,9 +33,9 @@ class ExamController {
         .read(userDataProvider)
         .whenData((value) => examRepo.addExamInfoToFirebase(
               totalGrade: totalGrade,
-              deadlineTime: deadlineTime,
+              // deadlineTime: deadlineTime,
               timeMinutes: timeMinutes,
-              image: image,
+              // image: image,
               context: context,
               examTitle: examTitle,
               examDescription: examDescription,
@@ -58,14 +58,14 @@ class ExamController {
     required String examId,
     required String title,
     required String description,
-    required String imageUrl,
+    // required String imageUrl,
     required List<Question> questions,
   }) =>
       examRepo.storeExamDataToUser(
         examId,
         title,
         description,
-        imageUrl,
+        // imageUrl,
         questions,
       );
   Future<void> selectAnswer({

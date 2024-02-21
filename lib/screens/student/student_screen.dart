@@ -1,5 +1,5 @@
 import 'package:faenonibeqwa/models/user_model.dart';
-import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';

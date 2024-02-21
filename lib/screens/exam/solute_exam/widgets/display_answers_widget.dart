@@ -10,21 +10,21 @@ import '../../../../models/exam_model.dart';
 import '../../../../utils/providers/app_providers.dart';
 import '../../../../utils/shared/widgets/big_text.dart';
 import 'answer_card.dart';
-import 'shimmer_widget.dart';
+import '../../../../utils/shared/widgets/shimmer_widget.dart';
 
 class DisplayAnswersWidget extends ConsumerWidget {
   final Question question;
   final List<Question> questions;
   final String examId;
   final String examTitle;
-  final String examImageUrl;
+  // final String examImageUrl;
   final String examDesc;
   const DisplayAnswersWidget({
     required this.question,
     required this.questions,
     required this.examId,
     required this.examTitle,
-    required this.examImageUrl,
+    // required this.examImageUrl,
     required this.examDesc,
   });
 

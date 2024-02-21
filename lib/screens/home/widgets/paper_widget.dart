@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:faenonibeqwa/screens/exam/solute_exam/widgets/shimmer_widget.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/shimmer_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
