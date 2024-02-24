@@ -10,8 +10,6 @@ import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../utils/shared/widgets/small_text.dart';
-
 class ViewLectureScreen extends StatelessWidget {
   const ViewLectureScreen({
     Key? key,
@@ -38,17 +36,23 @@ class ViewLectureScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child:
-                    VideoPlayerWidget(videoPath: videoPath, fromNetwotk: true),
+                child: VideoPlayerWidget(
+                  videoPath: videoPath,
+                  fromNetwotk: true,
+                ),
               ),
             ),
             10.hSpace,
-            SmallText(
-                text: 'عدد المشاهدات : $audienceNo',
-                fontWeight: FontWeight.w700),
-            30.hSpace,
-            const BigText(text: 'الملازم و الكتب'),
-            50.hSpace,
+            // SmallText(
+            //     text: 'عدد المشاهدات : $audienceNo',
+            //     fontWeight: FontWeight.w700),
+            // 30.hSpace,
+            const Center(
+              child: BigText(
+                text: 'الملازم و الكتب',
+              ),
+            ),
+            15.hSpace,
             PapersWidget(lectureId: id),
           ],
         ),

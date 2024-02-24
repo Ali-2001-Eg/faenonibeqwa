@@ -16,7 +16,7 @@ class StudenDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
-      appBar: CustomAppBar(title: ref.watch(authControllerProvider).getName),
+      appBar: const CustomAppBar(title: 'اختبارات الطالب'),
       body: Column(
         children: [
           Container(
@@ -32,30 +32,32 @@ class StudenDetails extends ConsumerWidget {
                   text:
                       'عدد الحضور ${_examsJoined(ref)} من ${_totalExams(ref)}')),
           Expanded(
-              child: ref.watch(examsHistoryProvider).when(
+            child: ref.watch(examsHistoryProvider).when(
                   data: (data) => ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          final exam = data[index];
-                          if (data.isEmpty) {
-                            return const Center(
-                                child: BigText(
-                              text: 'لم يختبر بعد',
-                              fontSize: 30,
-                            ));
-                          }
-                          return StudentDetailsItem(
-                            title: exam.title,
-                            grade: exam.studentGrade,
-                          );
-                        },
-                      ),
+                    shrinkWrap: true,
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      final exam = data[index];
+                      if (data.isEmpty) {
+                        return const Center(
+                            child: BigText(
+                          text: 'لم يختبر بعد',
+                          fontSize: 30,
+                        ));
+                      }
+                      return StudentDetailsItem(
+                        title: exam.title,
+                        grade: exam.studentGrade,
+                      );
+                    },
+                  ),
                   error: (error, d) => BigText(text: error.toString()),
                   loading: () => const ShimmerWidget(
-                        cardsNumber: 3,
-                        heigth: 100,
-                      )))
+                    cardsNumber: 3,
+                    heigth: 100,
+                  ),
+                ),
+          )
         ],
       ),
     );

@@ -42,6 +42,7 @@ dependencies:
   firebase_storage: ^11.5.1
   flutter:
     sdk: flutter
+  flutter_animate: ^4.5.0
   flutter_cache_manager: ^3.3.1
   flutter_downloader: ^1.11.6
   flutter_file_downloader: ^1.2.1
@@ -58,6 +59,7 @@ dependencies:
   path_provider: ^2.1.2
   paymob_payment: ^0.0.1+1
   permission_handler: ^11.2.0
+  rename: ^3.0.1
   shimmer: ^3.0.0
   syncfusion_flutter_charts: ^24.2.4+3
   syncfusion_flutter_pdfviewer: ^24.1.47
@@ -72,8 +74,12 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^2.0.0
+  flutter_native_splash: null
   flutter_test:
     sdk: flutter
+flutter_native_splash:
+  color: "#ffffff"
+  image: assets/images/logo.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
