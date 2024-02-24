@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../utils/providers/app_providers.dart';
 
@@ -144,7 +145,7 @@ class AuthRepo {
 
       await auth.currentUser!.reload();
 
-      // _saveCredentials();
+      _saveCredentials();
     } catch (e) {
       print('error');
     }
@@ -185,10 +186,12 @@ class AuthRepo {
   }
 
   Future<void> editPhoto(String filePath) async {
-    String imageUrl = await ref
-        .read(firebaseStorageRepoProvider)
-        .storeFileToFirebaseStorage(
-            'users', auth.currentUser!.uid, File(filePath));
+    TaskSnapshot snap = await FirebaseStorage.instance
+        .ref()
+        .child(auth.currentUser!.uid)
+        .child(filePath)
+        .putFile(File(filePath));
+    String imageUrl = await snap.ref.getDownloadURL();
     await firestore
         .collection('users')
         .doc(auth.currentUser!.uid)
@@ -203,6 +206,6 @@ class AuthRepo {
             users.add(UserModel.fromMap(user.data()));
           }
         }
-          return users;
+        return users;
       });
 }
