@@ -157,7 +157,7 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
           .signup(
             _emailController.text.trim(),
             _passwordController.text.trim(),
-            _usernameController.text.trim(),
+          _usernameController.text.trim(),
             
           )
           .then(

@@ -71,7 +71,7 @@ dependencies:
   video_player: ^2.8.2
   webview_flutter: ^4.4.2
   zego_uikit_prebuilt_video_conference: ^2.6.3
-
+  flutter_launcher_icons: ^0.13.1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_native_splash: null
@@ -80,7 +80,10 @@ dev_dependencies:
 flutter_native_splash:
   color: "#ffffff"
   image: assets/images/logo.png
-
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.

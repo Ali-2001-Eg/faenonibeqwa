@@ -41,41 +41,9 @@ class FeedWidget extends ConsumerWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             MeetingModel meetingItem = data[index];
-            return MeetingWidget(meeting: meetingItem);
-            return Column(
-              children: [
-                ListTile(
-                  onTap: () => _joinMeeting(ref, meetingItem, context),
-                  leading: AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        AppImages.logo,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  title: BigText(
-                    fontSize: 14,
-                    text: meetingItem.title,
-                    color: Colors.black,
-                  ),
-                  subtitle: SmallText(
-                    text: meetingItem.username,
-                    color: Colors.black,
-                  ),
-                  style: ListTileStyle.drawer,
-                  trailing: SmallText(
-                      text:
-                          ' عدد الحضور بالداخل: ${meetingItem.viewers.length.toString()}'),
-                ),
-                // Divider(
-                //   thickness: 2.h,
-                //   endIndent: 50,
-                // )
-              ],
-            );
+            return MeetingWidget(
+                meeting: meetingItem,
+                onJoin: () => _joinMeeting(ref, meetingItem, context));
           });
     }, error: (error, stackTrace) {
       return BigText(text: error.toString());
@@ -131,9 +99,11 @@ class FeedWidget extends ConsumerWidget {
 
 class MeetingWidget extends StatelessWidget {
   final MeetingModel meeting;
+  final VoidCallback onJoin;
   const MeetingWidget({
     Key? key,
     required this.meeting,
+    required this.onJoin,
   }) : super(key: key);
 
   @override
@@ -201,7 +171,7 @@ class MeetingWidget extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.bottomLeft,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: onJoin,
                       style: ElevatedButton.styleFrom(
                           backgroundColor: indicatorColor,
                           minimumSize: Size(100.w, 20.h)),
