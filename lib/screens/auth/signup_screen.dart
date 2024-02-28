@@ -67,7 +67,7 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
                     color: indicatorColor,
                   ),
                   CustomTextField(
-                    controller: _emailController,
+                    controller: _usernameController,
                     textInputAction: TextInputAction.next,
                     hintText: 'اسم المستخدم',
                     validator: (value) {
@@ -93,28 +93,30 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
                   CustomTextField(
                     hintText: 'الرقم السرى',
                     controller: _passwordController,
+                    obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'يرجي ادخال الرقم السري';
                       } else if (value.length < 6) {
-                        return 'Password should be at least 6 characters';
+                        return 'الرقم السرى يجب ان يكون مكون من 6 احرف';
                       } else if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*d).+$')
                           .hasMatch(value)) {
-                        return 'Password should contain at least one uppercase letter, one lowercase letter, and one digit';
+                        return 'الرقم السرى يجب ان يحتوى على ارقام و حروف و رموز';
                       }
                       return null;
                     },
                   ),
                   20.hSpace,
-                  ref.watch(isLoading)?
-                  const CustomIndicator():
-                  CustomButton(
-                    onTap: () {
-                      _signup(ref, context);
-                    },
-                    text: 'انشاء حساب',
-                    backgroundColor: indicatorColor,
-                  ),
+                  ref.watch(isLoading)
+                      ? const CustomIndicator()
+                      : CustomButton(
+                          onTap: () {
+                            _signup(ref, context);
+                          },
+                          text: 'انشاء حساب',
+                          width: 170.w,
+                          backgroundColor: indicatorColor,
+                        ),
                   15.hSpace,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -148,21 +150,12 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
   }
 
   void _signup(WidgetRef ref, BuildContext context) {
-    if (_formKey.currentState!.validate() &&
-        _emailController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty &&
-        _usernameController.text.isNotEmpty) {
-      ref
-          .read(authControllerProvider)
-          .signup(
+    if (_formKey.currentState!.validate()) {
+      ref.read(authControllerProvider).signup(
             _emailController.text.trim(),
             _passwordController.text.trim(),
-          _usernameController.text.trim(),
-            
-          )
-          .then(
-            (value) => Navigator.pushNamedAndRemoveUntil(
-                context, MainScreen.routeName, (r) => false),
+            _usernameController.text.trim(),
+            context,
           );
     } else {
       AppHelper.customSnackbar(

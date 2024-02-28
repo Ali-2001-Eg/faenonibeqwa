@@ -25,6 +25,15 @@ class ViewLectureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: AdminFloatingActionButton(
+        icon: Icons.picture_as_pdf_rounded,
+        routeName: AddDocumentScreen.routeName,
+        heroTag: 'add-document',
+        arguments: {
+          'lectureName': title,
+          'lectureId': id,
+        },
+      ),
       appBar: CustomAppBar(title: title),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
@@ -43,10 +52,6 @@ class ViewLectureScreen extends StatelessWidget {
               ),
             ),
             10.hSpace,
-            // SmallText(
-            //     text: 'عدد المشاهدات : $audienceNo',
-            //     fontWeight: FontWeight.w700),
-            // 30.hSpace,
             const Center(
               child: BigText(
                 text: 'الملازم و الكتب',
@@ -56,15 +61,6 @@ class ViewLectureScreen extends StatelessWidget {
             PapersWidget(lectureId: id),
           ],
         ),
-      ),
-      floatingActionButton: AdminFloatingActionButton(
-        icon: Icons.picture_as_pdf_rounded,
-        routeName: AddDocumentScreen.routeName,
-        heroTag: 'add-document',
-        arguments: {
-          'lectureName': title,
-          'lectureId': id,
-        },
       ),
     );
   }

@@ -15,6 +15,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../screens/home/main_sceen.dart';
 import '../utils/providers/app_providers.dart';
 
 class AuthRepo {
@@ -87,7 +88,7 @@ class AuthRepo {
   String get getPhotoUrl => ref.read(userDataProvider).when(
       data: (data) => data!.photoUrl,
       error: (error, s) {
-        throw error;
+        return "";
       },
       loading: () => '');
 
@@ -128,7 +129,8 @@ class AuthRepo {
     }
   }
 
-  Future signUp(String email, String password, String username) async {
+  Future signUp(String email, String password, String username,
+      BuildContext context) async {
     try {
       ref.read(isLoading.notifier).update((state) => true);
 
@@ -139,12 +141,12 @@ class AuthRepo {
         email: email,
         password: password,
       );
-
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, MainScreen.routeName, (r) => false);
+      }
       auth.currentUser!.updateProfile(displayName: username);
-      auth.currentUser!.updateProfile(displayName: email);
-
       await auth.currentUser!.reload();
-
       _saveCredentials();
     } catch (e) {
       print('error');
@@ -157,29 +159,27 @@ class AuthRepo {
       ref.read(isLoading.notifier).update((state) => true);
 
       await auth.signInWithEmailAndPassword(email: email, password: password);
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, MainScreen.routeName, (route) => false);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         if (context.mounted) {
-          AppHelper.customSnackbar(context: context, title: 'الحساب غير موجود');
+          AppHelper.customSnackbar(
+              context: context, title: ' هذا الحساب غير موجود');
         }
       } else if (e.code == 'wrong-password') {
         print('e.code is ${e.code}');
         if (context.mounted) {
           AppHelper.customSnackbar(
-              context: context, title: 'كلمه المرور خاطئه');
-        }
-      } else {
-        if (context.mounted) {
-          AppHelper.customSnackbar(
-              context: context,
-              title: 'ادخل بيانات حسابك الصحيحه او قم بعمل حساب أولا');
+              context: context, title: 'كلمه المرور غير صحيحه');
         }
       }
     } catch (e) {
       print(e.toString());
       if (context.mounted) {
-        AppHelper.customSnackbar(
-            context: context, title: 'catch ${e.toString()}');
+        AppHelper.customSnackbar(context: context, title: e.toString());
       }
     }
     ref.read(isLoading.notifier).update((state) => false);

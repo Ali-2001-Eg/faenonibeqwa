@@ -1,6 +1,4 @@
-import 'package:faenonibeqwa/screens/lectures/add_lecture/add_lecture_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
@@ -16,6 +14,7 @@ class LecturesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: const CustomAppBar(title: 'المحاضرات'),
       body: Consumer(
         builder: (context, ref, child) {
@@ -28,6 +27,7 @@ class LecturesListScreen extends StatelessWidget {
               return ListView.separated(
                 itemCount: data.length,
                 shrinkWrap: true,
+                padding: EdgeInsets.only(top: 14),
                 separatorBuilder: (context, index) =>
                     const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                 itemBuilder: (ctx, index) {

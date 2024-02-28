@@ -17,8 +17,8 @@ class VideoPlayerWidget extends StatefulWidget {
 }
 
 class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
-  late ChewieController _chewieController;
-  late VideoPlayerController _videoPlayerController;
+  ChewieController? _chewieController;
+  VideoPlayerController? _videoPlayerController;
   @override
   void initState() {
     _initcontrollers();
@@ -30,32 +30,33 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     _videoPlayerController = widget.fromNetwotk
         ? VideoPlayerController.networkUrl(widget.videoPath.toUri)
         : VideoPlayerController.file(File(widget.videoPath));
-    _videoPlayerController
-        .initialize()
-        .then((_) => setState(() => _chewieController = ChewieController(
-              videoPlayerController: _videoPlayerController,
+    _videoPlayerController!.initialize().then(
+          (_) => setState(
+            () => _chewieController = ChewieController(
+              videoPlayerController: _videoPlayerController!,
               aspectRatio: 1 / 1,
-              autoInitialize: true,
+              // autoInitialize: true,
               autoPlay: widget.fromNetwotk ? false : true,
               // placeholder: const CircularProgressIndicator(color: Colors.amber),
               zoomAndPan: true,
-            )));
+            ),
+          ),
+        );
   }
 
   @override
   void dispose() {
-    _chewieController.dispose();
-    _videoPlayerController.dispose();
+    _chewieController?.dispose();
+    _videoPlayerController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_videoPlayerController.value.isInitialized) {
-      // _videoPlayerController.value.
+    if (_videoPlayerController!.value.isInitialized) {
       return AspectRatio(
         aspectRatio: 16 / 9,
-        child: Chewie(controller: _chewieController),
+        child: Chewie(controller: _chewieController!),
       );
     } else {
       return Container(
