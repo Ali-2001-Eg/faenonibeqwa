@@ -53,7 +53,7 @@ class ProfileScreen extends ConsumerWidget {
                   else
                     Container(
                       width: context.screenWidth / 3,
-                      height: 120,
+                      height: 120.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(),
@@ -67,25 +67,25 @@ class ProfileScreen extends ConsumerWidget {
                   // margin: EdgeInsets.all(20.h),
 
                   InkWell(
-                      onTap: () {
-                        ref
-                            .watch(fileNotifier.notifier)
-                            .pickImage(context)
-                            .then((value) => ref
-                                .watch(authRepoProvider)
-                                .editPhoto(ref.watch(fileNotifier)!.path));
-                      },
-                      child: Container(
-                          padding: EdgeInsets.all(5.w),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey.shade200,
-                          ),
-                          child: Icon(
-                            Icons.add_a_photo_sharp,
-                            size: 20,
-                            color: context.theme.appBarTheme.backgroundColor,
-                          )))
+                    onTap: () {
+                      ref.watch(fileNotifier.notifier).pickImage(context).then(
+                          (value) => ref
+                              .watch(authRepoProvider)
+                              .editPhoto(ref.watch(fileNotifier)!.path));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(5.w),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.shade200,
+                      ),
+                      child: Icon(
+                        Icons.add_a_photo_sharp,
+                        size: 20,
+                        color: context.theme.appBarTheme.backgroundColor,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

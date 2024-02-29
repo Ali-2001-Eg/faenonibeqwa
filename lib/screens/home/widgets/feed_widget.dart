@@ -59,19 +59,23 @@ class FeedWidget extends ConsumerWidget {
   Future<void> _joinMeeting(
       WidgetRef ref, MeetingModel feed, BuildContext context) async {
     if (await _checkSubscribtionState(context, ref)) {
-      ref
-          .read(meetingControllerProvider)
-          .joinMeeting(feed.channelId)
-          .then((value) => Navigator.pushNamed(
-                context,
-                MeetingScreen.routeName,
-                arguments: {
-                  'channelId': feed.channelId,
-                  'userID': ref.watch(authControllerProvider).userInfo.uid,
-                  'isBroadcaster': false,
-                  'title': feed.title,
-                },
-              ));
+      if (feed.endsAt.isBefore(DateTime.now()) && context.mounted) {
+        AppHelper.customSnackbar(context: context, title: 'انتهت المكالمة ');
+      } else {
+        ref
+            .read(meetingControllerProvider)
+            .joinMeeting(feed.channelId)
+            .then((value) => Navigator.pushNamed(
+                  context,
+                  MeetingScreen.routeName,
+                  arguments: {
+                    'channelId': feed.channelId,
+                    'userID': ref.watch(authControllerProvider).userInfo.uid,
+                    'isBroadcaster': false,
+                    'title': feed.title,
+                  },
+                ));
+      }
     }
   }
 

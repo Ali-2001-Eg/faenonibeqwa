@@ -25,8 +25,8 @@ class AuthController {
   Stream<List<UserModel>> get users => authRepo.users;
   Future<void> get signout => authRepo.signout();
   Future<void> signup(
-          String email, String password, String username) =>
-      authRepo.signUp(email, password, username);
+          String email, String password, String username,BuildContext context) =>
+      authRepo.signUp(email, password, username,context);
   Future<void> login(String email, String password,BuildContext context) =>
       authRepo.login(email, password,context);
 }

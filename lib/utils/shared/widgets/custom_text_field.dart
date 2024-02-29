@@ -47,7 +47,9 @@ class CustomTextField extends StatelessWidget {
     this.obscureText,
     this.readOnly,
     this.onChange,
-    this.inputFormatters, this.filled, this.filledColor,
+    this.inputFormatters,
+    this.filled,
+    this.filledColor,
   }) : super(key: key);
 
   @override
@@ -59,8 +61,11 @@ class CustomTextField extends StatelessWidget {
       onFieldSubmitted: onSubmitted,
       controller: controller,
       validator: validator,
+      obscureText: obscureText ?? false,
+      textInputAction: textInputAction,
       inputFormatters: inputFormatters,
       style: const TextStyle(
+        fontFamily: 'Cairo',
         fontSize: 18,
         decorationThickness: 0,
         color: Colors.black,
@@ -73,6 +78,7 @@ class CustomTextField extends StatelessWidget {
           hintStyle: const TextStyle(
             decorationThickness: 0,
             color: Colors.grey,
+            fontFamily: 'Cairo',
             fontSize: 18,
           ),
           filled: filled,
@@ -85,9 +91,9 @@ class CustomTextField extends StatelessWidget {
 
   OutlineInputBorder outlineInputBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(14),
       borderSide: BorderSide(
-        color: Colors.grey.withOpacity(0.8),
+        color: Colors.grey.withOpacity(0.5),
         // color: context.theme.cardColor,
       ),
     );

@@ -87,7 +87,6 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         builder: (_, child) {
           return MaterialApp(
-            title: 'Faenonibeqwa',
             theme: lightMode,
             darkTheme: darkMode,
             builder: (context, child) {

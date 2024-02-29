@@ -44,114 +44,63 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
         _checkSubscribtionAndEnterExam(context);
       },
       child: Container(
-        padding: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.withOpacity(0.5)),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: const [
-            BoxShadow(
-              blurRadius: 50,
-              spreadRadius: 10,
-              color: Colors.white,
-              offset: Offset(0, -3),
-            ),
-          ],
-        ),
-        child: ListTile(
-          title: SmallText(
-            text: 'اسم الاختبار / ${widget.examModel.examTitle}',
-            color: Colors.black,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            fontWeight: FontWeight.bold,
+          padding: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.blue.withOpacity(0.3)),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [
+              BoxShadow(
+                blurRadius: 50,
+                spreadRadius: 10,
+                color: Colors.white,
+                offset: Offset(0, -3),
+              ),
+            ],
           ),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SmallText(
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  text: 'الوصف / ${widget.examModel.examDescription}',
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
+          child: Row(
+            children: [
+              const SizedBox(width: 10),
+              const CircleAvatar(
+                backgroundImage: AssetImage(AppImages.logo),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SmallText(
+                        text: 'الاختبار / ${widget.examModel.examTitle}',
+                        color: Colors.black,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      10.hSpace,
+                      SmallText(
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        text: 'الوصف / ${widget.examModel.examDescription}',
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      10.hSpace,
+                      SmallText(
+                        fontSize: 10.sp,
+                        text:
+                            'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ],
+                  ),
                 ),
-                5.hSpace,
-                SmallText(
-                  fontSize: 10.sp,
-                  text: 'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500,
-                ),
-              ],
-            ),
-          ),
-          trailing: const Icon(
-            Icons.text_snippet_outlined,
-          ),
-          leading: const CircleAvatar(
-              backgroundImage:  AssetImage(AppImages.logo)),
-        ),
-
-        //  Column(
-        //   crossAxisAlignment: CrossAxisAlignment.start,
-        //   children: [
-        //     ClipRRect(
-        //       borderRadius: BorderRadius.circular(12),
-        //       child: CachedNetworkImage(
-        //         imageUrl: widget.examModel.examImageUrl,
-        //         height: 120.h,
-        //         fit: BoxFit.cover,
-        //         width: double.infinity,
-        //       ),
-        //     ),
-        //     const SizedBox(height: 10),
-        //     SizedBox(
-        //       child: Padding(
-        //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        //         child: SmallText(
-        //           text: 'اسم الاختبار / ${widget.examModel.examTitle}',
-        //           color: Colors.black,
-        //           // overflow: TextOverflow.ellipsis,
-        //           maxLines: 1,
-        //           fontWeight: FontWeight.w500,
-        //         ),
-        //       ),
-        //     ),
-        //     10.hSpace,
-        //     Padding(
-        //       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        //       child: SmallText(
-        //         text: 'مده الاختبار / ${widget.examModel.timeMinutes} دقيقه',
-        //         color: Colors.black,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ),
-        //     const SizedBox(height: 10),
-        //     Padding(
-        //       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        //       child: SmallText(
-        //         maxLines: 3,
-        //         overflow: TextOverflow.ellipsis,
-        //         text: 'الوصف / ${widget.examModel.examDescription}',
-        //         color: Colors.black,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ),
-        //     const SizedBox(height: 10),
-        //     Center(
-        //       child: CustomButton(
-        //           onTap: () {
-        //             _checkSubscribtionAndEnterExam(context);
-        //           },
-        //           text: 'ادخل الآن',
-        //           textColor: Colors.white),
-        //     )
-        //   ],
-        // ),
-      ),
+              )
+            ],
+          )),
     );
   }
 
