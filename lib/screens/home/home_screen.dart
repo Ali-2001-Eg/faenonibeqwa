@@ -15,7 +15,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'فَأَعِينُونِي بِقُوَّةٍ',
+        title: 'المُعَلّم',
       ),
       body: SafeArea(
         child: Column(

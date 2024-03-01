@@ -54,8 +54,8 @@ dependencies:
   flutter_screenutil: null
   fluttertoast: ^8.2.4
   font_awesome_flutter: ^10.7.0
-  google_mobile_ads: ^4.0.0
-  google_sign_in: ^6.1.6
+  # google_mobile_ads: ^4.0.0
+  # google_sign_in: ^6.1.6
   http: ^1.2.0
   image_cropper: ^5.0.1
   image_picker: ^1.0.1

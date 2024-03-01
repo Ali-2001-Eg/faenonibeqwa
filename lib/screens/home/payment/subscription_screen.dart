@@ -1,13 +1,11 @@
 import 'package:faenonibeqwa/utils/shared/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
-import 'package:faenonibeqwa/utils/base/app_images.dart';
 import 'package:faenonibeqwa/utils/base/colors.dart';
 import 'package:faenonibeqwa/utils/enums/plan_enum.dart';
 import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_button.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

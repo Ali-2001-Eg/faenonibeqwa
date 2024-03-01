@@ -27,7 +27,7 @@ class LecturesListScreen extends StatelessWidget {
               return ListView.separated(
                 itemCount: data.length,
                 shrinkWrap: true,
-                padding: EdgeInsets.only(top: 14),
+                padding: const EdgeInsets.only(top: 14),
                 separatorBuilder: (context, index) =>
                     const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                 itemBuilder: (ctx, index) {

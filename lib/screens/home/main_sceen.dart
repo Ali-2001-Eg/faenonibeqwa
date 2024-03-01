@@ -2,7 +2,6 @@
 
 import 'package:faenonibeqwa/screens/lectures/lectures_list_screen.dart';
 import 'package:faenonibeqwa/screens/profile/profile_screen.dart';
-import 'package:faenonibeqwa/screens/trip/trips_screen.dart';
 import 'package:faenonibeqwa/utils/base/colors.dart';
 
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
@@ -36,9 +35,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       setState(() {
         token = tokenFcm!;
       });
-      print('===========');
-      print(" ===========  ${token}");
-      print('==============');
+    
     });
     super.initState();
   }

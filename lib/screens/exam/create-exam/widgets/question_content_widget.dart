@@ -130,9 +130,6 @@ class _QuestionContentWidgetState extends State<QuestionContentWidget> {
                     value!;
                 _selectedAnswer =
                     widget.questions[widget.questionIndex].correctAnswerIndex;
-                print('selected answer $_selectedAnswer');
-                print(
-                    'correct answer ${widget.questions[widget.questionIndex].correctAnswerIndex}');
               });
             },
             elevation: 0,

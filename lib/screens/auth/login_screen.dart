@@ -12,7 +12,6 @@ import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/big_text.dart';
 import '../../utils/shared/widgets/custom_button.dart';
 import '../../utils/shared/widgets/custom_text_field.dart';
-import '../home/main_sceen.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -133,11 +132,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _login(WidgetRef ref, BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      ref.read(authControllerProvider).login(
+      ref
+          .read(authControllerProvider)
+          .login(
             _emailController.text.trim(),
             _passwordController.text.trim(),
             context,
-          );
+          ).then((value){
+            
+          })
+          .catchError((err) {
+        AppHelper.customSnackbar(context: context, title: err.toString());
+      });
     } else {
       AppHelper.customSnackbar(
           context: context,

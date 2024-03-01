@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +10,6 @@ import 'package:uuid/uuid.dart';
 import 'package:faenonibeqwa/models/exam_model.dart';
 
 import '../models/exam_history.dart';
-import '../utils/providers/app_providers.dart';
 import '../utils/typedefs/app_typedefs.dart';
 
 class ExamRepo {
@@ -151,7 +149,6 @@ class ExamRepo {
       'description': description,
     });
     for (var element in questions) {
-      print('body to store ${element.body}');
       await firestore
           .collection('users')
           .doc(auth.currentUser!.uid)

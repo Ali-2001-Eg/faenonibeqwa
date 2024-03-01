@@ -1,10 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:faenonibeqwa/screens/meeting/meeting_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_images.dart';
@@ -16,7 +14,6 @@ import '../../../utils/base/app_helper.dart';
 import '../../../utils/base/colors.dart';
 import '../../../utils/providers/app_providers.dart';
 import '../../../utils/shared/widgets/big_text.dart';
-import '../../../utils/shared/widgets/custom_indicator.dart';
 import '../payment/subscription_screen.dart';
 
 class FeedWidget extends ConsumerWidget {
@@ -61,32 +58,31 @@ class FeedWidget extends ConsumerWidget {
     if (await _checkSubscribtionState(context, ref)) {
       if (feed.endsAt.isBefore(DateTime.now()) && context.mounted) {
         AppHelper.customSnackbar(context: context, title: 'انتهت المكالمة ');
-      } else {
-        ref
-            .read(meetingControllerProvider)
-            .joinMeeting(feed.channelId)
-            .then((value) => Navigator.pushNamed(
-                  context,
-                  MeetingScreen.routeName,
-                  arguments: {
-                    'channelId': feed.channelId,
-                    'userID': ref.watch(authControllerProvider).userInfo.uid,
-                    'isBroadcaster': false,
-                    'title': feed.title,
-                  },
-                ));
       }
+    } else {
+      ref
+          .read(meetingControllerProvider)
+          .joinMeeting(feed.channelId)
+          .then((value) => Navigator.pushNamed(
+                context,
+                MeetingScreen.routeName,
+                arguments: {
+                  'channelId': feed.channelId,
+                  'userID': ref.watch(authControllerProvider).userInfo.uid,
+                  'isBroadcaster': false,
+                  'title': feed.title,
+                },
+              ));
     }
   }
 
   Future<bool> _checkSubscribtionState(
       BuildContext context, WidgetRef ref) async {
-    if (ref.read(paymentControllerProvider).subscriptionEnded) {
-      ref.read(paymentControllerProvider).changePlanAfterEndDate;
-    }
     if (!ref.read(paymentControllerProvider).subscriptionEnded) {
       return true;
     } else {
+      ref.read(paymentControllerProvider).changePlanAfterEndDate;
+
       await FirebaseMessaging.instance.unsubscribeFromTopic('premium');
       if (context.mounted) {
         AppHelper.customSnackbar(

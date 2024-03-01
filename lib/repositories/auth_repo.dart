@@ -5,13 +5,14 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/user_model.dart';
+import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -24,35 +25,23 @@ class AuthRepo {
   final ProviderRef ref;
   AuthRepo(this.auth, this.firestore, this.ref);
 
-//google sign in
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  Future<void> signInWithGoogleAccount() async {
-    final GoogleSignInAccount? googleSignInAccount =
-        await _googleSignIn.signIn();
-
-    'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg';
-    GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount!.authentication;
-    final AuthCredential credentials = GoogleAuthProvider.credential(
-      idToken: googleSignInAuthentication.idToken,
-      accessToken: googleSignInAuthentication.accessToken,
-    );
-    await auth.signInWithCredential(
-      credentials,
-    );
-    //firestore
-    _saveCredentials();
-  }
-
-  //firestore
-  Future<void> _saveCredentials() async {
+  Future signUp(String email, String password, String username,
+      BuildContext context) async {
     try {
-      // String userId = const Uuid().v1();
+      ref.read(isLoading.notifier).update((state) => true);
+
+      // await Future.delayed(const Duration(seconds: 5), () {
+      //   print('loading');
+      // });
+      await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       UserModel user = UserModel(
-          name: auth.currentUser!.displayName!,
+          name: username,
           uid: auth.currentUser!.uid,
           photoUrl: '',
-          email: auth.currentUser!.email!,
+          email: email,
           isAdmin: false,
           isPremium: false,
           notificationToken: (await FirebaseMessaging.instance.getToken())!);
@@ -60,13 +49,52 @@ class AuthRepo {
           .collection('users')
           .doc(auth.currentUser!.uid)
           .set(user.toMap());
-      print('email is ${user.email}');
+
+      auth.currentUser!.updateProfile(displayName: username);
+      await auth.currentUser!.reload();
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
+      if (context.mounted) {
+        AppHelper.customSnackbar(
+            context: context,
+            title: e.toString(),
+            snackbarPosition: ToastGravity.TOP);
+      }
+      print('error');
+    }
+    ref.read(isLoading.notifier).update((state) => false);
+  }
+
+  Future login(String email, String password, BuildContext context) async {
+    try {
+      ref.read(isLoading.notifier).update((state) => true);
+
+      await auth.signInWithEmailAndPassword(email: email, password: password);
+      if (context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, MainScreen.routeName, (route) => false);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        if (context.mounted) {
+          AppHelper.customSnackbar(
+              context: context, title: ' هذا الحساب غير موجود');
+        }
+      } else if (e.code == 'wrong-password') {
+        print('e.code is ${e.code}');
+        if (context.mounted) {
+          AppHelper.customSnackbar(
+              context: context, title: 'كلمه المرور غير صحيحه');
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      if (context.mounted) {
+        AppHelper.customSnackbar(context: context, title: e.toString());
       }
     }
+    ref.read(isLoading.notifier).update((state) => false);
   }
+
 
   //get user data
 
@@ -86,7 +114,12 @@ class AuthRepo {
 
   //get photo url
   String get getPhotoUrl => ref.read(userDataProvider).when(
-      data: (data) => data!.photoUrl,
+      data: (data) {
+        if (data == null) {
+          return 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fstudent_354637&psig=AOvVaw3MqaKfajFyVXeKjn476gK3&ust=1709305183164000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCMjb1pTo0IQDFQAAAAAdAAAAABAE';
+        }
+        return data.photoUrl;
+      },
       error: (error, s) {
         return "";
       },
@@ -127,62 +160,6 @@ class AuthRepo {
     } catch (e) {
       print('sign out $e');
     }
-  }
-
-  Future signUp(String email, String password, String username,
-      BuildContext context) async {
-    try {
-      ref.read(isLoading.notifier).update((state) => true);
-
-      // await Future.delayed(const Duration(seconds: 5), () {
-      //   print('loading');
-      // });
-      await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, MainScreen.routeName, (r) => false);
-      }
-      auth.currentUser!.updateProfile(displayName: username);
-      await auth.currentUser!.reload();
-      _saveCredentials();
-    } catch (e) {
-      print('error');
-    }
-    ref.read(isLoading.notifier).update((state) => false);
-  }
-
-  Future login(String email, String password, BuildContext context) async {
-    try {
-      ref.read(isLoading.notifier).update((state) => true);
-
-      await auth.signInWithEmailAndPassword(email: email, password: password);
-      if (context.mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, MainScreen.routeName, (route) => false);
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        if (context.mounted) {
-          AppHelper.customSnackbar(
-              context: context, title: ' هذا الحساب غير موجود');
-        }
-      } else if (e.code == 'wrong-password') {
-        print('e.code is ${e.code}');
-        if (context.mounted) {
-          AppHelper.customSnackbar(
-              context: context, title: 'كلمه المرور غير صحيحه');
-        }
-      }
-    } catch (e) {
-      print(e.toString());
-      if (context.mounted) {
-        AppHelper.customSnackbar(context: context, title: e.toString());
-      }
-    }
-    ref.read(isLoading.notifier).update((state) => false);
   }
 
   Future<void> editPhoto(String filePath) async {

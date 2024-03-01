@@ -48,6 +48,7 @@ class ProfileScreen extends ConsumerWidget {
                       child: const Icon(
                         Icons.person,
                         size: 50,
+                        color: Colors.white,
                       ),
                     )
                   else
@@ -58,10 +59,10 @@ class ProfileScreen extends ConsumerWidget {
                         shape: BoxShape.circle,
                         border: Border.all(),
                         image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                            ref.watch(authControllerProvider).getPhotoUrl,
-                          ),
-                        ),
+                            image: CachedNetworkImageProvider(
+                              ref.watch(authControllerProvider).getPhotoUrl,
+                            ),
+                            fit: BoxFit.cover),
                       ),
                     ),
                   // margin: EdgeInsets.all(20.h),

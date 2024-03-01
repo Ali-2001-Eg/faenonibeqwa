@@ -50,9 +50,13 @@ class QuizAppBar extends StatelessWidget {
               ],
             ),
           ),
-          BigText(
-            text: examTitle,
-            color: Colors.white,
+          Expanded(
+            child: BigText(
+              maxlines: 1,
+              overflow: TextOverflow.ellipsis,
+              text: examTitle,
+              color: Colors.white,
+            ),
           ),
           GestureDetector(
             onTap: () {

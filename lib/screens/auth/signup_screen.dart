@@ -12,7 +12,6 @@ import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/big_text.dart';
 import '../../utils/shared/widgets/custom_button.dart';
 import '../../utils/shared/widgets/custom_text_field.dart';
-import '../home/main_sceen.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -71,7 +70,7 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
                     textInputAction: TextInputAction.next,
                     hintText: 'اسم المستخدم',
                     validator: (value) {
-                      if (!validateEmail(value!)) {
+                      if (value!.isEmpty) {
                         return 'يرجي ادخال اسم المستخدم';
                       }
                       return null;
@@ -99,10 +98,11 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
                         return 'يرجي ادخال الرقم السري';
                       } else if (value.length < 6) {
                         return 'الرقم السرى يجب ان يكون مكون من 6 احرف';
-                      } else if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*d).+$')
-                          .hasMatch(value)) {
-                        return 'الرقم السرى يجب ان يحتوى على ارقام و حروف و رموز';
                       }
+                      //  else if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*d).+$')
+                      //     .hasMatch(value)) {
+                      //   return 'الرقم السرى يجب ان يحتوى على ارقام و حروف و رموز';
+                      // }
                       return null;
                     },
                   ),
@@ -149,14 +149,22 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
     );
   }
 
-  void _signup(WidgetRef ref, BuildContext context) {
+  void _signup(WidgetRef ref, BuildContext context) async {
     if (_formKey.currentState!.validate()) {
-      ref.read(authControllerProvider).signup(
+      await ref
+          .read(authControllerProvider)
+          .signup(
             _emailController.text.trim(),
             _passwordController.text.trim(),
             _usernameController.text.trim(),
             context,
-          );
+          )
+          .then((value) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, LoginScreen.routeName, (r) => false);
+      }).catchError((error) {
+        AppHelper.customSnackbar(context: context, title: error.toString());
+      });
     } else {
       AppHelper.customSnackbar(
           context: context,

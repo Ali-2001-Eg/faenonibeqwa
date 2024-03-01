@@ -1,21 +1,17 @@
 import 'package:faenonibeqwa/models/exam_model.dart';
-import 'package:faenonibeqwa/repositories/admob_repo.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/screens/home/payment/subscription_screen.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../utils/base/app_images.dart';
 import '../../../utils/providers/app_providers.dart';
-import '../../../utils/shared/widgets/custom_button.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 
 class ExamTileWidget extends ConsumerStatefulWidget {
@@ -122,7 +118,9 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
           title: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
         );
       }
-      Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
+      if (context.mounted) {
+        Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
+      }
     }
   }
 }

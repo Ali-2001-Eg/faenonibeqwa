@@ -50,7 +50,6 @@ class SoluteExamScreen extends ConsumerWidget {
                           text: 'الاستكمال'),
                       CustomButton(
                           onTap: () async {
-                            Navigator.of(context).pop();
                             await ref
                                 .watch(examControllerProvider)
                                 .submitExam(
@@ -95,7 +94,7 @@ class SoluteExamScreen extends ConsumerWidget {
                     //initial
                     late Question question;
                     question = data[ref.watch(currentIndex)];
-                  
+
                     return SingleChildScrollView(
                       child: Container(
                         height: context.screenHeight * 0.84,
@@ -179,8 +178,8 @@ class SoluteExamScreen extends ConsumerWidget {
       WidgetRef ref, List<Question> snap, String examId) async {
     if (await ref
         .read(examControllerProvider)
-        .checkUserHasTakenExam(examId: examId)) print('user has taken it ');
-    if (!await ref
+        .checkUserHasTakenExam(examId: examId)) {
+      if (!await ref
         .read(examControllerProvider)
         .checkUserHasTakenExam(examId: examId)) {
       ref.read(examControllerProvider).storeExamDataToUser(
@@ -190,6 +189,7 @@ class SoluteExamScreen extends ConsumerWidget {
             // imageUrl: exam.examImageUrl,
             questions: snap,
           );
+    }
     }
   }
 }

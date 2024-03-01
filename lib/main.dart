@@ -58,8 +58,7 @@ void _initAwesomeLocalNotifications() async {
       ),
     );
 
-    if (message.notification != null) {
-    }
+    if (message.notification != null) {}
   });
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     await AwesomeNotifications().createNotification(
@@ -71,8 +70,7 @@ void _initAwesomeLocalNotifications() async {
       ),
     );
 
-    if (message.notification != null) {
-    }
+    if (message.notification != null) {}
   });
 }
 
@@ -81,12 +79,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth.instance.signOut();
     return ScreenUtilInit(
         designSize: const Size(360, 690),
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (_, child) {
+          // print(FirebaseAuth.instance.currentUser!.displayName);
           return MaterialApp(
+            title: 'المُعَلّم',
             theme: lightMode,
             darkTheme: darkMode,
             builder: (context, child) {

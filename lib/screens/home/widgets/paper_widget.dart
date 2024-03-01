@@ -3,18 +3,14 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_file/open_file.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path/path.dart' as Path;
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart' as path;
 
 import 'package:faenonibeqwa/models/paper_model.dart';
 import 'package:faenonibeqwa/screens/home/widgets/pdf_viewer_widget.dart';
-import 'package:faenonibeqwa/utils/download_pdf/check_permission.dart';
 import 'package:faenonibeqwa/utils/download_pdf/directory_path.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/shimmer_widget.dart';
 
@@ -104,7 +100,6 @@ class _PaperItemState extends State<PaperItem> {
         fileExists = true;
       });
     } catch (e) {
-      print(e);
       setState(() {
         dowloading = false;
       });
@@ -130,14 +125,13 @@ class _PaperItemState extends State<PaperItem> {
 
   openfile() {
     OpenFile.open(filePath);
-    print("fff $filePath");
   }
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      fileName = Path.basename(widget.paperModel.filePath);
+      fileName = path.basename(widget.paperModel.filePath);
     });
     checkFileExit();
   }
@@ -194,7 +188,7 @@ class _PaperItemState extends State<PaperItem> {
                       )
                     ],
                   )
-                : Icon(Icons.more_vert_outlined),
+                : const Icon(Icons.more_vert_outlined),
         itemBuilder: (context) {
           return <PopupMenuEntry>[
             PopupMenuItem(

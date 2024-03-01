@@ -11,8 +11,7 @@ class AuthController {
   AuthController({
     required this.authRepo,
   });
-  Future<void> signInWithGoggleAccount() async =>
-      await authRepo.signInWithGoogleAccount();
+ 
   Stream<UserModel?> get getUserData => authRepo.getUserData;
   Future<User?> get user => authRepo.user();
   String get getPhotoUrl => authRepo.getPhotoUrl;

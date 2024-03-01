@@ -1,11 +1,9 @@
 import 'package:faenonibeqwa/utils/base/colors.dart';
-import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../utils/enums/plan_enum.dart';
 import '../../../../utils/providers/app_providers.dart';
-import '../../../../utils/shared/widgets/custom_button.dart';
 import '../../../../utils/shared/widgets/small_text.dart';
 
 class PlanWidget extends StatelessWidget {

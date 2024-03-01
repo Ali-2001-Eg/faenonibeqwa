@@ -19,7 +19,7 @@ class DisplayAnswersWidget extends ConsumerWidget {
   final String examTitle;
   // final String examImageUrl;
   final String examDesc;
-  const DisplayAnswersWidget({
+  const DisplayAnswersWidget({super.key, 
     required this.question,
     required this.questions,
     required this.examId,
@@ -33,9 +33,6 @@ class DisplayAnswersWidget extends ConsumerWidget {
     // print('examId is $examId');
     //stream provider
     return ref.watch(questionIdsStream(examId)).when(data: (data) {
-      print("================");
-      print(data);
-      print("================");
 
       if (data.isEmpty) {
         return const Center(
@@ -49,7 +46,6 @@ class DisplayAnswersWidget extends ConsumerWidget {
           .watch(answersProvider(
               AnswersParameters(examId, data[ref.watch(currentIndex)])))
           .when(data: (answer) {
-        print('index is ${ref.watch(currentIndex)}');
         return ListView.separated(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
@@ -57,7 +53,6 @@ class DisplayAnswersWidget extends ConsumerWidget {
           separatorBuilder: (_, i) => Padding(padding: EdgeInsets.all(5.w)),
           itemBuilder: (_, i) {
             var answers = answer[i];
-            print(answers.answer);
             return Consumer(builder: (context, ref, child) {
               return InkWell(
                 onTap: () {
@@ -82,7 +77,6 @@ class DisplayAnswersWidget extends ConsumerWidget {
         return const ShimmerWidget();
       });
     }, error: (error, stacktrace) {
-      print('stacktrace is ${stacktrace.toString()}');
       AppHelper.customSnackbar(context: context, title: error.toString());
       return Center(
           child: BigText(

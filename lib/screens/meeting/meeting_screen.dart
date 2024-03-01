@@ -1,5 +1,3 @@
-import 'package:faenonibeqwa/ads/banner_widget.dart';
-import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';

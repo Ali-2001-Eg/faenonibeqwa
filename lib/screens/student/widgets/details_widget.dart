@@ -52,8 +52,6 @@ class StudentDetailsItem extends StatelessWidget {
     // Swap the numerator and denominator
     String newFraction = '$denominator/$numerator';
 
-    print('Original Fraction: $originalGrade');
-    print('Converted Fraction: $newFraction');
     return newFraction;
   }
 }

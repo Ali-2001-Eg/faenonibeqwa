@@ -3,7 +3,6 @@
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 
