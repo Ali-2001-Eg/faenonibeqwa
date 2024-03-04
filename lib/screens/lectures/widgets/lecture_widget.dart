@@ -44,9 +44,9 @@ class LectureWidget extends ConsumerWidget {
         onTap: () async {
           if (await _checkSubscribtionState(context, ref)) {
             if (!lecture.audienceUid
-                    .contains(ref.watch(userDataProvider).value!.uid) &&
+                    .contains(ref.watch(authControllerProvider).userInfo.uid) &&
                 context.mounted) {
-              ref
+              await ref
                   .watch(lecturesControllerProvider)
                   .addUserToVideoAudience(lecture.id);
               Navigator.push(context, MaterialPageRoute(builder: (ctx) {
@@ -89,7 +89,7 @@ class LectureWidget extends ConsumerWidget {
   Future<bool> _checkSubscribtionState(
       BuildContext context, WidgetRef ref) async {
     
-    if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+    if (!await ref.read(paymentControllerProvider).subscriptionEnded) {
       return true;
     } else {
       await ref.read(paymentControllerProvider).changePlanAfterEndDate;

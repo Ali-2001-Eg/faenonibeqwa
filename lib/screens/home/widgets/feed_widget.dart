@@ -76,7 +76,7 @@ class FeedWidget extends ConsumerWidget {
 
   Future<bool> _checkSubscribtionState(
       BuildContext context, WidgetRef ref,MeetingModel meeting) async {
-    if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+    if (!await ref.read(paymentControllerProvider).subscriptionEnded) {
       if (meeting.endsAt.isBefore(DateTime.now()) && context.mounted) {
         AppHelper.customSnackbar(context: context, title: 'انتهت المكالمة ');
         return false;

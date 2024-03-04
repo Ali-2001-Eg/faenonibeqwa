@@ -8,6 +8,7 @@ import 'package:faenonibeqwa/controllers/auth_controller.dart';
 import 'package:faenonibeqwa/models/user_model.dart';
 import 'package:faenonibeqwa/screens/auth/login_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
+import 'package:faenonibeqwa/utils/enums/plan_enum.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -44,7 +45,10 @@ class AuthRepo {
           photoUrl: '',
           email: email,
           isAdmin: false,
+          timeToFinishSubscribtion: DateTime.now(),
           isPremium: false,
+          freePlanEnded: false,
+          planEnum: PlanEnum.notSubscribed,
           notificationToken: (await FirebaseMessaging.instance.getToken())!);
       await firestore
           .collection('users')
@@ -123,9 +127,7 @@ class AuthRepo {
     Completer<String> completer = Completer<String>();
     getUserData.listen((event) {
     String photoUrl =''; 
-    if(event!.photoUrl ==""){
-      photoUrl = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fstudent_354637&psig=AOvVaw3MqaKfajFyVXeKjn476gK3&ust=1709305183164000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCMjb1pTo0IQDFQAAAAAdAAAAABAE';
-    }
+    
        photoUrl = event!.photoUrl;
           completer.complete(photoUrl);
     });

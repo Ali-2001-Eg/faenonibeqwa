@@ -138,6 +138,8 @@ class ExamRepo {
     String description,
     // String imageUrl,
   ) async {
+    // if(!await checkUserHasTakenExam(examId)){
+
     await firestore
         .collection('users')
         .doc(auth.currentUser!.uid)
@@ -147,6 +149,7 @@ class ExamRepo {
       'title': title,
       'description': description,
     });
+    // }
     // for (var element in questions) {
     // await firestore
     //     .collection('users')

@@ -10,14 +10,14 @@ class UserModel extends Equatable {
   final String uid;
   final String photoUrl;
   final String email;
-   bool isAdmin;
+  final bool isAdmin;
   final String notificationToken;
   final bool isPremium;
   final bool? freePlanEnded;
   final PlanEnum? planEnum;
   final DateTime? timeToFinishSubscribtion;
   // final int? streamJoined;
-   UserModel({
+  const UserModel({
     required this.name,
     required this.uid,
     required this.photoUrl,
@@ -58,8 +58,8 @@ class UserModel extends Equatable {
       'notificationToken': notificationToken,
       'premium': isPremium,
       'planEnum': planEnum!.type,
-      'freePlanEnded': freePlanEnded ?? false,
-      "timeToFinishSubscribtion": DateTime.now().microsecondsSinceEpoch
+      'freePlanEnded': freePlanEnded,
+      "timeToFinishSubscribtion": timeToFinishSubscribtion,
       // 'streamsJoined': streamJoined,
     };
   }

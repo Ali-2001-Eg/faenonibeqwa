@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,19 +49,18 @@ class PaymentRepo {
     return duration;
   }
 
-  bool get subscriptionEnded {
-    return ref
-      .read(userDataProvider)
-      .when(data: (data){
-        return
-  data!.timeToFinishSubscribtion!
-      .isBefore(DateTime.now());
-      }, error: (e,s){
-        return false;
-      }, loading: (){
-        return false;
-      });
-  }
+  Future<bool> get subscriptionEnded {
+    Completer<bool> completer = Completer<bool>();
+    ref.read(authControllerProvider). getUserData.listen((event) {
+    bool ended =false; 
+       ended = event!.timeToFinishSubscribtion!.isBefore(DateTime.now());
+       print('time is  ${event.timeToFinishSubscribtion!.add(Duration(seconds: 10)).millisecondsSinceEpoch}');
+       print('time is  ${DateTime.now().millisecondsSinceEpoch}');
+       print('ended is  $ended');
+          completer.complete(ended);
+    });
+      return completer.future;
+    }
   PlanEnum get subscriptionPlan =>
       ref.read(userDataProvider).value!.planEnum ?? PlanEnum.notSubscribed;
 

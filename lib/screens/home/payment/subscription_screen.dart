@@ -127,7 +127,7 @@ class SubscriptionScreen extends ConsumerWidget {
       return;
     }
     //check end date
-    else if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+    else if (!await ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
         context: context,
         title: ' الاشتراك جاري بالفعل باقي ${_reminingDays(ref)} يوما',
@@ -188,7 +188,7 @@ class SubscriptionScreen extends ConsumerWidget {
       return;
     }
     //check end date
-    else if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+    else if (!await ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
         context: context,
         title: ' الاشتراك جاري بالفعل باقي ${_reminingDays(ref)} يوما',
@@ -245,7 +245,7 @@ class SubscriptionScreen extends ConsumerWidget {
       return;
     }
     //check end date
-    else if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+    else if (!await ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
           context: context,
           title: ' الاشتراك جاري بالفعل باقي ${_reminingDays(ref)} يوما',
@@ -296,7 +296,7 @@ class SubscriptionScreen extends ConsumerWidget {
 
   Future<void> _freeTrailSubscribe(WidgetRef ref, BuildContext context) async {
     //check plan type
-    if (ref.read(paymentControllerProvider).subscriptionEnded) {
+    if (await ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
           context: context,
           title: 'الاشتراك جاري بالفعل حاول الاشتراك في برنامج آخر',
@@ -304,7 +304,7 @@ class SubscriptionScreen extends ConsumerWidget {
       return;
     }
     //check end date
-    else if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+    else if (!await ref.read(paymentControllerProvider).subscriptionEnded) {
       AppHelper.customSnackbar(
           context: context,
           title: ' الاشتراك جاري بالفعل باقي ${_reminingDays(ref)} يوما',

@@ -30,14 +30,11 @@ class ExamItem extends ConsumerStatefulWidget {
 class _ExamTileWidgetState extends ConsumerState<ExamItem> {
   @override
   Widget build(BuildContext context) {
-    // print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
-    if (kDebugMode) {
-      print(
-          'time to be changed in firestore ${DateTime.now().add(const Duration(seconds: 30)).millisecondsSinceEpoch}');
-    }
+    print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
+    
     return GestureDetector(
-      onTap: () {
-        _checkSubscribtionAndEnterExam(context)?Navigator.push(context, MaterialPageRoute(builder: (context) {
+      onTap: () async{
+        await _checkSubscribtionAndEnterExam(context)?Navigator.push(context, MaterialPageRoute(builder: (context) {
         return SoluteExamScreen(
           exam: widget.examModel,
         );
@@ -113,8 +110,8 @@ class _ExamTileWidgetState extends ConsumerState<ExamItem> {
     );
   }
 
-  bool _checkSubscribtionAndEnterExam(BuildContext context) {
-    if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+  Future<bool> _checkSubscribtionAndEnterExam(BuildContext context) async{
+    if (!await ref.read(paymentControllerProvider).subscriptionEnded) {
 
       
       return true;
