@@ -32,12 +32,12 @@ class SmallText extends StatelessWidget {
       overflow: overflow,
       maxLines: maxLines,
       style: context.theme.textTheme.displayMedium!.copyWith(
-        color: color ?? context.theme.textTheme.displayMedium!.color,
+        color: color,
+        // ?? context.theme.textTheme.displayMedium!.color
         fontWeight: fontWeight,
         fontSize: fontSize,
         height: height,
       ),
-      
       textAlign: textAlign,
     );
   }

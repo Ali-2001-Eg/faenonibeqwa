@@ -137,7 +137,6 @@ class ExamRepo {
     String title,
     String description,
     // String imageUrl,
-    List<Question> questions,
   ) async {
     await firestore
         .collection('users')
@@ -148,21 +147,21 @@ class ExamRepo {
       'title': title,
       'description': description,
     });
-    for (var element in questions) {
-      await firestore
-          .collection('users')
-          .doc(auth.currentUser!.uid)
-          .collection('examsHistory')
-          .doc(examId)
-          .collection('questions')
-          .doc(element.body)
-          .set({
-        'body': element.body,
-        'correctAnswer': element.correctAnswerIdentifier,
-        'imageUrl': element.questionImage ?? '',
-        'selectedAnswer': '',
-      });
-    }
+    // for (var element in questions) {
+    // await firestore
+    //     .collection('users')
+    //     .doc(auth.currentUser!.uid)
+    //     .collection('examsHistory')
+    //     .doc(examId)
+    //     .collection('questions')
+    //     .doc(element.body)
+    //     .set({
+    //   'body': element.body,
+    //   'correctAnswer': element.correctAnswerIdentifier,
+    //   'imageUrl': element.questionImage ?? '',
+    //   'selectedAnswer': '',
+    // });
+    // }
   }
 
   Future<void> selectAnswer(
@@ -181,24 +180,23 @@ class ExamRepo {
 //to make check on the answer
   Stream<String> getAnswerIdentifier(String examId, String questionId) async* {
     if (!await checkUserHasTakenExam(examId)) {
-      await Future.delayed(const Duration(seconds: 2), () {});
+      yield* firestore
+          .collection('users')
+          .doc(auth.currentUser!.uid)
+          .collection('examsHistory')
+          .doc(examId)
+          .collection('questions')
+          .doc(questionId)
+          .snapshots()
+          .map((query) {
+        String selectedAnswer = '';
+        if (query.data()!.isNotEmpty) {
+          selectedAnswer = query.data()!['selectedAnswer'];
+        }
+        print('selectedAnswer');
+        return selectedAnswer;
+      });
     }
-    yield* firestore
-        .collection('users')
-        .doc(auth.currentUser!.uid)
-        .collection('examsHistory')
-        .doc(examId)
-        .collection('questions')
-        .doc(questionId)
-        .snapshots()
-        .map((query) {
-      String selectedAnswer = '';
-      if (query.data()!.isNotEmpty) {
-        selectedAnswer = query.data()!['selectedAnswer'];
-      }
-      // print('selectedAnswer');
-      return selectedAnswer;
-    });
   }
 
   Future<bool> checkUserHasTakenExam(String examId) async {

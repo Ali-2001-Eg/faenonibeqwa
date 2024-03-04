@@ -35,11 +35,16 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       setState(() {
         token = tokenFcm!;
       });
-    
     });
     super.initState();
   }
 
+  List<Widget> screen = [
+    const HomeScreen(),
+    const LecturesListScreen(),
+    const ExamsListScreen(),
+    const ProfileScreen(),
+  ];
   @override
   Widget build(BuildContext context) {
     //to rebuild the screen
@@ -47,15 +52,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     // print(FirebaseAuth.instance.currentUser?.email);
 
     return Scaffold(
-      body: IndexedStack(
-        index: selectedTabIndex,
-        children: const [
-          HomeScreen(),
-          LecturesListScreen(),
-          ExamsListScreen(),
-          ProfileScreen(),
-        ],
-      ),
+      body: screen[selectedTabIndex],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         type: BottomNavigationBarType.fixed,

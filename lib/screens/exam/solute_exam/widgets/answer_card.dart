@@ -29,10 +29,10 @@ class AnswerCard extends ConsumerWidget {
           milliseconds: 250,
         ),
         width: double.infinity,
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.all(12),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(
               width: data == answer.identifier ? 1.5 : 0.5,
               color: data == answer.identifier ? Colors.green : Colors.black),

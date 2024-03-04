@@ -59,6 +59,7 @@ class UserModel extends Equatable {
       'premium': isPremium,
       'planEnum': planEnum!.type,
       'freePlanEnded': freePlanEnded ?? false,
+      "timeToFinishSubscribtion": DateTime.now().microsecondsSinceEpoch
       // 'streamsJoined': streamJoined,
     };
   }
@@ -79,6 +80,7 @@ class UserModel extends Equatable {
       planEnum: map['planEnum'] != null
           ? (map['planEnum'] as String).toEnum()
           : PlanEnum.notSubscribed,
+
       // streamJoined: map['streamJoined'] != null
       //     ? (map['streamJoined'] as int)
       //     : 0,

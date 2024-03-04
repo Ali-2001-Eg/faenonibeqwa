@@ -1,8 +1,9 @@
-import 'package:faenonibeqwa/screens/exam/widgets/exam_tile_widget.dart';
+import 'package:faenonibeqwa/screens/exam/widgets/exam_item.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../models/exam_model.dart';
 import '../../utils/providers/app_providers.dart';
 import '../../utils/shared/widgets/big_text.dart';
 import '../../utils/shared/widgets/custom_indicator.dart';
@@ -30,7 +31,7 @@ class ExamsListScreen extends ConsumerWidget {
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) {
-            return ExamTileWidget(
+            return ExamItem(
               ref: ref,
               examModel: data[index],
             );
@@ -43,4 +44,6 @@ class ExamsListScreen extends ConsumerWidget {
       }),
     );
   }
+
+  
 }

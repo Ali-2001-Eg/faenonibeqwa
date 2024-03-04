@@ -58,14 +58,12 @@ class ExamController {
     required String title,
     required String description,
     // required String imageUrl,
-    required List<Question> questions,
   }) =>
       examRepo.storeExamDataToUser(
         examId,
         title,
         description,
         // imageUrl,
-        questions,
       );
   Future<void> selectAnswer({
     required String examId,

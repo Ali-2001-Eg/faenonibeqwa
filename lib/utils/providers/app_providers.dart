@@ -99,7 +99,7 @@ final planType = StateProvider<PlanEnum>((ref) => PlanEnum.notSubscribed);
 
 //state notifiers providers
 final homeNotifierProvider =
-    StateNotifierProvider<HomeProvider, int>((ref) => HomeProvider(0));
+    StateNotifierProvider.autoDispose<HomeProvider, int>((ref) => HomeProvider(0));
 
 final fileNotifier =
     StateNotifierProvider.autoDispose<LectureVideoNotifier, File?>(
@@ -135,7 +135,7 @@ final streamJoinedProvider = StreamProvider((ref) {
   return controller.userPresence;
 });
 
-final userDataProvider = StreamProvider<UserModel?>((ref) {
+final userDataProvider = StreamProvider.autoDispose<UserModel?>((ref) {
   final stream = ref.read(authControllerProvider).getUserData;
   return stream;
 });
