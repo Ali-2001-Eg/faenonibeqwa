@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use, unused_import, avoid_print
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -98,7 +99,9 @@ class AuthRepo {
 
   //get user data
 
-  Stream<UserModel?> get getUserData => firestore
+  Stream<UserModel?> get getUserData {
+
+    return firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
           .snapshots()
@@ -106,46 +109,61 @@ class AuthRepo {
         UserModel? user;
         if (query.exists) {
           user = UserModel.fromMap(query.data()!);
+        }else if(auth.currentUser ==null){
+          return null;
         }
         return user;
       });
+  }
 
   Future<User?> user() async => auth.currentUser;
 
   //get photo url
-  String get getPhotoUrl => ref.read(userDataProvider).when(
-      data: (data) {
-        if (data == null) {
-          return 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fstudent_354637&psig=AOvVaw3MqaKfajFyVXeKjn476gK3&ust=1709305183164000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCMjb1pTo0IQDFQAAAAAdAAAAABAE';
-        }
-        return data.photoUrl;
-      },
-      error: (error, s) {
-        return "";
-      },
-      loading: () => '');
+  Future<String> get getPhotoUrl {
+    Completer<String> completer = Completer<String>();
+    getUserData.listen((event) {
+    String photoUrl =''; 
+    if(event!.photoUrl ==""){
+      photoUrl = 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fstudent_354637&psig=AOvVaw3MqaKfajFyVXeKjn476gK3&ust=1709305183164000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCMjb1pTo0IQDFQAAAAAdAAAAABAE';
+    }
+       photoUrl = event!.photoUrl;
+          completer.complete(photoUrl);
+    });
+      return completer.future;
+    
+  }
 
   //name
-  String get getName => ref.read(userDataProvider).when(
-      data: (data) => data!.name,
-      error: (error, s) {
-        throw error;
-      },
-      loading: () => '');
-  String get getEmail => ref.read(userDataProvider).when(
-      data: (data) => data!.email,
-      error: (error, s) {
-        throw error;
-      },
-      loading: () => '');
+  Future<String> get getName {
+    Completer<String> completer = Completer<String>();
+    getUserData.listen((event) {
+    String name =''; 
+       name = event!.name;
+          completer.complete(name);
+    });
+      return completer.future;
+  }
+  Future<String> get getEmail {
+    Completer<String> completer = Completer<String>();
+    getUserData.listen((event) {
+    String email =''; 
+       email = event!.email;
+          completer.complete(email);
+    });
+      return completer.future;
+  }
 
   //check role
-  bool get isAdmin => ref.read(userDataProvider).when(
-      data: (data) => data!.isAdmin,
-      error: (error, s) {
-        throw error;
-      },
-      loading: () => false);
+  Future<bool> get isAdmin async{
+      Completer<bool> completer = Completer<bool>();
+    getUserData.listen((event) {
+    bool isAdmin = false; 
+       isAdmin = event!.isAdmin;
+          completer.complete(isAdmin);
+
+    });
+      return completer.future;
+  }
 
   bool get isPremium => ref.read(userDataProvider).when(
       data: (data) => data!.isPremium,

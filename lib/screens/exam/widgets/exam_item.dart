@@ -37,7 +37,14 @@ class _ExamTileWidgetState extends ConsumerState<ExamItem> {
     }
     return GestureDetector(
       onTap: () {
-        _checkSubscribtionAndEnterExam(context);
+        _checkSubscribtionAndEnterExam(context)?Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return SoluteExamScreen(
+          exam: widget.examModel,
+        );
+      })):
+        Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
+      
+      
         _storeExamData(
           ref,
           widget.examModel.id,
@@ -106,25 +113,22 @@ class _ExamTileWidgetState extends ConsumerState<ExamItem> {
     );
   }
 
-  Future<void> _checkSubscribtionAndEnterExam(BuildContext context) async {
+  bool _checkSubscribtionAndEnterExam(BuildContext context) {
     if (!ref.read(paymentControllerProvider).subscriptionEnded) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return SoluteExamScreen(
-          exam: widget.examModel,
-        );
-      }));
+
+      
+      return true;
     } else {
       ref.read(paymentControllerProvider).changePlanAfterEndDate;
-      await FirebaseMessaging.instance.unsubscribeFromTopic('premium');
+       FirebaseMessaging.instance.unsubscribeFromTopic('premium');
       if (context.mounted) {
         AppHelper.customSnackbar(
           context: context,
           title: 'يجب تفعيل الاشتراك لتتمكن من دخول الاختبار',
         );
       }
-      if (context.mounted) {
-        Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
-      }
+     
+      return false;
     }
   }
 

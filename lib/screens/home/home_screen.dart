@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 
+import '../../utils/providers/app_providers.dart';
 import 'widgets/feed_widget.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -13,6 +14,8 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print(ref.watch(authControllerProvider).userInfo.displayName);
+
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'المُعَلّم',

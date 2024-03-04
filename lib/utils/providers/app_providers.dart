@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -91,7 +92,7 @@ final notificationRepoProvider = Provider((ref) {
 //state providers
 final currentIndex = StateProvider<int>((ref) => 0);
 
-final isAdmin = StateProvider<bool>((ref) => false);
+final isAdminProvider = StateProvider<bool>((ref) => false);
 final isCached = StateProvider<bool>((ref) => false);
 final isDownloading = StateProvider<bool>((ref) => false);
 final isLoading = StateProvider<bool>((ref) => false);
@@ -135,7 +136,9 @@ final streamJoinedProvider = StreamProvider((ref) {
   return controller.userPresence;
 });
 
-final userDataProvider = StreamProvider.autoDispose<UserModel?>((ref) {
+final userStreamController = StreamController<UserModel?>();
+
+final userDataProvider = StreamProvider<UserModel?>((ref) {
   final stream = ref.read(authControllerProvider).getUserData;
   return stream;
 });

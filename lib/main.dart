@@ -75,11 +75,11 @@ void _initAwesomeLocalNotifications() async {
   });
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context,ref) {
+  Widget build(BuildContext context) {
     // FirebaseAuth.instance.signOut();
     return ScreenUtilInit(
         designSize: const Size(360, 690),
@@ -100,21 +100,23 @@ class MyApp extends ConsumerWidget {
               themeMode: ThemeMode.light,
               debugShowCheckedModeBanner: false,
               onGenerateRoute: (settings) => generateRoute(settings),
-              home: ref.watch(userDataProvider).when(
-                    data: (data) {
-                      if (data == null) {
-                        return const LoginScreen();
-                      } else {
-                        return const MainScreen();
-                      }
-                    },
-                    error: (error, stackTrace) => Text(error.toString()),
-                    loading: () => const CircularProgressIndicator(),
-                  )
-
-              // FirebaseAuth.instance.currentUser == null
-              //     ? const LoginScreen()
-              //     : const MainScreen(),
+              // home: ref.watch(userDataProvider).when(
+              //       data: (data) {
+              //         if (data == null) {
+              //           return const LoginScreen();
+              //         } else {
+              //           return const MainScreen();
+              //         }
+              //       },
+              //       error: (error, stackTrace) {
+              //         print(stackTrace.toString());
+              //         return Text(error.toString());
+              //       },
+              //       loading: () => const CircularProgressIndicator(),
+              //     )
+              home:FirebaseAuth.instance.currentUser == null
+                  ? const LoginScreen()
+                  : const MainScreen(),
               );
         });
   }

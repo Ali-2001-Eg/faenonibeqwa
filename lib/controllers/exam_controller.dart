@@ -28,9 +28,7 @@ class ExamController {
     required List<Question> question,
     required BuildContext context,
   }) async {
-    ref
-        .read(userDataProvider)
-        .whenData((value) => examRepo.addExamInfoToFirebase(
+     examRepo.addExamInfoToFirebase(
               totalGrade: totalGrade,
               // deadlineTime: deadlineTime,
               timeMinutes: timeMinutes,
@@ -39,7 +37,7 @@ class ExamController {
               examTitle: examTitle,
               examDescription: examDescription,
               question: question,
-            ));
+            );
   }
 
   Stream<List<String>> questionIds(String examId) async* {

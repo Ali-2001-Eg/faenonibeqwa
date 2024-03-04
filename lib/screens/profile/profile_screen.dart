@@ -7,8 +7,9 @@ import 'package:faenonibeqwa/screens/home/payment/subscription_screen.dart';
 import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
+import 'package:faenonibeqwa/utils/shared/widgets/shimmer_widget.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,9 +30,9 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    print(ref.watch(authControllerProvider).getName);
-    print(ref.watch(authControllerProvider).email);
-    print(ref.watch(authControllerProvider).userInfo.uid);
+    // print(ref.watch(authControllerProvider).getName);
+    // print(ref.watch(authControllerProvider).email);
+    // print(ref.watch(authControllerProvider).isAdmin);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: 35.h),
@@ -43,8 +44,17 @@ class ProfileScreen extends ConsumerWidget {
               child: Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  if (ref.watch(authControllerProvider).getPhotoUrl.isEmpty)
-                    CircleAvatar(
+                    FutureBuilder<String>(
+                      future:ref.watch(authControllerProvider).getPhotoUrl,
+                      builder: (context, snapshot) {
+                        if(snapshot.connectionState == ConnectionState.waiting){
+                          return const ShimmerWidget(cardsNumber: 1,);
+                          
+                        }else if(snapshot.hasError){
+                          return BigText(text:snapshot.error.toString());
+                        }
+                        if(snapshot.data! == ''){
+                          return CircleAvatar(
                       radius: 60,
                       backgroundColor: context
                           .theme.appBarTheme.backgroundColor!
@@ -54,9 +64,9 @@ class ProfileScreen extends ConsumerWidget {
                         size: 50,
                         color: Colors.white,
                       ),
-                    )
-                  else
-                    Container(
+                    );
+                        }
+                        return Container(
                       width: context.screenWidth / 3,
                       height: 120.h,
                       decoration: BoxDecoration(
@@ -64,11 +74,16 @@ class ProfileScreen extends ConsumerWidget {
                         border: Border.all(),
                         image: DecorationImage(
                             image: CachedNetworkImageProvider(
-                              ref.watch(authControllerProvider).getPhotoUrl,
+                              snapshot
+                              .data!,
                             ),
                             fit: BoxFit.cover),
                       ),
-                    ),
+                    );
+                      }
+                    )
+                  ,
+                    
                   // margin: EdgeInsets.all(20.h),
 
                   InkWell(
@@ -95,104 +110,184 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
             20.hSpace,
-            BigText(
-              text: ref.watch(authControllerProvider).getName,
-              fontSize: 20.sp,
-              textAlign: TextAlign.center,
-              color: Colors.black,
+            FutureBuilder<String>(
+              future: ref.watch(authControllerProvider).getName,
+              builder: (context, snapshot) {
+                if(snapshot.hasError){
+                          return BigText(text:snapshot.error.toString());
+
+                }else if(snapshot.connectionState == ConnectionState.waiting){
+                  return const ShimmerWidget(cardsNumber: 1,);
+                }
+                if(snapshot.hasData) {
+                  return BigText(
+                  text: snapshot.data!,
+                  fontSize: 20.sp,
+                  textAlign: TextAlign.center,
+                  color: Colors.black,
+                );
+                }else {
+                  return Container();
+                }
+              }
             ),
             10.hSpace,
-            SmallText(
-              textAlign: TextAlign.center,
-              text: ref.watch(authControllerProvider).email,
-              fontSize: 14.sp,
-              color: Colors.black,
+            FutureBuilder<String>(
+              future: ref.watch(authControllerProvider).email,
+              builder: (context, snapshot) {
+                if(snapshot.hasError){
+                          return BigText(text:snapshot.error.toString());
+
+                }else if(snapshot.connectionState == ConnectionState.waiting){
+                  return const ShimmerWidget(cardsNumber: 1,);
+                }
+                if(snapshot.hasData) {
+                  return SmallText(
+                  text: snapshot.data!,
+                  // fontSize: 20.sp,
+                  textAlign: TextAlign.center,
+                  color: Colors.grey,
+                );
+                }else {
+                  return Container();
+                }
+              }
             ),
             15.hSpace,
-            if (!ref.watch(authControllerProvider).isAdmin)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 70.w),
-                child: CustomButton(
-                    onTap: () {
-                      if (ref.watch(authControllerProvider).isPremium) {
-                        AppHelper.customSnackbar(
-                          context: context,
-                          title: 'تم الاشتراك بالفعل',
-                          status: ToastStatus.success,
-                        );
-                      } else {
-                        Navigator.of(context)
-                            .pushNamed(SubscriptionScreen.routeName);
-                      }
-                    },
-                    text: 'الاشتراك في الخطه'),
+            // if (!ref.watch(authControllerProvider).isAdmin)
+              FutureBuilder<bool>(
+                future: ref.watch(authControllerProvider).isAdmin,
+                builder: (context, snapshot) {
+                  if(snapshot.hasData) {
+                    if(!snapshot.data!) {
+                      return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 70.w),
+                    child: CustomButton(
+                        onTap: () {
+                          if (ref.watch(authControllerProvider).isPremium) {
+                            AppHelper.customSnackbar(
+                              context: context,
+                              title: 'تم الاشتراك بالفعل',
+                              status: ToastStatus.success,
+                            );
+                          } else {
+                            Navigator.of(context)
+                                .pushNamed(SubscriptionScreen.routeName);
+                          }
+                        },
+                        text: 'الاشتراك في الخطه'),
+                  );
+                    }else{
+                      return Container();
+                    }
+                  }else{
+                    return const ShimmerWidget(cardsNumber: 2,);
+                  }
+                }
               ),
-            (ref.watch(authControllerProvider).isAdmin)
-                ? Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SettingsTile(
-                            onTap: () => Navigator.pushNamed(
-                                context, CreateMeetingScreen.routeName),
-                            text: "مكالمه جماعيه",
-                            icon: Icons.call,
-                            leadingIconColor: Colors.green),
-                        SettingsTile(
-                            onTap: () => Navigator.pushNamed(
-                                context, CreateExamScreen.routeName),
-                            text: 'إضافه اختبار',
-                            icon: Icons.book,
-                            leadingIconColor: Colors.yellow),
-                        SettingsTile(
-                            onTap: () => Navigator.pushNamed(
-                                context, AddLectureScreen.routeName),
-                            text: 'إضافه حلقه',
-                            icon: Icons.ondemand_video_rounded,
-                            leadingIconColor: Colors.redAccent),
-                        SettingsTile(
-                            onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ChangePlanScreen())),
-                            text: 'إضافه خطه دفع',
-                            icon: Icons.monetization_on,
-                            leadingIconColor: Colors.green),
-                        SettingsTile(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return const StudentScreen();
-                                  },
-                                ),
-                              );
-                            },
-                            text: 'بيانات الطلاب',
-                            icon: Icons.history_outlined,
-                            leadingIconColor: Colors.white),
-                        SettingsTile(
-                          leadingIconColor: Colors.redAccent,
-                          text: 'تسجيل خروج',
-                          icon: Icons.logout_sharp,
-                          onTap: () => _signout(ref, context),
+           FutureBuilder<bool>(
+                  future: ref.watch(authControllerProvider).isAdmin,
+                  builder: (context, snapshot) {
+                    // print( ref.watch(authControllerProvider).isAdmin.then((value) => value));
+                      print(snapshot.data);
+                       if (snapshot.hasError){
+                        return BigText(text: snapshot.error.toString());
+                      }
+                      else if(snapshot.connectionState == ConnectionState.waiting){
+                        
+                        return const ShimmerWidget(cardsNumber: 1,);
+                      }
+                    else if(snapshot.hasData) {
+                      if(snapshot.data! == true) {
+                        return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SettingsTile(
+                                onTap: () => Navigator.pushNamed(
+                                    context, CreateMeetingScreen.routeName),
+                                text: "مكالمه جماعيه",
+                                icon: Icons.call,
+                                leadingIconColor: Colors.green),
+                            SettingsTile(
+                                onTap: () => Navigator.pushNamed(
+                                    context, CreateExamScreen.routeName),
+                                text: 'إضافه اختبار',
+                                icon: Icons.book,
+                                leadingIconColor: Colors.yellow),
+                            SettingsTile(
+                                onTap: () => Navigator.pushNamed(
+                                    context, AddLectureScreen.routeName),
+                                text: 'إضافه حلقه',
+                                icon: Icons.ondemand_video_rounded,
+                                leadingIconColor: Colors.redAccent),
+                            SettingsTile(
+                                onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ChangePlanScreen())),
+                                text: 'إضافه خطه دفع',
+                                icon: Icons.monetization_on,
+                                leadingIconColor: Colors.green),
+                            SettingsTile(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return const StudentScreen();
+                                      },
+                                    ),
+                                  );
+                                },
+                                text: 'بيانات الطلاب',
+                                icon: Icons.history_outlined,
+                                leadingIconColor: Colors.white),
+                            SettingsTile(
+                              leadingIconColor: Colors.redAccent,
+                              text: 'تسجيل خروج',
+                              icon: Icons.logout_sharp,
+                              onTap: () => _signout(ref, context),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )
-                : SfCartesianChart(
+                      );
+                      }
+                       else{
+return  SfCartesianChart(
                     primaryXAxis: const CategoryAxis(),
                     series: <LineSeries<ProfileCartModel, String>>[
                         lineSeries(ref)
-                      ]),
-            // 15.hSpace,
-            if (!ref.watch(authControllerProvider).isAdmin)
-              SettingsTile(
-                leadingIconColor: Colors.redAccent,
-                text: 'تسجيل خروج',
-                icon: Icons.logout_sharp,
-                onTap: () => _signout(ref, context),
+                      ]);
+          
+                      }
+                    }
+                    else{
+                      return const ShimmerWidget(cardsNumber: 1,heigth: 50,);
+                    }
+                  }
+                )
+                 // 15.hSpace,
+            ,
+              FutureBuilder<bool>(
+                future: ref.watch(authControllerProvider).isAdmin,
+                builder: (context, snapshot) {
+                  if(snapshot.hasData ) {
+                    if( !snapshot.data!) {
+                      return SettingsTile(
+                    leadingIconColor: Colors.redAccent,
+                    text: 'تسجيل خروج',
+                    icon: Icons.logout_sharp,
+                    onTap: () => _signout(ref, context),
+                  );
+                    }else{
+                      return Container();
+                    }
+                  }
+                  else{
+                    return const ShimmerWidget(cardsNumber: 1,);
+                  }
+                }
               ),
           ],
         ),
@@ -206,20 +301,20 @@ class ProfileScreen extends ConsumerWidget {
       builder: (conetxt) => AlertDialog(
         actions: [
           CustomButton(
+            onTap: () => Navigator.of(context).pop(),
+            text: 'الرجوع',
+          ),
+          CustomButton(
             onTap: () => ref.watch(authControllerProvider).signout.then(
                 (value) => Navigator.pushNamedAndRemoveUntil(
                     context, LoginScreen.routeName, (route) => false)),
             text: 'تأكيد',
             backgroundColor: Colors.redAccent,
-          ),
-          CustomButton(
-            onTap: () => Navigator.of(context).pop(),
-            text: 'الرجوع',
           )
         ],
         title: const BigText(text: 'تأكيد تسجيل الخروج'),
       ),
-    );
+    ).then((value) => ref.read(userDataProvider).value == null);
   }
 
   LineSeries<ProfileCartModel, String> lineSeries(WidgetRef ref) {

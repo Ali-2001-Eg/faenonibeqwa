@@ -47,11 +47,19 @@ class PaymentRepo {
     return duration;
   }
 
-  bool get subscriptionEnded => ref
+  bool get subscriptionEnded {
+    return ref
       .read(userDataProvider)
-      .value!
-      .timeToFinishSubscribtion!
+      .when(data: (data){
+        return
+  data!.timeToFinishSubscribtion!
       .isBefore(DateTime.now());
+      }, error: (e,s){
+        return false;
+      }, loading: (){
+        return false;
+      });
+  }
   PlanEnum get subscriptionPlan =>
       ref.read(userDataProvider).value!.planEnum ?? PlanEnum.notSubscribed;
 

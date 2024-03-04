@@ -18,15 +18,23 @@ class AdminFloatingActionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    return ref.watch(authControllerProvider).isAdmin
-        ? FloatingActionButton(
-            heroTag: heroTag,
-            onPressed: () => Navigator.pushNamed(context, routeName,arguments:arguments ),
-            child: Icon(
-              icon,
-              color: Colors.white,
-            ),
-          )
-        : Container();
+    return FutureBuilder<bool>(
+          future: ref.watch(authControllerProvider).isAdmin,
+          builder: (context, snapshot) {
+            if(snapshot.hasData) {
+              return FloatingActionButton(
+                heroTag: heroTag,
+                onPressed: () => Navigator.pushNamed(context, routeName,arguments:arguments ),
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                ),
+              );
+            }
+            else{
+              return Container();
+            }
+          }
+        );
   }
 }

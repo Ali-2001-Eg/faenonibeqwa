@@ -14,10 +14,10 @@ class AuthController {
  
   Stream<UserModel?> get getUserData => authRepo.getUserData;
   Future<User?> get user => authRepo.user();
-  String get getPhotoUrl => authRepo.getPhotoUrl;
-  String get getName => authRepo.getName;
-  bool get isAdmin => authRepo.isAdmin;
-  String get email => authRepo.getEmail;
+  Future<String> get getPhotoUrl => authRepo.getPhotoUrl;
+  Future<String> get getName => authRepo.getName;
+  Future<bool> get isAdmin => authRepo.isAdmin;
+  Future<String> get email => authRepo.getEmail;
   bool get isPremium => authRepo.isPremium;
   
   User get userInfo => authRepo.auth.currentUser!;

@@ -88,12 +88,11 @@ class LectureWidget extends ConsumerWidget {
 
   Future<bool> _checkSubscribtionState(
       BuildContext context, WidgetRef ref) async {
-    if (ref.read(paymentControllerProvider).subscriptionEnded) {
-      ref.read(paymentControllerProvider).changePlanAfterEndDate;
-    }
+    
     if (!ref.read(paymentControllerProvider).subscriptionEnded) {
       return true;
     } else {
+      await ref.read(paymentControllerProvider).changePlanAfterEndDate;
       await FirebaseMessaging.instance.unsubscribeFromTopic('premium');
       if (context.mounted) {
         AppHelper.customSnackbar(

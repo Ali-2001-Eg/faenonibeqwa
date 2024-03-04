@@ -10,14 +10,14 @@ class UserModel extends Equatable {
   final String uid;
   final String photoUrl;
   final String email;
-  final bool isAdmin;
+   bool isAdmin;
   final String notificationToken;
   final bool isPremium;
   final bool? freePlanEnded;
   final PlanEnum? planEnum;
   final DateTime? timeToFinishSubscribtion;
   // final int? streamJoined;
-  const UserModel({
+   UserModel({
     required this.name,
     required this.uid,
     required this.photoUrl,

@@ -55,7 +55,7 @@ class FeedWidget extends ConsumerWidget {
 
   Future<void> _joinMeeting(
       WidgetRef ref, MeetingModel feed, BuildContext context) async {
-    if (await _checkSubscribtionState(context, ref)) {
+    if (await _checkSubscribtionState(context, ref,feed)) {
       ref
           .read(meetingControllerProvider)
           .joinMeeting(feed.channelId)
@@ -70,15 +70,18 @@ class FeedWidget extends ConsumerWidget {
                 },
               ));
     } else {
-      if (feed.endsAt.isBefore(DateTime.now()) && context.mounted) {
-        AppHelper.customSnackbar(context: context, title: 'انتهت المكالمة ');
-      }
+      
     }
   }
 
   Future<bool> _checkSubscribtionState(
-      BuildContext context, WidgetRef ref) async {
+      BuildContext context, WidgetRef ref,MeetingModel meeting) async {
     if (!ref.read(paymentControllerProvider).subscriptionEnded) {
+      if (meeting.endsAt.isBefore(DateTime.now()) && context.mounted) {
+        AppHelper.customSnackbar(context: context, title: 'انتهت المكالمة ');
+        return false;
+      }
+      print('not ended');
       return true;
     } else {
       ref.read(paymentControllerProvider).changePlanAfterEndDate;
