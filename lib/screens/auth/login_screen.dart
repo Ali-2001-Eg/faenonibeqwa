@@ -132,18 +132,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _login(WidgetRef ref, BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      ref
-          .read(authControllerProvider)
-          .login(
+      ref.read(authControllerProvider).login(
             _emailController.text.trim(),
             _passwordController.text.trim(),
             context,
-          ).then((value){
-            
-          })
-          .catchError((err) {
-        AppHelper.customSnackbar(context: context, title: err.toString());
-      });
+          );
     } else {
       AppHelper.customSnackbar(
           context: context,

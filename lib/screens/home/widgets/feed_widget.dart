@@ -56,10 +56,6 @@ class FeedWidget extends ConsumerWidget {
   Future<void> _joinMeeting(
       WidgetRef ref, MeetingModel feed, BuildContext context) async {
     if (await _checkSubscribtionState(context, ref)) {
-      if (feed.endsAt.isBefore(DateTime.now()) && context.mounted) {
-        AppHelper.customSnackbar(context: context, title: 'انتهت المكالمة ');
-      }
-    } else {
       ref
           .read(meetingControllerProvider)
           .joinMeeting(feed.channelId)
@@ -73,6 +69,10 @@ class FeedWidget extends ConsumerWidget {
                   'title': feed.title,
                 },
               ));
+    } else {
+      if (feed.endsAt.isBefore(DateTime.now()) && context.mounted) {
+        AppHelper.customSnackbar(context: context, title: 'انتهت المكالمة ');
+      }
     }
   }
 

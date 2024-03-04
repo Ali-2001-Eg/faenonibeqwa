@@ -14,20 +14,20 @@ import '../../../utils/base/app_images.dart';
 import '../../../utils/providers/app_providers.dart';
 import '../../../utils/shared/widgets/small_text.dart';
 
-class ExamTileWidget extends ConsumerStatefulWidget {
+class ExamItem extends ConsumerStatefulWidget {
   final ExamModel examModel;
   final WidgetRef ref;
-  const ExamTileWidget({
+  const ExamItem({
     super.key,
     required this.examModel,
     required this.ref,
   });
 
   @override
-  ConsumerState<ExamTileWidget> createState() => _ExamTileWidgetState();
+  ConsumerState<ExamItem> createState() => _ExamTileWidgetState();
 }
 
-class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
+class _ExamTileWidgetState extends ConsumerState<ExamItem> {
   @override
   Widget build(BuildContext context) {
     // print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
@@ -38,6 +38,12 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
     return GestureDetector(
       onTap: () {
         _checkSubscribtionAndEnterExam(context);
+        _storeExamData(
+          ref,
+          widget.examModel.id,
+          widget.examModel.examTitle,
+          widget.examModel.examDescription,
+        );
       },
       child: Container(
           padding: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
@@ -101,9 +107,6 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
   }
 
   Future<void> _checkSubscribtionAndEnterExam(BuildContext context) async {
-    if (ref.read(paymentControllerProvider).subscriptionEnded) {
-      ref.read(paymentControllerProvider).changePlanAfterEndDate;
-    }
     if (!ref.read(paymentControllerProvider).subscriptionEnded) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return SoluteExamScreen(
@@ -111,6 +114,7 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
         );
       }));
     } else {
+      ref.read(paymentControllerProvider).changePlanAfterEndDate;
       await FirebaseMessaging.instance.unsubscribeFromTopic('premium');
       if (context.mounted) {
         AppHelper.customSnackbar(
@@ -120,6 +124,27 @@ class _ExamTileWidgetState extends ConsumerState<ExamTileWidget> {
       }
       if (context.mounted) {
         Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
+      }
+    }
+  }
+
+  Future<void> _storeExamData(
+    WidgetRef ref,
+    String examId,
+    String examTitle,
+    String examDescription,
+  ) async {
+    if (await ref
+        .read(examControllerProvider)
+        .checkUserHasTakenExam(examId: examId)) {
+      if (!await ref
+          .read(examControllerProvider)
+          .checkUserHasTakenExam(examId: examId)) {
+        ref.read(examControllerProvider).storeExamDataToUser(
+              examId: examId,
+              title: examTitle,
+              description: examDescription,
+            );
       }
     }
   }

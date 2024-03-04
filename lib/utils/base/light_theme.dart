@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'colors.dart';
 
 ThemeData get lightMode => ThemeData.light().copyWith(
-      scaffoldBackgroundColor: lightScaffold,
+      scaffoldBackgroundColor: Colors.white,
       iconTheme: const IconThemeData(
         color: lightIconColor,
       ),

@@ -85,60 +85,54 @@ class SoluteExamScreen extends ConsumerWidget {
                     totalGrade: exam.totalGrade,
                     examTitle: exam.examTitle,
                   ),
-                  40.hSpace,
+                  30.hSpace,
                   ref
                       .watch(questionsProvider(
                           QuestionParameters(exam.id, exam.timeMinutes)))
                       .when(data: (data) {
-                    _storeExamData(ref, data, exam.id);
+                    // _storeExamData(ref, data, exam.id);
                     //initial
                     late Question question;
                     question = data[ref.watch(currentIndex)];
 
-                    return SingleChildScrollView(
-                      child: Container(
-                        height: context.screenHeight * 0.84,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30),
+                    return Container(
+                      height: context.screenHeight,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        ),
+                      ),
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          QuestionDetails(
+                            questionBody: question.body,
+                            questionImage: question.questionImage,
+                            ref: ref,
                           ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            // 30.hSpace,
+                          10.hSpace,
+                          DisplayAnswersWidget(
+                            examId: exam.id,
+                            examDesc: exam.examDescription,
+                            // examImageUrl: exam.examImageUrl,
+                            examTitle: exam.examTitle,
+                            question: question,
+                            questions: data,
+                          ),
+                          15.hSpace,
 
-                            QuestionDetails(
-                              questionBody: question.body,
-                              questionImage: question.questionImage,
-                              ref: ref,
-                            ),
-                            30.hSpace,
-                            Expanded(
-                              child: DisplayAnswersWidget(
-                                examId: exam.id,
-                                examDesc: exam.examDescription,
-                                // examImageUrl: exam.examImageUrl,
-                                examTitle: exam.examTitle,
-                                question: question,
-                                questions: data,
-                              ),
-                            ),
-                            // 30.hSpace,
-
-                            //footer
-                            ExamFooterWidget(
-                              ref: ref,
-                              snap: data,
-                              examId: exam.id,
-                              totalGrade: exam.totalGrade,
-                            ),
-                            // const BannerWidget(),
-                          ],
-                        ),
+                          //footer
+                          ExamFooterWidget(
+                            ref: ref,
+                            snap: data,
+                            examId: exam.id,
+                            totalGrade: exam.totalGrade,
+                          ),
+                          // const BannerWidget(),
+                        ],
                       ),
                     );
                   }, error: (err, stackTrace) {
@@ -174,22 +168,5 @@ class SoluteExamScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _storeExamData(
-      WidgetRef ref, List<Question> snap, String examId) async {
-    if (await ref
-        .read(examControllerProvider)
-        .checkUserHasTakenExam(examId: examId)) {
-      if (!await ref
-        .read(examControllerProvider)
-        .checkUserHasTakenExam(examId: examId)) {
-      ref.read(examControllerProvider).storeExamDataToUser(
-            examId: examId,
-            title: exam.examTitle,
-            description: exam.examDescription,
-            // imageUrl: exam.examImageUrl,
-            questions: snap,
-          );
-    }
-    }
-  }
+ 
 }

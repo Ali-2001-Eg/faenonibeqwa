@@ -8,6 +8,7 @@ import 'package:faenonibeqwa/utils/enums/toast_enum.dart';
 import 'package:faenonibeqwa/utils/extensions/context_extension.dart';
 import 'package:faenonibeqwa/utils/extensions/sized_box_extension.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/small_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,9 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    print(ref.watch(authControllerProvider).getName);
+    print(ref.watch(authControllerProvider).email);
+    print(ref.watch(authControllerProvider).userInfo.uid);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: 35.h),
@@ -95,12 +99,14 @@ class ProfileScreen extends ConsumerWidget {
               text: ref.watch(authControllerProvider).getName,
               fontSize: 20.sp,
               textAlign: TextAlign.center,
+              color: Colors.black,
             ),
             10.hSpace,
             SmallText(
               textAlign: TextAlign.center,
               text: ref.watch(authControllerProvider).email,
               fontSize: 14.sp,
+              color: Colors.black,
             ),
             15.hSpace,
             if (!ref.watch(authControllerProvider).isAdmin)

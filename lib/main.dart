@@ -5,6 +5,7 @@ import 'package:faenonibeqwa/screens/home/main_sceen.dart';
 import 'package:faenonibeqwa/utils/base/app_constants.dart';
 import 'package:faenonibeqwa/utils/base/dark_theme.dart';
 import 'package:faenonibeqwa/utils/base/light_theme.dart';
+import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -74,11 +75,11 @@ void _initAwesomeLocalNotifications() async {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,ref) {
     // FirebaseAuth.instance.signOut();
     return ScreenUtilInit(
         designSize: const Size(360, 690),
@@ -87,22 +88,34 @@ class MyApp extends StatelessWidget {
         builder: (_, child) {
           // print(FirebaseAuth.instance.currentUser!.displayName);
           return MaterialApp(
-            title: 'المُعَلّم',
-            theme: lightMode,
-            darkTheme: darkMode,
-            builder: (context, child) {
-              return Directionality(
-                textDirection: TextDirection.rtl,
-                child: child!,
+              title: 'المُعَلّم',
+              theme: lightMode,
+              darkTheme: darkMode,
+              builder: (context, child) {
+                return Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: child!,
+                );
+              },
+              themeMode: ThemeMode.light,
+              debugShowCheckedModeBanner: false,
+              onGenerateRoute: (settings) => generateRoute(settings),
+              home: ref.watch(userDataProvider).when(
+                    data: (data) {
+                      if (data == null) {
+                        return const LoginScreen();
+                      } else {
+                        return const MainScreen();
+                      }
+                    },
+                    error: (error, stackTrace) => Text(error.toString()),
+                    loading: () => const CircularProgressIndicator(),
+                  )
+
+              // FirebaseAuth.instance.currentUser == null
+              //     ? const LoginScreen()
+              //     : const MainScreen(),
               );
-            },
-            themeMode: ThemeMode.light,
-            debugShowCheckedModeBanner: false,
-            onGenerateRoute: (settings) => generateRoute(settings),
-            home: FirebaseAuth.instance.currentUser == null
-                ? const LoginScreen()
-                : const MainScreen(),
-          );
         });
   }
 }
