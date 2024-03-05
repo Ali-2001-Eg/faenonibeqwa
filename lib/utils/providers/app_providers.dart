@@ -90,7 +90,7 @@ final notificationRepoProvider = Provider((ref) {
   return NotificationRepo();
 });
 //state providers
-final currentIndex = StateProvider<int>((ref) => 0);
+final currentIndex = StateProvider.autoDispose<int>((ref) => 0);
 
 final isAdminProvider = StateProvider<bool>((ref) => false);
 final isCached = StateProvider<bool>((ref) => false);
@@ -111,9 +111,9 @@ final pdfPathNotifier =
 //future providers
 //used tuple to pass two parameters
 final questionsProvider =
-    FutureProvider.family((ref, QuestionParameters parameters) {
+    FutureProvider.family((ref, String examId) {
   final examConrtoller = ref.read(examControllerProvider);
-  return examConrtoller.questions(parameters);
+  return examConrtoller.questions(examId);
 });
 
 final answersProvider =
@@ -149,7 +149,7 @@ final questionIdsStream = StreamProvider.family((ref, String examId) {
 });
 
 final answerCardStream =
-    StreamProvider.family((ref, AnswersIdentiferParameters parameters) {
+    StreamProviderFamily((ref, AnswersIdentiferParameters parameters) {
   final stream =
       ref.read(examControllerProvider).getAnswerIdentifier(parameters);
   return stream;

@@ -84,7 +84,7 @@ class ExamRepo {
   }
 
 //Questions is typedef of List<Question>
-  Questions questions(String examId, int timeMinutes) async {
+  Questions questions(String examId) async {
     var quesionData = await firestore
         .collection('exams')
         .doc(examId)
@@ -136,7 +136,7 @@ class ExamRepo {
     String examId,
     String title,
     String description,
-    // String imageUrl,
+    
   ) async {
     // if(!await checkUserHasTakenExam(examId)){
 
@@ -149,22 +149,22 @@ class ExamRepo {
       'title': title,
       'description': description,
     });
-    // }
-    // for (var element in questions) {
-    // await firestore
-    //     .collection('users')
-    //     .doc(auth.currentUser!.uid)
-    //     .collection('examsHistory')
-    //     .doc(examId)
-    //     .collection('questions')
-    //     .doc(element.body)
-    //     .set({
-    //   'body': element.body,
-    //   'correctAnswer': element.correctAnswerIdentifier,
-    //   'imageUrl': element.questionImage ?? '',
-    //   'selectedAnswer': '',
-    // });
-    // }
+    
+    for (var element in await quiz(examId)) {
+    await firestore
+        .collection('users')
+        .doc(auth.currentUser!.uid)
+        .collection('examsHistory')
+        .doc(examId)
+        .collection('questions')
+        .doc(element.body)
+        .set({
+      'body': element.body,
+      'correctAnswer': element.correctAnswerIdentifier,
+      'imageUrl': element.questionImage ?? '',
+      'selectedAnswer': '',
+    });
+    }
   }
 
   Future<void> selectAnswer(
@@ -179,11 +179,26 @@ class ExamRepo {
         .doc(questionId)
         .update({'selectedAnswer': selectedAnswer});
   }
+Questions quiz(String examId) {
+  Completer<List<Question>> completer = Completer<List<Question>>();
 
+  questions(examId).then((data) {
+    // Perform any transformation or processing on the data
+    List<Question> transformedData = data;
+
+    // Complete the completer with the transformed data
+    completer.complete(transformedData);
+  }).catchError((error) {
+    // Handle errors, if any
+    completer.completeError(error);
+  });
+
+  return completer.future;
+} 
 //to make check on the answer
-  Stream<String> getAnswerIdentifier(String examId, String questionId) async* {
-    if (!await checkUserHasTakenExam(examId)) {
-      yield* firestore
+  Stream<String> getAnswerIdentifier(String examId, String questionId)  {
+    
+      return  firestore
           .collection('users')
           .doc(auth.currentUser!.uid)
           .collection('examsHistory')
@@ -199,7 +214,7 @@ class ExamRepo {
         print('selectedAnswer');
         return selectedAnswer;
       });
-    }
+    
   }
 
   Future<bool> checkUserHasTakenExam(String examId) async {

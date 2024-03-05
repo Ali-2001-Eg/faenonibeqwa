@@ -30,10 +30,10 @@ class DisplayAnswersWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // print('examId is $examId');
+    print('examId is $examId');
     //stream provider
     return ref.watch(questionIdsStream(examId)).when(data: (data) {
-
+print(data);
       if (data.isEmpty) {
         return const Center(
           child: BigText(
@@ -46,6 +46,7 @@ class DisplayAnswersWidget extends ConsumerWidget {
           .watch(answersProvider(
               AnswersParameters(examId, data[ref.watch(currentIndex)])))
           .when(data: (answer) {
+            print(answer.length);
         return ListView.separated(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),

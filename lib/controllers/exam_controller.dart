@@ -46,8 +46,8 @@ class ExamController {
 
   Stream<List<ExamModel>> get exams => examRepo.exams;
 //questionParameters is tuple
-  Future<List<Question>> questions(QuestionParameters questionParameters) =>
-      examRepo.questions(questionParameters.item1, questionParameters.item2);
+  Future<List<Question>> questions(String examId) =>
+      examRepo.questions(examId);
 
   Future<List<Answers>> answers(AnswersParameters answersParameters) =>
       examRepo.answers(answersParameters.item1, answersParameters.item2);

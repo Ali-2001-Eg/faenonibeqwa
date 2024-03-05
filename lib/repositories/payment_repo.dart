@@ -54,9 +54,9 @@ class PaymentRepo {
     ref.read(authControllerProvider). getUserData.listen((event) {
     bool ended =false; 
        ended = event!.timeToFinishSubscribtion!.isBefore(DateTime.now());
-       print('time is  ${event.timeToFinishSubscribtion!.add(Duration(seconds: 10)).millisecondsSinceEpoch}');
-       print('time is  ${DateTime.now().millisecondsSinceEpoch}');
-       print('ended is  $ended');
+      //  print('time is  ${event.timeToFinishSubscribtion!.add(Duration(seconds: 10)).millisecondsSinceEpoch}');
+      //  print('time is  ${DateTime.now().millisecondsSinceEpoch}');
+      //  print('ended is  $ended');
           completer.complete(ended);
     });
       return completer.future;

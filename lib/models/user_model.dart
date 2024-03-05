@@ -59,7 +59,7 @@ class UserModel extends Equatable {
       'premium': isPremium,
       'planEnum': planEnum!.type,
       'freePlanEnded': freePlanEnded,
-      "timeToFinishSubscribtion": timeToFinishSubscribtion,
+      "timeToFinishSubscribtion": timeToFinishSubscribtion?.millisecondsSinceEpoch,
       // 'streamsJoined': streamJoined,
     };
   }

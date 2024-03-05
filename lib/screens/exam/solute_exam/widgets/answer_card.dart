@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
 import 'package:faenonibeqwa/utils/typedefs/app_typedefs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,6 +25,7 @@ class AnswerCard extends ConsumerWidget {
     return ref
         .watch(answerCardStream(AnswersParameters(examId, questionBody)))
         .when(data: (data) {
+          print('ali');
       return AnimatedContainer(
         duration: const Duration(
           milliseconds: 250,

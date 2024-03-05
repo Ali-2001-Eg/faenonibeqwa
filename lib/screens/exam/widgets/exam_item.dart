@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:faenonibeqwa/models/exam_model.dart';
 import 'package:faenonibeqwa/screens/exam/solute_exam/solute_exam_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
@@ -30,11 +32,13 @@ class ExamItem extends ConsumerStatefulWidget {
 class _ExamTileWidgetState extends ConsumerState<ExamItem> {
   @override
   Widget build(BuildContext context) {
-    print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
+    // print('subscribtion ${ref.read(paymentControllerProvider).subscriptionEnded}');
     
     return GestureDetector(
       onTap: () async{
-        await _checkSubscribtionAndEnterExam(context)?Navigator.push(context, MaterialPageRoute(builder: (context) {
+        await _checkSubscribtionAndEnterExam(context,widget.examModel.id,
+          widget.examModel.examTitle,
+          widget.examModel.examDescription,)?Navigator.push(context, MaterialPageRoute(builder: (context) {
         return SoluteExamScreen(
           exam: widget.examModel,
         );
@@ -42,12 +46,7 @@ class _ExamTileWidgetState extends ConsumerState<ExamItem> {
         Navigator.of(context).pushNamed(SubscriptionScreen.routeName);
       
       
-        _storeExamData(
-          ref,
-          widget.examModel.id,
-          widget.examModel.examTitle,
-          widget.examModel.examDescription,
-        );
+        
       },
       child: Container(
           padding: const EdgeInsets.only(bottom: 10, left: 0, right: 0),
@@ -110,10 +109,10 @@ class _ExamTileWidgetState extends ConsumerState<ExamItem> {
     );
   }
 
-  Future<bool> _checkSubscribtionAndEnterExam(BuildContext context) async{
+  Future<bool> _checkSubscribtionAndEnterExam(BuildContext context,String examId,String examTitle,String examDescription) async{
     if (!await ref.read(paymentControllerProvider).subscriptionEnded) {
 
-      
+      _storeExamData(ref, examId, examTitle, examDescription);
       return true;
     } else {
       ref.read(paymentControllerProvider).changePlanAfterEndDate;
@@ -135,18 +134,16 @@ class _ExamTileWidgetState extends ConsumerState<ExamItem> {
     String examTitle,
     String examDescription,
   ) async {
-    if (await ref
+    if (!await ref
         .read(examControllerProvider)
         .checkUserHasTakenExam(examId: examId)) {
-      if (!await ref
-          .read(examControllerProvider)
-          .checkUserHasTakenExam(examId: examId)) {
-        ref.read(examControllerProvider).storeExamDataToUser(
+      
+        await ref.read(examControllerProvider).storeExamDataToUser(
               examId: examId,
               title: examTitle,
               description: examDescription,
             );
       }
-    }
+    
   }
 }

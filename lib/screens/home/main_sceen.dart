@@ -27,8 +27,8 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class _MainScreenState extends ConsumerState<MainScreen> {
-  String token = '';
 
+  String token = '';
   @override
   void initState() {
     FirebaseMessaging.instance.getToken().then((tokenFcm) {
@@ -49,7 +49,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget build(BuildContext context) {
     //to rebuild the screen
     final selectedTabIndex = ref.watch(homeNotifierProvider);
-    // print(FirebaseAuth.instance.currentUser?.email);
+    print(FirebaseAuth.instance.currentUser?.email);
+    print(DateTime.now().millisecondsSinceEpoch);
 
     return Scaffold(
       body: screen[selectedTabIndex],

@@ -88,7 +88,7 @@ class SoluteExamScreen extends ConsumerWidget {
                   30.hSpace,
                   ref
                       .watch(questionsProvider(
-                          QuestionParameters(exam.id, exam.timeMinutes)))
+                          (exam.id)))
                       .when(data: (data) {
                     // _storeExamData(ref, data, exam.id);
                     //initial

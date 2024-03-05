@@ -60,19 +60,21 @@ class QuizAppBar extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              ref
-                  .read(examControllerProvider)
-                  .submitExam(
-                    examId: examId,
-                    totalGrade: totalGrade,
-                  )
-                  .then((value) => Navigator.pushNamedAndRemoveUntil(
-                      context, MainScreen.routeName, (route) => false))
-                  .catchError((err) {
-                AppHelper.customSnackbar(
-                    context: context, title: err.toString());
-                return err;
-              });
+              // ref.
+              //     watch(examControllerProvider)
+              //     .submitExam(
+              //       examId: examId,
+              //       totalGrade: totalGrade,
+              //     )
+              //     .
+              //     then((value) =>
+                   Navigator.pushNamedAndRemoveUntil(
+                      context, MainScreen.routeName, (route) => false);
+              //     .catchError((err) {
+              //   AppHelper.customSnackbar(
+              //       context: context, title: err.toString());
+              //   return err;
+              // });
             },
             child: const CircleAvatar(
               radius: 18,
