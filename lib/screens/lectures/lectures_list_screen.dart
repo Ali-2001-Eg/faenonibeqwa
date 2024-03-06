@@ -1,11 +1,14 @@
+import 'package:faenonibeqwa/screens/lectures/view_lecture_screen.dart';
 import 'package:faenonibeqwa/utils/base/app_helper.dart';
 import 'package:faenonibeqwa/utils/providers/app_providers.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/big_text.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_appbar.dart';
 import 'package:faenonibeqwa/utils/shared/widgets/custom_indicator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../home/payment/subscription_screen.dart';
 import 'widgets/lecture_widget.dart';
 
 class LecturesListScreen extends StatelessWidget {
@@ -32,8 +35,46 @@ class LecturesListScreen extends StatelessWidget {
                     const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                 itemBuilder: (ctx, index) {
                   final lecture = data[index];
-                  return LectureWidget(
-                    lecture: lecture,
+                  return InkWell(
+                    onTap: () async {
+                      if (await ref
+                          .read(paymentControllerProvider)
+                          .subscriptionEnded) {
+                        Navigator.of(context)
+                            .pushNamed(SubscriptionScreen.routeName);
+                        await ref
+                            .read(paymentControllerProvider)
+                            .changePlanAfterEndDate;
+                        await FirebaseMessaging.instance
+                            .unsubscribeFromTopic('premium');
+                        if (context.mounted) {
+                          AppHelper.customSnackbar(
+                            context: context,
+                            title:
+                                'يجب تفعيل الاشتراك لتتمكن من مشاهده المحاضره',
+                          );
+                        }
+                      } else if (context.mounted) {
+                        if (!lecture.audienceUid.contains(
+                            ref.watch(authControllerProvider).userInfo.uid)) {
+                          await ref
+                              .watch(lecturesControllerProvider)
+                              .addUserToVideoAudience(lecture.id);
+                        }
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (ctx) {
+                          return ViewLectureScreen(
+                              title: lecture.name,
+                              videoPath: lecture.lectureUrl,
+                              id: lecture.id,
+                              audienceNo:
+                                  lecture.audienceUid.length.toString());
+                        }));
+                      }
+                    },
+                    child: LectureWidget(
+                      lecture: lecture,
+                    ),
                   );
                 },
               );

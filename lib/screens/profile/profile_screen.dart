@@ -163,8 +163,8 @@ class ProfileScreen extends ConsumerWidget {
                       return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 70.w),
                     child: CustomButton(
-                        onTap: () {
-                          if (ref.watch(authControllerProvider).isPremium) {
+                        onTap: () async{
+                          if (!await ref.watch(paymentControllerProvider).subscriptionEnded) {
                             AppHelper.customSnackbar(
                               context: context,
                               title: 'تم الاشتراك بالفعل',
