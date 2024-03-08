@@ -22,15 +22,15 @@ class _PaymentBodyState extends ConsumerState<PaymentBody> {
       shrinkWrap: true,
       children: [
         //free trail
-        if (ref.watch(userDataProvider).value!.freePlanEnded == false)
-          PlanWidget(
-            index: 0,
-            selectedIndex: selectedContainerIndex,
-            title: 'تجربه مجانيه لمده 15 يوم',
-            price: 'مجانا',
-            onTap: _handleTap,
-            unit: 'نصف شهر',
-          ),
+        // if (ref.watch(userDataProvider).value!.freePlanEnded == false)
+        //   PlanWidget(
+        //     index: 0,
+        //     selectedIndex: selectedContainerIndex,
+        //     title: 'تجربه مجانيه لمده 15 يوم',
+        //     price: 'مجانا',
+        //     onTap: _handleTap,
+        //     unit: 'نصف شهر',
+        //   ),
         //monthly
         PlanWidget(
           title: 'للاشتراك الشهري',

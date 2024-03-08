@@ -50,16 +50,17 @@ class PaymentRepo {
   }
 
   Future<bool> get subscriptionEnded {
-    Completer<bool> completer = Completer<bool>();
-    ref.read(authControllerProvider). getUserData.listen((event) {
+     Completer<bool> completer = Completer<bool>();
+    ref.read(authRepoProvider).getUserData.listen((event) {
     bool ended =false; 
        ended = event!.timeToFinishSubscribtion!.isBefore(DateTime.now());
-      //  print('time is  ${event.timeToFinishSubscribtion!.add(Duration(seconds: 10)).millisecondsSinceEpoch}');
-      //  print('time is  ${DateTime.now().millisecondsSinceEpoch}');
-      //  print('ended is  $ended');
+       if(completer.isCompleted){
+        
+       }
           completer.complete(ended);
     });
       return completer.future;
+   
     }
   PlanEnum get subscriptionPlan =>
       ref.read(userDataProvider).value!.planEnum ?? PlanEnum.notSubscribed;

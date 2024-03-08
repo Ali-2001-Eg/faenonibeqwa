@@ -18,7 +18,7 @@ class AuthController {
   Future<String> get getName => authRepo.getName;
   Future<bool> get isAdmin => authRepo.isAdmin;
   Future<String> get email => authRepo.getEmail;
-  bool get isPremium => authRepo.isPremium;
+  Future<bool> get isPremium => authRepo.isPremium;
   
   User get userInfo => authRepo.auth.currentUser!;
   Stream<List<UserModel>> get users => authRepo.users;

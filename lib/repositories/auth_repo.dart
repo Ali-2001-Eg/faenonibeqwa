@@ -45,7 +45,7 @@ class AuthRepo {
           photoUrl: '',
           email: email,
           isAdmin: false,
-          timeToFinishSubscribtion: DateTime.now(),
+          timeToFinishSubscribtion: DateTime.now().add(const Duration(days: 15)),
           isPremium: false,
           freePlanEnded: false,
           planEnum: PlanEnum.notSubscribed,
@@ -167,12 +167,16 @@ class AuthRepo {
       return completer.future;
   }
 
-  bool get isPremium => ref.read(userDataProvider).when(
-      data: (data) => data!.isPremium,
-      error: (error, s) {
-        throw error;
-      },
-      loading: () => false);
+  Future<bool> get isPremium {
+    Completer<bool> completer = Completer<bool>();
+    getUserData.listen((event) {
+    bool premium = false; 
+       premium = event!.isPremium;
+          completer.complete(premium);
+
+    });
+      return completer.future;
+  }
 
   Future<void> signout() async {
     try {
