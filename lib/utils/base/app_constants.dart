@@ -1,7 +1,7 @@
 class AppConstants {
-  static int appId = 1338647143;
+  static int appId = 1818966915;
   static String appSign =
-      '8041e6f34cf8217386a2afc66851bb7615f0fa7e151e9d589e93fe58f87733b6';
+      'b881efc8cd8c5a6f03bfbc191ae3c08da0ea649741742e842cef191c2b49b84f';
   static String baseUrl = 'https://accept.paymob.com/api';
   static String authTokenUrl = '/auth/tokens';
   static String orderID = '/ecommerce/orders';
@@ -12,6 +12,3 @@ class AppConstants {
   static int integrationId = 4196410;
   static String fcmKey = 'AAAAnMizr3c:APA91bFI9oFR3Us3AA29zSIEJNVC9UENYtf595Ir__7qpAxGciKvKIH95Inx7kwPLmkJyaR997DA7TWjomZDiVHTCtoD92c8bYCYud_a1yPmNGvFbMRL-hjlVLxtp_yORbXTNv-J5x4K';
 }
-
-const String firebaseMassgingServerKey =
-    'AAAAnMizr3c:APA91bFI9oFR3Us3AA29zSIEJNVC9UENYtf595Ir__7qpAxGciKvKIH95Inx7kwPLmkJyaR997DA7TWjomZDiVHTCtoD92c8bYCYud_a1yPmNGvFbMRL-hjlVLxtp_yORbXTNv-J5x4K';
