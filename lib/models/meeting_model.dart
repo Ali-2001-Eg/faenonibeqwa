@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 
 class MeetingModel extends Equatable {
   final String title;
-  final bool isBrodcater;
+  // final bool isBrodcater;
   final String uid;
   final String username;
   final DateTime endsAt;
@@ -12,7 +12,7 @@ class MeetingModel extends Equatable {
   final String channelId;
   const MeetingModel({
     required this.title,
-    required this.isBrodcater,
+    // required this.isBrodcater,
     required this.uid,
     required this.username,
     required this.endsAt,
@@ -23,7 +23,7 @@ class MeetingModel extends Equatable {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
-      'isBrodcater': isBrodcater,
+      // 'isBrodcater': isBrodcater,
       'uid': uid,
       'username': username,
       'startedAt': endsAt.millisecondsSinceEpoch,
@@ -35,7 +35,7 @@ class MeetingModel extends Equatable {
   factory MeetingModel.fromMap(Map<String, dynamic> map) {
     return MeetingModel(
       title: map['title'] as String,
-      isBrodcater: map['isBrodcater'] as bool,
+      // isBrodcater: map['isBrodcater'] as bool,
       uid: map['uid'] as String,
       username: map['username'] as String,
       endsAt: DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int),
@@ -48,7 +48,7 @@ class MeetingModel extends Equatable {
   List<Object> get props {
     return [
       title,
-      isBrodcater,
+      // isBrodcater,
       uid,
       username,
       endsAt,

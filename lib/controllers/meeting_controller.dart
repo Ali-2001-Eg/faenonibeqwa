@@ -12,10 +12,10 @@ class MeetingController {
   //meeting start
   Future<void> startMeeting({
     required String title,
-    required bool isBrodcater,
+    // required bool isBrodcater,
     required String channelId,
   }) =>
-      meetingRepo.startMeeing(title, isBrodcater, channelId);
+      meetingRepo.startMeeing(title, channelId);
   //get live feeds
   Stream<List<MeetingModel>> get feeds => meetingRepo.feeds;
   //join meeting

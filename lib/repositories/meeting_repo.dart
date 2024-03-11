@@ -23,15 +23,15 @@ class MeetingRepo extends ChangeNotifier {
   MeetingRepo(this.ref, this.auth, this.firestore);
 
   Future<void> startMeeing(
-      String title, bool isBrodcater, String channelId) async {
+      String title, String channelId) async {
     try {
       if (title.isNotEmpty && channelId.isNotEmpty) {
         MeetingModel meeting = MeetingModel(
           title: title,
-          isBrodcater: isBrodcater,
+          // isBrodcater: isBrodcater,
           uid: auth.currentUser!.uid,
           username: auth.currentUser!.displayName!,
-          endsAt: DateTime.now(),
+          endsAt: DateTime.now().add(const Duration(days: 1)),
           viewers: <String>[auth.currentUser!.uid],
           channelId: channelId,
         );
