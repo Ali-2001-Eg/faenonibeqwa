@@ -67,7 +67,7 @@ class _CreateMeetingScreenState extends ConsumerState<CreateMeetingScreen> {
                       .read(meetingControllerProvider)
                       .startMeeting(
                         title: _titleController.text.trim(),
-                        isBrodcater: true,
+                        // isBrodcater: true,
                         channelId: channeld,
                       )
                       .then((value) {
