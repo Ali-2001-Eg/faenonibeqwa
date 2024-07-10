@@ -36,44 +36,6 @@ class LectureWidget extends ConsumerWidget {
         ),
       ),
       child: ListTile(
-        onTap: () async {
-          // if (await _checkSubscribtionState(context, ref)) {
-          //   if (!lecture.audienceUid
-          //           .contains(ref.watch(authControllerProvider).userInfo.uid) &&
-          //       context.mounted) {
-          //     await ref
-          //         .watch(lecturesControllerProvider)
-          //         .addUserToVideoAudience(lecture.id);
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (ctx) {
-          //           return ViewLectureScreen(
-          //               title: lecture.name,
-          //               videoPath: lecture.lectureUrl,
-          //               id: lecture.id,
-          //               audienceNo: lecture.audienceUid.length.toString());
-          //         },
-          //       ),
-          //     );
-          //   } else {
-          //     if (context.mounted) {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (ctx) {
-          //             return ViewLectureScreen(
-          //                 title: lecture.name,
-          //                 id: lecture.id,
-          //                 videoPath: lecture.lectureUrl,
-          //                 audienceNo: lecture.audienceUid.length.toString());
-          //           },
-          //         ),
-          //       );
-          //     }
-          //   }
-          // }
-        },
         title: SmallText(
           text: lecture.name,
           fontSize: 15,

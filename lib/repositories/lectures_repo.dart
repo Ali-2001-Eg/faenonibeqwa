@@ -45,26 +45,26 @@ class LecturesRepo {
       Reference lectureRef = FirebaseStorage.instance
           .ref()
           .child('lectures/${DateTime.now().millisecondsSinceEpoch}.mp4');
-      Reference thumbnailRef = FirebaseStorage.instance.ref().child(
-          'videos/${DateTime.now().millisecondsSinceEpoch}/thumbnail.png');
+      // Reference thumbnailRef = FirebaseStorage.instance.ref().child(
+      //     'videos/${DateTime.now().millisecondsSinceEpoch}/thumbnail.png');
 
       UploadTask uploadTask =
           lectureRef.putFile(File(await _compressVideoFile(video.path)));
-      UploadTask uploadThumbnail =
-          thumbnailRef.putFile(await _thumbnail(video));
+      // UploadTask uploadThumbnail =
+      //     thumbnailRef.putFile(await _thumbnail(video));
 
       await uploadTask.whenComplete(() => print('Video uploaded'));
-      await uploadThumbnail.whenComplete(() => print('Thumbnail uploaded'));
+      // await uploadThumbnail.whenComplete(() => print('Thumbnail uploaded'));
 
       // Get the download URL of the uploaded video
       downloadURL = await lectureRef.getDownloadURL();
-      thumbnailURL = await thumbnailRef.getDownloadURL();
+      // thumbnailURL = await thumbnailRef.getDownloadURL();
       String lectureId = const Uuid().v1();
       final LecturesModel lecture = LecturesModel(
         name: name,
         id: lectureId,
         lectureUrl: downloadURL,
-        lectureThumbnail: thumbnailURL,
+        lectureThumbnail: '',
         audienceUid: const [],
       );
       firestore.collection('lectures').doc(lectureId).set(lecture.toMap());

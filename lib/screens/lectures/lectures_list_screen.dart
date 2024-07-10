@@ -40,8 +40,10 @@ class LecturesListScreen extends StatelessWidget {
                       if (await ref
                           .read(paymentControllerProvider)
                           .subscriptionEnded) {
-                        Navigator.of(context)
-                            .pushNamed(SubscriptionScreen.routeName);
+                        if (context.mounted) {
+                          Navigator.of(context)
+                              .pushNamed(SubscriptionScreen.routeName);
+                        }
                         await ref
                             .read(paymentControllerProvider)
                             .changePlanAfterEndDate;
@@ -61,15 +63,21 @@ class LecturesListScreen extends StatelessWidget {
                               .watch(lecturesControllerProvider)
                               .addUserToVideoAudience(lecture.id);
                         }
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (ctx) {
-                          return ViewLectureScreen(
-                              title: lecture.name,
-                              videoPath: lecture.lectureUrl,
-                              id: lecture.id,
-                              audienceNo:
-                                  lecture.audienceUid.length.toString());
-                        }));
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) {
+                                return ViewLectureScreen(
+                                    title: lecture.name,
+                                    videoPath: lecture.lectureUrl,
+                                    id: lecture.id,
+                                    audienceNo:
+                                        lecture.audienceUid.length.toString());
+                              },
+                            ),
+                          );
+                        }
                       }
                     },
                     child: LectureWidget(

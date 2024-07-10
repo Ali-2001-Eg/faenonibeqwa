@@ -22,8 +22,7 @@ class MeetingRepo extends ChangeNotifier {
 
   MeetingRepo(this.ref, this.auth, this.firestore);
 
-  Future<void> startMeeing(
-      String title, String channelId) async {
+  Future<void> startMeeing(String title, String channelId) async {
     try {
       if (title.isNotEmpty && channelId.isNotEmpty) {
         MeetingModel meeting = MeetingModel(
@@ -55,7 +54,10 @@ class MeetingRepo extends ChangeNotifier {
       firestore.collection('meeting').snapshots().map((query) {
         List<MeetingModel> meetings = [];
         for (var meeting in query.docs) {
-          meetings.add(MeetingModel.fromMap(meeting.data()));
+          MeetingModel meetingModel = MeetingModel.fromMap(meeting.data());
+          if (meetingModel.endsAt.isAfter(DateTime.now())) {
+            meetings.add(meetingModel);
+          }
         }
         return meetings;
       });
@@ -110,9 +112,8 @@ class MeetingRepo extends ChangeNotifier {
         }
       }
     }
-    if(meetingDocs.docs.length.isNaN){
-
-    yield 0;
+    if (meetingDocs.docs.length.isNaN) {
+      yield 0;
     }
     yield (userPresence / meetingDocs.docs.length) * 100;
   }
